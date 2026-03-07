@@ -149,19 +149,19 @@
         <h2>लेआउट और सेटिंग्स</h2>
         
         <div style="background:#e6fffa; padding:20px; border-radius:8px; border: 1px solid #81e6d9; margin-bottom:20px;">
-            <h3 style="color:#2c7a7b; margin-top:0;">📺 स्कोरबोर्ड लेआउट बदलें (10 Options)</h3>
-            <p style="font-size:0.9rem; color:#285e61;">मैच के दौरान अपनी स्क्रीन का पूरा डिज़ाइन और आकार बदलें:</p>
+            <h3 style="color:#2c7a7b; margin-top:0;">📺 स्कोरबोर्ड लेआउट बदलें (नीचे की पट्टी)</h3>
+            <p style="font-size:0.9rem; color:#285e61;">डिज़ाइन और कट बदलें (पट्टी हमेशा नीचे ही रहेगी):</p>
             <select id="themeSelector" onchange="changeTheme()" style="font-size:1.1rem; padding:12px; font-weight:bold; color:#234e52;">
-                <option value="layout-classic">1. Classic Bottom (क्लासिक लंबी पट्टी)</option>
-                <option value="layout-top-left">2. Top Left Box (टीवी ब्रॉडकास्ट स्टाइल)</option>
-                <option value="layout-floating">3. Floating Center (हवा में तैरता डिज़ाइन)</option>
-                <option value="layout-bottom-left">4. Bottom Left Box (लेफ्ट साइड का डिब्बा)</option>
-                <option value="layout-top-bar">5. Top Bar (स्क्रीन के एकदम ऊपर)</option>
-                <option value="layout-glass-right">6. Glass Right Sidebar (पारदर्शी राइट साइड)</option>
-                <option value="layout-split">7. Split Corners (अलग-अलग कोनों में)</option>
-                <option value="layout-angled">8. Angled Dynamic (स्पोर्ट्स तिरछा कट)</option>
-                <option value="layout-neon">9. Neon Arcade (चमकता हुआ डिज़ाइन)</option>
-                <option value="layout-minimal">10. Ultra Minimal (बिना बॉक्स के, सिर्फ टेक्स्ट)</option>
+                <option value="layout-classic">1. Classic TV Bar (क्लासिक चौड़ी पट्टी)</option>
+                <option value="layout-curved">2. Curved Center (बीच से गोल उभरा हुआ)</option>
+                <option value="layout-split">3. Split Gap (बीच में खाली जगह)</option>
+                <option value="layout-glass">4. Frosted Glass (शीशे जैसी पारदर्शी पट्टी)</option>
+                <option value="layout-slant">5. Sport Slant (तिरछे कट वाली पट्टी)</option>
+                <option value="layout-neon">6. Neon Glow (चमकती हुई बॉर्डर)</option>
+                <option value="layout-pill">7. Floating Pill (हवा में तैरती कैप्सूल)</option>
+                <option value="layout-gold">8. Gold Premium (वर्ल्ड कप फाइनल डिज़ाइन)</option>
+                <option value="layout-minimal">9. Clean Minimal (बिना बॉक्स का डिज़ाइन)</option>
+                <option value="layout-blocky">10. Retro Blocky (सख्त बॉक्स वाली पट्टी)</option>
             </select>
         </div>
 
@@ -185,7 +185,7 @@
         let team1Squad = [], team2Squad = [], batSquad = [], bowlSquad = []; let playerDB = {}; let lastOutPlayer = ""; let historyStack = []; let bestPlayerName = ""; let t1LogoStr = ""; let t2LogoStr = "";
         let state = { runs: 0, wickets: 0, balls: 0, batTeam: "", bowlTeam: "", batTeamLogo: "", bowlTeamLogo: "", totalMatchOvers: 20, maxBowlerOvers: 4, s_name: "", ns_name: "", b_name: "", s_runs:0, s_balls:0, ns_runs:0, ns_balls:0, b_runs:0, b_wickets:0, b_balls:0, thisOver: [], target: 0, innings: 1, fow: [], partnership: {runs: 0, balls: 0}, crr: "0.00", rrr: "0.00" };
 
-        window.onload = function() { updateTeamNames(); changeTheme(); } // Change theme on load
+        window.onload = function() { updateTeamNames(); changeTheme(); }
         document.getElementById('t1LogoInput').addEventListener('change', function(e) { const f = e.target.files[0]; if(f) { const r = new FileReader(); r.onload = (ev) => { t1LogoStr = ev.target.result; }; r.readAsDataURL(f); } });
         document.getElementById('t2LogoInput').addEventListener('change', function(e) { const f = e.target.files[0]; if(f) { const r = new FileReader(); r.onload = (ev) => { t2LogoStr = ev.target.result; }; r.readAsDataURL(f); } });
 
