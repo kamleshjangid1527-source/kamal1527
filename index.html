@@ -17,36 +17,41 @@
         label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 0.9rem; color: #4a5568; }
         input[type="text"], input[type="number"], select, input[type="file"] { padding: 10px; font-size: 1rem; width: 100%; border: 1px solid #cbd5e0; border-radius: 6px; box-sizing: border-box; background-color: #f7fafc; }
         
-        .tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; }
-        .tab-btn { background: #e2e8f0; flex: 1; padding: 12px 5px; color: #4a5568; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .tabs { display: flex; justify-content: center; gap: 5px; margin-bottom: 15px; flex-wrap: wrap;}
+        .tab-btn { background: #e2e8f0; flex: 1; min-width: 80px; padding: 10px 5px; color: #4a5568; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.9rem;}
         .tab-btn.active { background: #3182ce; color: white; }
 
         .btn-primary { background: #3182ce; color: white; padding: 12px; border: none; border-radius: 6px; font-weight: bold; width: 100%; cursor: pointer; }
         .btn-success { background: #38a169; color: white; padding: 12px; border: none; border-radius: 6px; font-weight: bold; width: 100%; cursor: pointer; font-size: 1.1rem; }
         .btn-cancel { background: #e53e3e; color: white; padding: 12px; border: none; border-radius: 6px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 8px;}
+        .btn-remove { background: #fc8181; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8rem; padding: 2px 6px; margin-left:5px;}
         
         .list-container { background:#f8fafc; padding:10px; height:180px; overflow-y:auto; border: 1px solid #e2e8f0; border-radius: 6px; }
-        .player-item { padding: 6px 8px; border-bottom: 1px solid #edf2f7; font-size: 0.9rem; display: flex; justify-content: space-between; }
+        .player-item { padding: 6px 8px; border-bottom: 1px solid #edf2f7; font-size: 0.9rem; display: flex; justify-content: space-between; align-items:center; }
         .player-tag { font-size: 0.75rem; background: #e2e8f0; padding: 2px 6px; border-radius: 4px; }
 
         .director-controls { background: #ebf8ff; padding: 12px; border-radius: 8px; border: 1px solid #bee3f8; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .tv-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .tv-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .btn-tv { background: #4299e1; color: white; padding: 10px; border: none; border-radius: 6px; font-weight: bold; font-size: 0.85rem; cursor: pointer; }
         .btn-hide-tv { background: #718096; color: white; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        #btnPotm { display: none; background: linear-gradient(90deg, #d69e2e, #b7791f); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.1rem; text-transform: uppercase; cursor: pointer; margin-top:10px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); box-shadow: 0 4px 6px rgba(0,0,0,0.2);}
+        #btnPotm { display: none; background: linear-gradient(90deg, #d69e2e, #b7791f); color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.1rem; text-transform: uppercase; cursor: pointer; margin-top:10px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);}
 
         .mini-board { background: #1a202c; color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
         .mb-top { display: flex; justify-content: space-between; font-size: 1.5rem; font-weight: bold; border-bottom: 1px solid #4a5568; padding-bottom: 8px; margin-bottom: 8px; }
         .mb-details { display: grid; grid-template-columns: 1fr 1fr; font-size: 1rem; line-height: 1.4; }
         
-        .numpad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .numpad button { background: #edf2f7; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 1.2rem; font-weight: bold; height: 60px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .numpad button:active { transform: scale(0.96); }
-        .numpad .btn-run { background: #fff; } .numpad .btn-4 { background: #4299e1; color: white; } .numpad .btn-6 { background: #805ad5; color: white; }
-        .numpad .btn-w { background: #e53e3e; color: white; grid-column: span 2;} .numpad .btn-ex { background: #ecc94b; grid-column: span 2;}
-        .numpad .btn-undo { background: #ed8936; color: white; grid-column: span 2; height: 45px;}
-        .numpad .btn-tool { background: #718096; color: white; grid-column: span 2; height: 45px;}
-        .numpad .btn-danger { background: #dd6b20; color: white; grid-column: span 4; height: 45px;}
+        /* New Better Numpad Layout */
+        .numpad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .numpad button { border: none; border-radius: 8px; font-size: 1.2rem; font-weight: bold; height: 55px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.1s; }
+        .numpad button:active { transform: scale(0.95); }
+        .btn-run { background: #ffffff; color: #2d3748; border: 1px solid #e2e8f0 !important; } 
+        .btn-4 { background: #3182ce; color: white; grid-column: span 2; font-size: 1.4rem;} 
+        .btn-6 { background: #805ad5; color: white; grid-column: span 2; font-size: 1.4rem;}
+        .btn-w { background: #e53e3e; color: white; grid-column: span 2; font-size: 1.3rem;} 
+        .btn-ex { background: #ecc94b; color: #744210; grid-column: span 2; font-size: 1.1rem;}
+        .btn-undo { background: #ed8936; color: white; grid-column: span 2;}
+        .btn-tool { background: #718096; color: white; grid-column: span 2;}
+        .btn-danger { background: #c53030; color: white; grid-column: span 4;}
 
         .modal-bg { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 20px; border-radius: 12px; width: 320px; text-align:center;}
@@ -57,12 +62,14 @@
 <body>
 
     <div class="tabs">
-        <button class="tab-btn active" id="tab1" onclick="switchTab('playerSetup')">1. टीम & टॉस</button>
-        <button class="tab-btn" id="tab3" onclick="switchTab('liveControl')">2. लाइव कंट्रोल</button>
+        <button class="tab-btn active" id="tab1" onclick="switchTab('playerSetup', 'tab1')">1. टीम सेटअप</button>
+        <button class="tab-btn" id="tab2" onclick="switchTab('tossSetup', 'tab2')">2. टॉस & ओपनर्स</button>
+        <button class="tab-btn" id="tab3" onclick="switchTab('liveControl', 'tab3')">3. लाइव कंट्रोल</button>
+        <button class="tab-btn" id="tab4" onclick="switchTab('settingsPanel', 'tab4')">4. सेटिंग्स</button>
     </div>
 
     <div class="panel active-panel" id="playerSetup">
-        <h2>मैच और टीम सेटअप (Wireless)</h2>
+        <h2>टीमें बनाएं (Point 1: Remove Player)</h2>
         <div class="grid" style="background:#fffaf0; padding:12px; border-radius:8px;">
             <div><label>टीम 1</label><input type="text" id="setupT1Name" value="IND" onkeyup="updateTeamNames()"><label style="margin-top:10px;">टीम 1 लोगो (Optional)</label><input type="file" id="t1LogoInput" accept="image/*"></div>
             <div><label>टीम 2</label><input type="text" id="setupT2Name" value="PAK" onkeyup="updateTeamNames()"><label style="margin-top:10px;">टीम 2 लोगो (Optional)</label><input type="file" id="t2LogoInput" accept="image/*"></div>
@@ -80,41 +87,40 @@
             <div><label id="lblT1">IND Squad</label><div class="list-container" id="t1List"></div></div>
             <div><label id="lblT2">PAK Squad</label><div class="list-container" id="t2List"></div></div>
         </div>
+        <button class="btn-primary" style="margin-top:15px;" onclick="switchTab('tossSetup', 'tab2')">टॉस पेज पर जाएं ➔</button>
+    </div>
 
-        <div class="grid" style="background: #edf2f7; padding: 15px; border-radius:8px; margin-top: 10px;">
+    <div class="panel" id="tossSetup">
+        <h2>टॉस और मैच की शुरुआत</h2>
+        <div class="grid" style="background: #edf2f7; padding: 15px; border-radius:8px; margin-bottom: 15px;">
             <div><label>कुल ओवर</label><input type="number" id="matchOvers" value="20"></div>
             <div><label>बॉलर लिमिट</label><input type="number" id="maxBowlerOvers" value="4"></div>
-            <div><label>टॉस जीता</label><select id="tossWinner"><option value="1" id="optTossT1">IND</option><option value="2" id="optTossT2">PAK</option></select></div>
-            <div><label>क्या चुना</label><select id="tossDecision"><option value="bat">बल्लेबाज़ी</option><option value="bowl">गेंदबाज़ी</option></select></div>
+            <div><label>टॉस किसने जीता?</label><select id="tossWinner"><option value="1" id="optTossT1">IND</option><option value="2" id="optTossT2">PAK</option></select></div>
+            <div><label>क्या चुना?</label><select id="tossDecision"><option value="bat">बल्लेबाज़ी (Batting)</option><option value="bowl">गेंदबाज़ी (Bowling)</option></select></div>
+            <div class="grid-full"><button class="btn-success" onclick="applyToss()">टॉस कन्फर्म करें</button></div>
         </div>
-        <button class="btn-success" style="margin-top:15px;" onclick="startMatch()">मैच शुरू करें (Live)</button>
+
+        <div id="openerSetup" style="display:none; background:#ebf8ff; padding:15px; border-radius:8px; border:1px solid #bee3f8;">
+            <h3 style="color:#2b6cb0;">ओपनर्स चुनें (Select Openers)</h3>
+            <div class="grid">
+                <div><label>स्ट्राइकर (Striker)</label><select id="initStr"></select></div>
+                <div><label>नॉन-स्ट्राइकर (Non-Striker)</label><select id="initNStr"></select></div>
+                <div class="grid-full"><label>पहला बॉलर (First Bowler)</label><select id="initBwl"></select></div>
+            </div>
+            <button class="btn-primary" style="margin-top:15px;" onclick="startScoring()">मैच और स्कोरिंग शुरू करें 🏏</button>
+        </div>
     </div>
 
     <div class="panel" id="liveControl">
         <div class="director-controls" id="directorPanel" style="display:none;">
-            <div><label style="color:#2b6cb0;">ग्राफिक्स थीम बदलें</label>
-                <select id="themeSelector" onchange="changeTheme()">
-                    <option value="theme-2024">T20 WC 2024</option><option value="theme-2022">T20 WC 2022</option><option value="theme-2021">T20 WC 2021</option><option value="theme-2016">T20 WC 2016</option><option value="theme-2014">T20 WC 2014</option>
-                </select>
-            </div>
             <div class="tv-btns">
-                <button class="btn-tv" onclick="broadcast({type: 'show_bat_card', teamName: state.batTeam, squad: batSquad, db: playerDB, fow: state.fow})">🏏 Batting</button>
-                <button class="btn-tv" style="background:#38b2ac;" onclick="broadcast({type: 'show_bowl_card', teamName: state.bowlTeam, squad: bowlSquad, db: playerDB})">🎾 Bowling</button>
-                <button class="btn-tv" style="background:#d69e2e; grid-column:span 2;" onclick="broadcast({type: 'show_partnership', state: state})">🤝 Partnership</button>
-                <button class="btn-tv" style="background:#9f7aea; grid-column:span 2;" onclick="if(lastOutPlayer) broadcast({type: 'show_player_profile', playerName: lastOutPlayer, db: playerDB})">👤 Out Profile</button>
+                <button class="btn-tv" onclick="broadcast({type: 'show_bat_card', teamName: state.batTeam, squad: batSquad, db: playerDB, fow: state.fow})">🏏 Batting Card</button>
+                <button class="btn-tv" style="background:#38b2ac;" onclick="broadcast({type: 'show_bowl_card', teamName: state.bowlTeam, squad: bowlSquad, db: playerDB})">🎾 Bowling Card</button>
+                <button class="btn-tv" style="background:#d69e2e;" onclick="broadcast({type: 'show_partnership', state: state})">🤝 Partnership</button>
+                <button class="btn-tv" style="background:#9f7aea;" onclick="if(lastOutPlayer) broadcast({type: 'show_player_profile', playerName: lastOutPlayer, db: playerDB})">👤 Out Profile</button>
             </div>
-            <button class="btn-hide-tv" onclick="broadcast({type: 'hide_all_cards'})">❌ Hide Graphics</button>
+            <button class="btn-hide-tv" onclick="broadcast({type: 'hide_all_cards'})">❌ Hide All Graphics</button>
             <button id="btnPotm" onclick="if(bestPlayerName) broadcast({type: 'show_potm', playerName: bestPlayerName, db: playerDB})">🏆 Player of the Match</button>
-        </div>
-
-        <div id="openerSetup" style="display:none; background:#f7fafc; padding:15px; border-radius:8px; border:1px solid #e2e8f0;">
-            <h3>ओपनर्स चुनें</h3>
-            <div class="grid">
-                <div><label>स्ट्राइकर</label><select id="initStr"></select></div>
-                <div><label>नॉन-स्ट्राइकर</label><select id="initNStr"></select></div>
-                <div class="grid-full"><label>पहला बॉलर</label><select id="initBwl"></select></div>
-            </div>
-            <button class="btn-primary" style="margin-top:10px;" onclick="startScoring()">स्कोरिंग शुरू करें</button>
         </div>
 
         <div id="actionButtons" style="display:none;">
@@ -134,23 +140,58 @@
             </div>
 
             <div class="numpad">
-                <button class="btn-run" onclick="addRun(0)">0</button><button class="btn-run" onclick="addRun(1)">1</button><button class="btn-run" onclick="addRun(2)">2</button><button class="btn-run" onclick="addRun(3)">3</button>
-                <button class="btn-4" onclick="addRun(4)">4</button><button class="btn-6" onclick="addRun(6)">6</button>
-                <button class="btn-w" onclick="openWicketModal()">WICKET</button><button class="btn-ex" onclick="document.getElementById('extraModal').style.display='flex'">Extra (Wd/NB)</button>
-                <button class="btn-undo" onclick="undoAction()">UNDO ↩</button><button class="btn-tool" onclick="openRetireModal()">Retire Out</button>
-                <button class="btn-danger" onclick="endInningsEarly()">पारी समाप्त</button>
+                <button class="btn-run" onclick="addRun(0)">0</button>
+                <button class="btn-run" onclick="addRun(1)">1</button>
+                <button class="btn-run" onclick="addRun(2)">2</button>
+                <button class="btn-run" onclick="addRun(3)">3</button>
+                
+                <button class="btn-4" onclick="addRun(4)">FOUR (4)</button>
+                <button class="btn-6" onclick="addRun(6)">SIX (6)</button>
+                
+                <button class="btn-w" onclick="openWicketModal()">WICKET!</button>
+                <button class="btn-ex" onclick="document.getElementById('extraModal').style.display='flex'">Extra (Wd/NB)</button>
+                
+                <button class="btn-undo" onclick="undoAction()">↩ UNDO</button>
+                <button class="btn-tool" onclick="openRetireModal()">Retire Out</button>
+                
+                <button class="btn-danger" onclick="endInningsEarly()">पारी समाप्त करें (End Innings)</button>
             </div>
+        </div>
+        <div id="waitMessage" style="text-align:center; color:#718096; margin-top:50px;">कृपया पहले 'टॉस और ओपनर्स' सेट करें।</div>
+    </div>
+
+    <div class="panel" id="settingsPanel">
+        <h2>सिस्टम सेटिंग्स</h2>
+        <div style="background:#fed7d7; padding:20px; border-radius:8px; text-align:center; border: 1px solid #feb2b2;">
+            <h3 style="color:#c53030; margin-top:0;">खतरनाक ज़ोन (Danger Zone)</h3>
+            <p style="color:#742a2a; font-size:0.95rem;">नया मैच या टूर्नामेंट शुरू करने के लिए पुराने डेटा को डिलीट करें। इससे स्कोर, खिलाड़ी और सारी सेटिंग्स ज़ीरो हो जाएंगी।</p>
+            <button class="btn-danger" style="padding:15px; font-size:1.1rem; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.2);" onclick="resetSystem()">⚠️ पूरा सिस्टम रीसेट करें (Reset All)</button>
+        </div>
+        <div style="margin-top:20px;">
+            <label style="color:#2b6cb0;">ग्राफिक्स थीम बदलें</label>
+            <select id="themeSelector" onchange="changeTheme()">
+                <option value="theme-2024">T20 WC 2024</option><option value="theme-2022">T20 WC 2022</option><option value="theme-2021">T20 WC 2021</option><option value="theme-2016">T20 WC 2016</option><option value="theme-2014">T20 WC 2014</option>
+            </select>
         </div>
     </div>
 
-    <div id="wicketModal" class="modal-bg"><div class="modal-content"><h3 style="color:#c53030;">Wicket!</h3><select id="outType"><option value="Bowled">Bowled</option><option value="Caught">Caught</option><option value="LBW">LBW</option><option value="Run Out">Run Out</option><option value="Stumped">Stumped</option></select><input type="text" id="fielderName" placeholder="Fielder Name"><hr><select id="newBatsmanSelect"></select><button class="btn-primary" onclick="confirmWicket()">कन्फर्म</button><button class="btn-cancel" onclick="document.getElementById('wicketModal').style.display='none'">Back</button></div></div>
+    <div id="wicketModal" class="modal-bg"><div class="modal-content"><h3 style="color:#c53030;">Wicket!</h3>
+        <select id="outType"><option value="Bowled">Bowled</option><option value="Caught">Caught</option><option value="LBW">LBW</option><option value="Run Out">Run Out</option><option value="Stumped">Stumped</option></select>
+        <label style="text-align:left; margin-top:10px;">फील्डर का नाम (Fielder)</label>
+        <select id="fielderNameSelect"></select> <hr>
+        <label style="text-align:left;">नया बल्लेबाज़ (New Batsman)</label>
+        <select id="newBatsmanSelect"></select>
+        <button class="btn-primary" onclick="confirmWicket()">कन्फर्म</button>
+        <button class="btn-cancel" onclick="document.getElementById('wicketModal').style.display='none'">Back</button>
+    </div></div>
+    
     <div id="bowlerModal" class="modal-bg"><div class="modal-content"><h3 style="color:#2b6cb0;">ओवर समाप्त</h3><select id="newBowlerSelect"></select><button class="btn-primary" onclick="confirmBowler()">कन्फर्म</button><button class="btn-cancel" onclick="document.getElementById('bowlerModal').style.display='none'">Cancel</button></div></div>
     <div id="extraModal" class="modal-bg"><div class="modal-content"><h3 style="color:#d69e2e;">Extra Runs</h3><select id="exType"><option value="wd">Wide</option><option value="nb">No Ball</option><option value="lb">Leg Bye / Bye</option></select><select id="exRuns"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="6">6</option></select><button class="btn-primary" onclick="applyExtra()">Apply</button><button class="btn-cancel" onclick="document.getElementById('extraModal').style.display='none'">Back</button></div></div>
     <div id="retireModal" class="modal-bg"><div class="modal-content"><h3 style="color:#4a5568;">Retire Out</h3><select id="retirePlayerSelect"></select><hr><select id="newRetireBatsmanSelect"></select><button class="btn-primary" onclick="confirmRetireOut()">कन्फर्म</button><button class="btn-cancel" onclick="document.getElementById('retireModal').style.display='none'">Back</button></div></div>
 
     <script>
         // ==========================================
-        // FIREBASE SETUP (आपका असली कोड यहाँ डाल दिया गया है)
+        // 1. FIREBASE SETUP
         // ==========================================
         const firebaseConfig = {
           apiKey: "AIzaSyBVDsBQ-yf2Bf3SYn6EGA8TFzf5BwrGBGg",
@@ -162,29 +203,33 @@
           appId: "1:58214965866:web:de98f07ae696c69ec16013",
           measurementId: "G-FSBY7QGFF0"
         };
-        
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Broadcast function
         function broadcast(data) {
             data.timestamp = Date.now(); 
             database.ref('vk_live_action').set(data);
         }
-        // ==========================================
 
+        // ==========================================
+        // VARIABLES
+        // ==========================================
         let team1Squad = [], team2Squad = [], batSquad = [], bowlSquad = [];
         let playerDB = {}; let lastOutPlayer = ""; let historyStack = []; let bestPlayerName = "";
         let t1LogoStr = ""; let t2LogoStr = "";
         
-        let state = { runs: 0, wickets: 0, balls: 0, batTeam: "", bowlTeam: "", batTeamLogo: "", totalMatchOvers: 20, maxBowlerOvers: 4, s_name: "", ns_name: "", b_name: "", s_runs:0, s_balls:0, ns_runs:0, ns_balls:0, b_runs:0, b_wickets:0, b_balls:0, thisOver: [], target: 0, innings: 1, fow: [], partnership: {runs: 0, balls: 0}, crr: "0.00", rrr: "0.00" };
+        let state = { runs: 0, wickets: 0, balls: 0, batTeam: "", bowlTeam: "", batTeamLogo: "", bowlTeamLogo: "", totalMatchOvers: 20, maxBowlerOvers: 4, s_name: "", ns_name: "", b_name: "", s_runs:0, s_balls:0, ns_runs:0, ns_balls:0, b_runs:0, b_wickets:0, b_balls:0, thisOver: [], target: 0, innings: 1, fow: [], partnership: {runs: 0, balls: 0}, crr: "0.00", rrr: "0.00" };
 
         window.onload = function() { updateTeamNames(); }
         document.getElementById('t1LogoInput').addEventListener('change', function(e) { const f = e.target.files[0]; if(f) { const r = new FileReader(); r.onload = (ev) => { t1LogoStr = ev.target.result; }; r.readAsDataURL(f); } });
         document.getElementById('t2LogoInput').addEventListener('change', function(e) { const f = e.target.files[0]; if(f) { const r = new FileReader(); r.onload = (ev) => { t2LogoStr = ev.target.result; }; r.readAsDataURL(f); } });
 
-        function switchTab(t) { document.querySelectorAll('.panel').forEach(p => p.classList.remove('active-panel')); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(t).classList.add('active-panel'); document.getElementById(t==='playerSetup'?'tab1':'tab3').classList.add('active'); }
+        function switchTab(panelId, btnId) { 
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active-panel')); 
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); 
+            document.getElementById(panelId).classList.add('active-panel'); 
+            document.getElementById(btnId).classList.add('active'); 
+        }
         function changeTheme() { broadcast({ type: 'theme', themeName: document.getElementById('themeSelector').value }); }
         
         function updateTeamNames() {
@@ -194,37 +239,83 @@
             document.getElementById("optTossT1").innerText = t1; document.getElementById("optTossT2").innerText = t2;
         }
 
+        // Point 1: Added Remove logic
+        function renderTeamLists() {
+            document.getElementById("t1List").innerHTML = ""; document.getElementById("t2List").innerHTML = "";
+            team1Squad.forEach(p => createPlayerHTML(p, 1)); team2Squad.forEach(p => createPlayerHTML(p, 2));
+        }
+
+        function createPlayerHTML(p, teamNum) {
+            let tags = `<span class="player-tag">${p.role}</span>`; 
+            if(p.isC) tags += ` <span class="player-tag" style="background:#fefcbf;">C</span>`; 
+            if(p.isVC) tags += ` <span class="player-tag">VC</span>`;
+            let itemHTML = `<div class="player-item"><span><b>${p.name}</b></span> <span>${tags} <button class="btn-remove" onclick="removePlayer('${p.name}', ${teamNum})">❌</button></span></div>`;
+            if(teamNum === 1) document.getElementById("t1List").insertAdjacentHTML('beforeend', itemHTML);
+            else document.getElementById("t2List").insertAdjacentHTML('beforeend', itemHTML);
+        }
+
         function addPlayerToList() {
             let tSelect = document.getElementById("addTeamSelect").value; let name = document.getElementById("addPName").value.trim(); if(!name) return;
             if(playerDB[name]) { alert("यह नाम पहले से है!"); return; }
             let role = document.getElementById("addPRole").value; let isC = document.getElementById("addPCaptain").checked; let isVC = document.getElementById("addPViceCaptain").checked;
-            playerDB[name] = { r:0, b:0, fours:0, sixes:0, bwR:0, bwW:0, bwB:0, status: 'yet_to_bat', dismissalInfo: '' };
-            let tags = `<span class="player-tag">${role}</span>`; if(isC) tags += ` <span class="player-tag" style="background:#fefcbf;">C</span>`; if(isVC) tags += ` <span class="player-tag">VC</span>`;
-            let itemHTML = `<div class="player-item"><span><b>${name}</b></span> <span>${tags}</span></div>`;
-            if(tSelect === "1") { team1Squad.push({name:name, role:role, isC:isC, isVC:isVC}); document.getElementById("t1List").insertAdjacentHTML('beforeend', itemHTML); } 
-            else { team2Squad.push({name:name, role:role, isC:isC, isVC:isVC}); document.getElementById("t2List").insertAdjacentHTML('beforeend', itemHTML); }
+            // Point 3: Added c (catches), st (stumping), ro (run out) for POTM
+            playerDB[name] = { r:0, b:0, fours:0, sixes:0, bwR:0, bwW:0, bwB:0, c:0, st:0, ro:0, status: 'yet_to_bat', dismissalInfo: '' };
+            
+            let pObj = {name:name, role:role, isC:isC, isVC:isVC};
+            if(tSelect === "1") team1Squad.push(pObj); else team2Squad.push(pObj);
+            
+            renderTeamLists();
             document.getElementById("addPName").value = ""; document.getElementById("addPCaptain").checked = false; document.getElementById("addPViceCaptain").checked = false;
         }
 
-        function startMatch() {
+        function removePlayer(name, teamNum) {
+            delete playerDB[name];
+            if(teamNum === 1) team1Squad = team1Squad.filter(p => p.name !== name);
+            else team2Squad = team2Squad.filter(p => p.name !== name);
+            renderTeamLists();
+        }
+
+        // Point 2: Toss logic moved to separate tab
+        function applyToss() {
             state.totalMatchOvers = parseInt(document.getElementById("matchOvers").value); state.maxBowlerOvers = parseInt(document.getElementById("maxBowlerOvers").value);
             let t1 = document.getElementById("setupT1Name").value.trim(); let t2 = document.getElementById("setupT2Name").value.trim();
             let tossW = document.getElementById("tossWinner").value; let dec = document.getElementById("tossDecision").value;
-            if((tossW === "1" && dec === "bat") || (tossW === "2" && dec === "bowl")) { state.batTeam = t1; state.bowlTeam = t2; batSquad = [...team1Squad]; bowlSquad = [...team2Squad]; state.batTeamLogo = t1LogoStr; } 
-            else { state.batTeam = t2; state.bowlTeam = t1; batSquad = [...team2Squad]; bowlSquad = [...team1Squad]; state.batTeamLogo = t2LogoStr; }
+            
+            if((tossW === "1" && dec === "bat") || (tossW === "2" && dec === "bowl")) { 
+                state.batTeam = t1; state.bowlTeam = t2; batSquad = [...team1Squad]; bowlSquad = [...team2Squad]; 
+                state.batTeamLogo = t1LogoStr; state.bowlTeamLogo = t2LogoStr; // Point 5: Save both logos
+            } else { 
+                state.batTeam = t2; state.bowlTeam = t1; batSquad = [...team2Squad]; bowlSquad = [...team1Squad]; 
+                state.batTeamLogo = t2LogoStr; state.bowlTeamLogo = t1LogoStr;
+            }
+            
             populateDropdown("initStr", batSquad); populateDropdown("initNStr", batSquad); populateDropdown("initBwl", bowlSquad);
-            switchTab('liveControl'); document.getElementById("openerSetup").style.display = "block"; changeTheme();
+            document.getElementById("openerSetup").style.display = "block";
             broadcast({ type:'animation', eventText: `${tossW==="1"?t1:t2} WON TOSS`, animType:'simple' });
+            changeTheme();
         }
 
-        function populateDropdown(id, arr, excl1="", excl2="") { let sel = document.getElementById(id); sel.innerHTML = ""; arr.forEach(p => { if(p.name !== excl1 && p.name !== excl2 && playerDB[p.name] && playerDB[p.name].status !== 'out' && playerDB[p.name].status !== 'retired') { sel.innerHTML += `<option value="${p.name}">${p.name}</option>`; }}); }
+        function populateDropdown(id, arr, excl1="", excl2="") { 
+            let sel = document.getElementById(id); sel.innerHTML = ""; 
+            if(id === "fielderNameSelect") sel.innerHTML = `<option value="Sub/None">-- Substitute / None --</option>`; // Point 3
+            arr.forEach(p => { 
+                if(p.name !== excl1 && p.name !== excl2 && playerDB[p.name] && playerDB[p.name].status !== 'out' && playerDB[p.name].status !== 'retired') { 
+                    sel.innerHTML += `<option value="${p.name}">${p.name}</option>`; 
+                }
+            }); 
+        }
         document.getElementById("initStr").addEventListener("change", function() { populateDropdown("initNStr", batSquad, this.value); });
         
         function startScoring() {
             state.s_name = document.getElementById("initStr").value; state.ns_name = document.getElementById("initNStr").value; state.b_name = document.getElementById("initBwl").value;
             if(!state.s_name || !state.ns_name || !state.b_name || state.s_name === state.ns_name) { alert("खिलाड़ी सही से चुनें!"); return; }
             playerDB[state.s_name].status = 'batting'; playerDB[state.ns_name].status = 'batting';
-            document.getElementById("openerSetup").style.display = "none"; document.getElementById("actionButtons").style.display = "block"; document.getElementById("directorPanel").style.display = "flex"; sendUpdate();
+            
+            switchTab('liveControl', 'tab3');
+            document.getElementById("waitMessage").style.display = "none";
+            document.getElementById("actionButtons").style.display = "block"; 
+            document.getElementById("directorPanel").style.display = "flex"; 
+            sendUpdate();
         }
 
         function saveStateToHistory() { if(historyStack.length >= 5) historyStack.shift(); historyStack.push({ stateCopy: JSON.parse(JSON.stringify(state)), dbCopy: JSON.parse(JSON.stringify(playerDB)), outPlayerCopy: lastOutPlayer }); }
@@ -236,7 +327,21 @@
             } else { alert("और Undo नहीं किया जा सकता!"); }
         }
 
-        function calculatePOTM() { let bestP = ""; let maxPts = -1; for(let p in playerDB) { let d = playerDB[p]; let pts = 0; pts += d.r; if(d.r >= 30) { let sr = (d.r / d.b) * 100; if(sr > 150) pts += 10; if(sr > 200) pts += 20; } pts += (d.bwW * 25); if(d.bwB >= 12) { let eco = (d.bwR / d.bwB) * 6; if(eco < 6) pts += 15; if(eco < 8) pts += 5; } if(pts > maxPts) { maxPts = pts; bestP = p; } } return bestP; }
+        // Point 3: POTM logic updated with fielding points
+        function calculatePOTM() { 
+            let bestP = ""; let maxPts = -1; 
+            for(let p in playerDB) { 
+                let d = playerDB[p]; let pts = 0; 
+                pts += d.r; // 1 run = 1 pt
+                if(d.r >= 30) { let sr = (d.r / d.b) * 100; if(sr > 150) pts += 10; if(sr > 200) pts += 20; } 
+                pts += (d.bwW * 25); // 1 wicket = 25 pts
+                if(d.bwB >= 12) { let eco = (d.bwR / d.bwB) * 6; if(eco < 6) pts += 15; if(eco < 8) pts += 5; } 
+                // Fielding points added
+                pts += (d.c * 10) + (d.st * 12) + (d.ro * 10);
+                
+                if(pts > maxPts) { maxPts = pts; bestP = p; } 
+            } return bestP; 
+        }
 
         function sendUpdate() {
             if(state.s_name) { state.s_runs = playerDB[state.s_name].r; state.s_balls = playerDB[state.s_name].b; }
@@ -266,13 +371,37 @@
             if(r===1 || r===3) swapStrike(); sendUpdate(); checkOverAndInnings(); checkTarget();
         }
 
-        function openWicketModal() { populateDropdown("newBatsmanSelect", batSquad, state.ns_name, state.s_name); document.getElementById("fielderName").value = ""; document.getElementById("wicketModal").style.display = "flex"; }
+        // Point 3: Populating fielder dropdown
+        function openWicketModal() { 
+            populateDropdown("newBatsmanSelect", batSquad, state.ns_name, state.s_name); 
+            populateDropdown("fielderNameSelect", bowlSquad); // Load fielding team
+            document.getElementById("wicketModal").style.display = "flex"; 
+        }
+
         function confirmWicket() {
-            saveStateToHistory(); let outType = document.getElementById("outType").value; let fielder = document.getElementById("fielderName").value.trim();
-            state.wickets += 1; state.balls += 1; playerDB[state.s_name].b += 1; playerDB[state.b_name].bwB += 1; if(outType !== "Run Out") playerDB[state.b_name].bwW += 1; 
+            saveStateToHistory(); 
+            let outType = document.getElementById("outType").value; 
+            let fielder = document.getElementById("fielderNameSelect").value; // Get from dropdown
+            let fielderNameText = (fielder === "Sub/None") ? "sub" : fielder;
+
+            state.wickets += 1; state.balls += 1; playerDB[state.s_name].b += 1; playerDB[state.b_name].bwB += 1; 
+            if(outType !== "Run Out") playerDB[state.b_name].bwW += 1; 
+            
+            // Point 3: Update Fielding Stats
+            if(fielder !== "Sub/None") {
+                if(outType === "Caught") playerDB[fielder].c += 1;
+                else if(outType === "Stumped") playerDB[fielder].st += 1;
+                else if(outType === "Run Out") playerDB[fielder].ro += 1;
+            }
+
             state.thisOver.push("W"); lastOutPlayer = state.s_name; playerDB[state.s_name].status = 'out'; state.fow.push(`${state.runs}-${state.wickets} (${state.s_name}, ${Math.floor(state.balls/6)}.${state.balls%6})`); state.partnership = {runs: 0, balls: 0}; 
 
-            let dText = ""; if(outType === "Bowled") dText = `b ${state.b_name}`; else if(outType === "Caught") dText = fielder ? `c ${fielder} b ${state.b_name}` : `c sub b ${state.b_name}`; else if(outType === "LBW") dText = `lbw b ${state.b_name}`; else if(outType === "Run Out") dText = fielder ? `run out (${fielder})` : `run out`; else if(outType === "Stumped") dText = fielder ? `st ${fielder} b ${state.b_name}` : `st b ${state.b_name}`;
+            let dText = ""; 
+            if(outType === "Bowled") dText = `b ${state.b_name}`; 
+            else if(outType === "Caught") dText = `c ${fielderNameText} b ${state.b_name}`; 
+            else if(outType === "LBW") dText = `lbw b ${state.b_name}`; 
+            else if(outType === "Run Out") dText = `run out (${fielderNameText})`; 
+            else if(outType === "Stumped") dText = `st ${fielderNameText} b ${state.b_name}`;
             playerDB[state.s_name].dismissalInfo = dText;
 
             broadcast({ type:'animation', eventText:'WICKET!', animType:'wicket' }); document.getElementById("wicketModal").style.display = "none";
@@ -306,12 +435,43 @@
             if(state.innings === 1) {
                 state.target = state.runs + 1; alert(`पहली पारी समाप्त! टारगेट: ${state.target}`); broadcast({ type:'animation', eventText:`TARGET: ${state.target}`, animType:'simple' });
                 state.innings = 2; state.runs = 0; state.wickets = 0; state.balls = 0; state.thisOver = []; historyStack = []; state.fow = []; state.partnership = {runs:0,balls:0};
-                let t = state.batTeam; state.batTeam = state.bowlTeam; state.bowlTeam = t; let sq = batSquad; batSquad = bowlSquad; bowlSquad = sq; let tLogo = state.batTeamLogo; state.batTeamLogo = (tLogo === t1LogoStr) ? t2LogoStr : t1LogoStr;
-                document.getElementById("actionButtons").style.display = "none"; populateDropdown("initStr", batSquad); populateDropdown("initNStr", batSquad); populateDropdown("initBwl", bowlSquad); document.getElementById("openerSetup").style.display = "block";
+                let t = state.batTeam; state.batTeam = state.bowlTeam; state.bowlTeam = t; 
+                let sq = batSquad; batSquad = bowlSquad; bowlSquad = sq; 
+                
+                // Point 5: Swap logos for 2nd innings
+                let tempLogo = state.batTeamLogo; state.batTeamLogo = state.bowlTeamLogo; state.bowlTeamLogo = tempLogo;
+
+                document.getElementById("actionButtons").style.display = "none"; document.getElementById("directorPanel").style.display = "none";
+                populateDropdown("initStr", batSquad); populateDropdown("initNStr", batSquad); populateDropdown("initBwl", bowlSquad); 
+                
+                switchTab('tossSetup', 'tab2');
+                document.getElementById("openerSetup").style.display = "block";
             } else {
                 let res = state.runs >= state.target ? `${state.batTeam} WON` : state.runs === state.target - 1 ? `MATCH TIED` : `${state.bowlTeam} WON`;
                 alert(`Match Over! ${res}`); broadcast({ type:'animation', eventText: res, animType:'simple' }); document.getElementById("actionButtons").style.display = "none"; 
                 bestPlayerName = calculatePOTM(); document.getElementById("btnPotm").style.display = "block"; 
+            }
+        }
+
+        // Point 4: Reset System Logic
+        function resetSystem() {
+            if(confirm("चेतावनी: क्या आप सच में पूरा डेटा और मैच डिलीट करना चाहते हैं? यह वापस नहीं आएगा!")) {
+                // Clear all data
+                team1Squad = []; team2Squad = []; batSquad = []; bowlSquad = [];
+                playerDB = {}; lastOutPlayer = ""; historyStack = []; bestPlayerName = "";
+                state = { runs: 0, wickets: 0, balls: 0, batTeam: "", bowlTeam: "", batTeamLogo: "", bowlTeamLogo: "", totalMatchOvers: 20, maxBowlerOvers: 4, s_name: "", ns_name: "", b_name: "", s_runs:0, s_balls:0, ns_runs:0, ns_balls:0, b_runs:0, b_wickets:0, b_balls:0, thisOver: [], target: 0, innings: 1, fow: [], partnership: {runs: 0, balls: 0}, crr: "0.00", rrr: "0.00" };
+                
+                // Reset UI
+                renderTeamLists();
+                document.getElementById("openerSetup").style.display = "none";
+                document.getElementById("actionButtons").style.display = "none";
+                document.getElementById("directorPanel").style.display = "none";
+                document.getElementById("waitMessage").style.display = "block";
+                document.getElementById("setupT1Name").value = "IND"; document.getElementById("setupT2Name").value = "PAK"; updateTeamNames();
+                
+                broadcast({ type: 'reset' }); // Tell scoreboard to reload/clear
+                alert("सिस्टम पूरी तरह से रीसेट हो गया है। आप नया मैच बना सकते हैं।");
+                switchTab('playerSetup', 'tab1');
             }
         }
     </script>
