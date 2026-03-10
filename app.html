@@ -301,6 +301,15 @@
         let state = { runs: 0, wickets: 0, balls: 0, batTeam: "", bowlTeam: "", totalMatchOvers: 20, maxBowlerOvers: 4, s_name: "", ns_name: "", b_name: "", s_runs:0, s_balls:0, ns_runs:0, ns_balls:0, b_runs:0, b_wickets:0, b_balls:0, thisOver: [], target: 0, innings: 1, fow: [], partnership: {runs: 0, balls: 0}, crr: "0.00", rrr: "0.00", isPowerplay: false };
         let activeBatSquad = []; let activeBowlSquad = []; let playerDB = {}; let historyStack = []; let lastOutPlayer = ""; let currentMatchStage = "Group Match";
 
+        // 🔥 AUTO-LOGIN LOGIC ON LOAD 🔥
+        window.onload = function() {
+            let savedClient = localStorage.getItem('activeCricScoreClient');
+            if(savedClient) {
+                document.getElementById('clientIdInput').value = savedClient;
+                checkLogin(); // Automatically trigger login
+            }
+        };
+
         function saveToLocal() { if(!currentClientID) return; const dataToSave = { matchMode, state, playerDB, activeBatSquad, activeBowlSquad, tournament, historyStack, lastOutPlayer, currentMatchStage }; localStorage.setItem('cricScore_' + currentClientID, JSON.stringify(dataToSave)); }
         function checkSavedMatch() { let saved = localStorage.getItem('cricScore_' + currentClientID); document.getElementById('btnResumeMatch').style.display = saved ? 'block' : 'none'; }
         function resumeSavedMatch() { let saved = localStorage.getItem('cricScore_' + currentClientID); if(saved) { let p = JSON.parse(saved); matchMode = p.matchMode; state = p.state; playerDB = p.playerDB; activeBatSquad = p.activeBatSquad; activeBowlSquad = p.activeBowlSquad; tournament = p.tournament; historyStack = p.historyStack || []; lastOutPlayer = p.lastOutPlayer || ""; currentMatchStage = p.currentMatchStage || "Group Match"; navigate('liveScoringScreen'); sendUpdate(); alert("✅ अधूरा मैच वापस आ गया है!"); } }
@@ -372,9 +381,43 @@
             navigate('liveScoringScreen');
         }
 
-        function logout() { if(confirm("लॉगआउट करना चाहते हैं?")) { currentClientID = ""; document.getElementById('appContainer').style.display = "none"; document.getElementById('loginBox').style.display = "flex"; } }
+        // 🔥 LOGOUT UPDATED TO REMOVE AUTO-LOGIN 🔥
+        function logout() { 
+            if(confirm("लॉगआउट करना चाहते हैं?")) { 
+                currentClientID = ""; 
+                localStorage.removeItem('activeCricScoreClient'); // Clear session
+                document.getElementById('appContainer').style.display = "none"; 
+                document.getElementById('loginBox').style.display = "flex"; 
+                document.getElementById('clientIdInput').value = ""; // Clear input box
+            } 
+        }
 
-        function checkLogin() { let inputId = document.getElementById('clientIdInput').value.trim().toUpperCase(); if(!inputId) return; let errorBox = document.getElementById('loginError'); errorBox.style.display = "none"; database.ref('vk_clients/' + inputId).once('value').then((snapshot) => { let clientData = snapshot.val(); if(clientData && Date.now() < clientData.expiryTime && clientData.active !== false) { currentClientID = inputId; document.getElementById('loginBox').style.display = "none"; document.getElementById('appContainer').style.display = "block"; checkSavedMatch(); navigate('modeSelectScreen'); } else { errorBox.innerHTML = "❌ आईडी गलत है!"; errorBox.style.display = "block"; } }); }
+        function checkLogin() { 
+            let inputId = document.getElementById('clientIdInput').value.trim().toUpperCase(); 
+            if(!inputId) return; 
+            let errorBox = document.getElementById('loginError'); 
+            errorBox.style.display = "none"; 
+            
+            database.ref('vk_clients/' + inputId).once('value').then((snapshot) => { 
+                let clientData = snapshot.val(); 
+                if(clientData && Date.now() < clientData.expiryTime && clientData.active !== false) { 
+                    currentClientID = inputId; 
+                    localStorage.setItem('activeCricScoreClient', currentClientID); // Save Session
+                    document.getElementById('loginBox').style.display = "none"; 
+                    document.getElementById('appContainer').style.display = "block"; 
+                    checkSavedMatch(); 
+                    navigate('modeSelectScreen'); 
+                } else { 
+                    errorBox.innerHTML = "❌ आईडी गलत है या एक्सपायर हो गई है!"; 
+                    errorBox.style.display = "block"; 
+                    localStorage.removeItem('activeCricScoreClient'); // Clear invalid session
+                } 
+            }).catch(e => {
+                errorBox.innerHTML = "❌ इंटरनेट कनेक्शन चेक करें!"; 
+                errorBox.style.display = "block"; 
+            }); 
+        }
+
         function broadcast(data) { if(!currentClientID) return; data.timestamp = Date.now(); database.ref('vk_live_action/' + currentClientID).set(data); saveToLocal(); }
 
         // ================= SINGLE MATCH =================
