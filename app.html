@@ -106,6 +106,9 @@
                 <p style="margin:20px 0; color:#718096; font-weight:bold;">- या -</p>
                 <button class="btn-warning" onclick="startSingleMatchSetup()" style="background:#ed8936;">🏏 सिंगल मैच (बिना ग्रुप के)</button>
                 <hr style="border:none; border-top:1px solid #e2e8f0; margin: 30px 0 20px;">
+                
+                <button class="btn-primary" style="background:#8b5cf6; padding:15px; font-size:1.1rem; width:100%; margin-bottom:15px;" onclick="loadDemoData()">🚀 डेमो डेटा डालें (World Cup Teams)</button>
+                
                 <button class="btn-danger" style="width:auto; padding:8px 20px; background:#718096;" onclick="logout()">🚪 लॉगआउट करें</button>
             </div>
         </div>
@@ -303,6 +306,49 @@
         function resumeSavedMatch() { let saved = localStorage.getItem('cricScore_' + currentClientID); if(saved) { let p = JSON.parse(saved); matchMode = p.matchMode; state = p.state; playerDB = p.playerDB; activeBatSquad = p.activeBatSquad; activeBowlSquad = p.activeBowlSquad; tournament = p.tournament; historyStack = p.historyStack || []; lastOutPlayer = p.lastOutPlayer || ""; currentMatchStage = p.currentMatchStage || "Group Match"; navigate('liveScoringScreen'); sendUpdate(); alert("✅ अधूरा मैच वापस आ गया है!"); } }
         function clearSavedMatch() { localStorage.removeItem('cricScore_' + currentClientID); document.getElementById('btnResumeMatch').style.display = 'none'; document.getElementById('nav_liveScoringScreen').style.display = 'none'; }
 
+        // ================= DEMO DATA FUNCTION =================
+        function loadDemoData() {
+            if(confirm("क्या आप डेमो के लिए इंटरनेशनल टीमें और खिलाड़ी लोड करना चाहते हैं? (यह आपके मौजूदा टूर्नामेंट को हटा देगा)")) {
+                matchMode = "tournament";
+                document.getElementById('tourTypeMode').value = "group";
+                document.getElementById('groupCount').value = "2";
+                
+                tournament = {
+                    name: "T20 World Cup Demo",
+                    type: "group",
+                    groups: ["Group A", "Group B"],
+                    teams: {
+                        "India": { group: "Group A", stats: {m:0, w:0, l:0, pts:0}, eliminated: false, players: [
+                            {name: "Rohit Sharma", role: "BAT", isC: true, isVC: false}, {name: "Virat Kohli", role: "BAT", isC: false, isVC: false},
+                            {name: "Suryakumar", role: "BAT", isC: false, isVC: false}, {name: "Rishabh Pant", role: "WK", isC: false, isVC: false},
+                            {name: "Jasprit Bumrah", role: "BOWL", isC: false, isVC: true}
+                        ]},
+                        "Australia": { group: "Group A", stats: {m:0, w:0, l:0, pts:0}, eliminated: false, players: [
+                            {name: "Pat Cummins", role: "BOWL", isC: true, isVC: false}, {name: "Travis Head", role: "BAT", isC: false, isVC: false},
+                            {name: "David Warner", role: "BAT", isC: false, isVC: false}, {name: "Glenn Maxwell", role: "AR", isC: false, isVC: false},
+                            {name: "Mitchell Starc", role: "BOWL", isC: false, isVC: true}
+                        ]},
+                        "England": { group: "Group B", stats: {m:0, w:0, l:0, pts:0}, eliminated: false, players: [
+                            {name: "Jos Buttler", role: "WK", isC: true, isVC: false}, {name: "Phil Salt", role: "BAT", isC: false, isVC: false},
+                            {name: "Ben Stokes", role: "AR", isC: false, isVC: false}, {name: "Jofra Archer", role: "BOWL", isC: false, isVC: false},
+                            {name: "Adil Rashid", role: "BOWL", isC: false, isVC: false}
+                        ]},
+                        "Pakistan": { group: "Group B", stats: {m:0, w:0, l:0, pts:0}, eliminated: false, players: [
+                            {name: "Babar Azam", role: "BAT", isC: true, isVC: false}, {name: "Mohammad Rizwan", role: "WK", isC: false, isVC: true},
+                            {name: "Fakhar Zaman", role: "BAT", isC: false, isVC: false}, {name: "Shaheen Afridi", role: "BOWL", isC: false, isVC: false},
+                            {name: "Haris Rauf", role: "BOWL", isC: false, isVC: false}
+                        ]}
+                    }
+                };
+                
+                saveToLocal();
+                document.getElementById('tourName').value = tournament.name;
+                navigate('tourTeamsListScreen');
+                renderTournamentTeams();
+                alert("✅ डेमो टीमें और खिलाड़ी सफलतापूर्वक लोड हो गए हैं!");
+            }
+        }
+
         // ================= NAVIGATION BAR LOGIC =================
         function navigate(screenId) { 
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen')); 
@@ -411,7 +457,6 @@
             renderTourPlayers(); 
         }
         
-        // 🔥 NEW: Player Removal Logic 🔥
         function removePlayerFromSelectedTeam(index) {
             if(confirm("क्या आप सच में इस खिलाड़ी को हटाना चाहते हैं?")) {
                 tournament.teams[selectedTeamForPlayer].players.splice(index, 1);
