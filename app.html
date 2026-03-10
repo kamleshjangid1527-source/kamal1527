@@ -2,7 +2,7 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Jangid CricScore - World Cup Control Panel</title>
+    <title>Jangid CricScore - Pro Control Panel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -18,7 +18,10 @@
         .top-navbar button:hover { background: #2b6cb0; color: white; }
         .top-navbar button.active-nav { background: #38bdf8; color: #0f172a; }
 
-        .btn-back-nav { display: none; /* अब इसकी जरूरत नहीं, टॉप मेनू आ गया है */ }
+        /* ⬅️ BACK BUTTON RESTORED */
+        .btn-back-nav { background: #e2e8f0; color: #4a5568; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 15px; font-size: 0.95rem; transition: 0.2s; }
+        .btn-back-nav:hover { background: #cbd5e0; color: #1a202c; }
+
         h2 { text-align: center; color: #1a365d; margin-top: 0; font-size: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;}
         h3 { color: #2d3748; margin-top: 0; margin-bottom: 10px; font-size: 1.2rem; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
@@ -51,13 +54,14 @@
         .list-container { background:#f8fafc; padding:10px; height:250px; overflow-y:auto; border: 1px solid #e2e8f0; border-radius: 6px; margin-top:10px;}
         .player-item { padding: 10px; border-bottom: 1px solid #edf2f7; font-size: 1rem; display: flex; justify-content: space-between; align-items:center;}
         
-        /* Premium TV Control Section */
+        /* Premium TV Control Section - Expanded to 3 Columns */
         .tv-panel { background: #1e293b; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 2px solid #38bdf8;}
         .tv-panel h3 { color: #38bdf8; margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 8px;}
-        .tv-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px;}
-        .btn-tv { background: #334155; color: white; padding: 10px; border: 1px solid #475569; border-radius: 6px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.2s;}
+        .tv-btns { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;}
+        .btn-tv { background: #334155; color: white; padding: 10px; border: 1px solid #475569; border-radius: 6px; font-weight: bold; font-size: 0.85rem; cursor: pointer; transition: 0.2s;}
         .btn-tv:hover { background: #475569; }
         .btn-tv-highlight { background: #d69e2e; color: #1a202c; border-color: #ecc94b;}
+        .btn-tv-old { background: #4299e1; border-color:#3182ce; }
         
         /* Points Table Styling */
         .pt-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size:0.9rem;}
@@ -108,6 +112,7 @@
 
         <div id="singleMatchSetupScreen" class="screen">
             <div class="panel">
+                <button class="btn-back-nav" onclick="navigate('modeSelectScreen')">⬅️ पीछे जाएँ</button>
                 <h2>🏏 सिंगल मैच सेटअप</h2>
                 <div class="grid">
                     <div><label>टीम 1</label><input type="text" id="smT1" placeholder="उदा: India"></div>
@@ -134,6 +139,7 @@
 
         <div id="tourSetupScreen" class="screen">
             <div class="panel">
+                <button class="btn-back-nav" onclick="navigate('modeSelectScreen')">⬅️ होम पेज पर जाएँ</button>
                 <h2>🏆 टूर्नामेंट सेटिंग्स</h2>
                 <div class="grid">
                     <div class="grid-full"><label>टूर्नामेंट का नाम</label><input type="text" id="tourName" placeholder="उदा: World Cup 2026"></div>
@@ -153,6 +159,7 @@
 
         <div id="tourTeamsListScreen" class="screen">
             <div class="panel">
+                <button class="btn-back-nav" onclick="navigate('tourSetupScreen')">⬅️ टूर्नामेंट सेटिंग्स पर जाएँ</button>
                 <h2>🛡️ टूर्नामेंट की टीमें</h2>
                 
                 <div style="background:#e6fffa; padding:15px; border-radius:8px; margin-bottom:15px;">
@@ -170,6 +177,7 @@
         <div id="tourPlayerManageScreen" class="screen">
             <div class="panel">
                 <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom:15px;">
+                    <button class="btn-back-nav" style="margin:0;" onclick="navigate('tourTeamsListScreen')">⬅️ सभी टीमें</button>
                     <h2 style="margin:0; border:none; color:#e53e3e;" id="selectedTeamLabel">TEAM NAME</h2>
                 </div>
                 <div class="grid" style="background:#ebf8ff; padding:15px; border-radius:8px;">
@@ -186,6 +194,7 @@
 
         <div id="tourStandingsScreen" class="screen">
             <div class="panel">
+                <button class="btn-back-nav" onclick="navigate('tourTeamsListScreen')">⬅️ टीमों की लिस्ट पर जाएँ</button>
                 <h2>📊 Points Table & Standings</h2>
                 <div id="standingsContainer"></div>
             </div>
@@ -193,6 +202,7 @@
 
         <div id="tourMatchSetupScreen" class="screen">
             <div class="panel">
+                <button class="btn-back-nav" onclick="navigate('tourTeamsListScreen')">⬅️ टीमों की लिस्ट पर जाएँ</button>
                 <h2>🏏 मैच सेटअप और टॉस</h2>
                 <div class="grid" style="background:#fffaf0; padding:15px; border-radius:8px;">
                     <div class="grid-full"><label>मैच का प्रकार</label>
@@ -224,12 +234,18 @@
             <div class="tv-panel">
                 <h3>📺 Broadcast Director Controls</h3>
                 <div class="tv-btns">
-                    <button class="btn-tv" onclick="broadcast({type: 'show_playing_xi', t1: state.batTeam, t2: state.bowlTeam, sq1: activeBatSquad, sq2: activeBowlSquad})">🏏 Show Playing XI</button>
-                    <button class="btn-tv" onclick="togglePowerplay()" id="btnPp">⚡ Powerplay: OFF</button>
-                    <button class="btn-tv btn-tv-highlight" onclick="showMilestonePrompt()">🏅 50/100 Milestone</button>
+                    <button class="btn-tv btn-tv-old" onclick="broadcast({type: 'show_bat_card', teamName: state.batTeam, squad: activeBatSquad, db: playerDB, fow: state.fow})">🏏 Batting Score</button>
+                    <button class="btn-tv btn-tv-old" style="background:#38b2ac;" onclick="broadcast({type: 'show_bowl_card', teamName: state.bowlTeam, squad: activeBowlSquad, db: playerDB})">🎾 Bowling Score</button>
+                    <button class="btn-tv btn-tv-old" style="background:#d69e2e;" onclick="broadcast({type: 'show_partnership', state: state})">🤝 Partnership</button>
+                    <button class="btn-tv btn-tv-old" style="background:#9f7aea;" onclick="if(lastOutPlayer) broadcast({type: 'show_player_profile', playerName: lastOutPlayer, db: playerDB})">👤 Out Batsman</button>
+                    
+                    <button class="btn-tv" onclick="broadcast({type: 'show_playing_xi', t1: state.batTeam, t2: state.bowlTeam, sq1: activeBatSquad, sq2: activeBowlSquad})">📋 Playing XI</button>
                     <button class="btn-tv" onclick="broadcast({type: 'show_match_summary', state: state, db: playerDB})">📊 Match Summary</button>
                     <button class="btn-tv" onclick="broadcast({type: 'show_points_table', tourName: tournament.name, groups: tournament.groups, teams: tournament.teams})">🏆 Points Table</button>
-                    <button class="btn-tv" style="background:#e53e3e; color:white; border-color:#c53030;" onclick="broadcast({type: 'hide_all_cards'})">❌ Hide TV Graphics</button>
+                    <button class="btn-tv btn-tv-highlight" onclick="showMilestonePrompt()">🏅 50/100 Mile</button>
+                    <button class="btn-tv" onclick="togglePowerplay()" id="btnPp">⚡ Powerplay: OFF</button>
+                    
+                    <button class="btn-tv" style="background:#e53e3e; color:white; border-color:#c53030; grid-column: span 3;" onclick="broadcast({type: 'hide_all_cards'})">❌ Hide TV Graphics (ग्राफ़िक्स हटाएं)</button>
                 </div>
             </div>
 
@@ -285,22 +301,19 @@
         function saveToLocal() { if(!currentClientID) return; const dataToSave = { matchMode, state, playerDB, activeBatSquad, activeBowlSquad, tournament, historyStack, lastOutPlayer, currentMatchStage }; localStorage.setItem('cricScore_' + currentClientID, JSON.stringify(dataToSave)); }
         function checkSavedMatch() { let saved = localStorage.getItem('cricScore_' + currentClientID); document.getElementById('btnResumeMatch').style.display = saved ? 'block' : 'none'; }
         function resumeSavedMatch() { let saved = localStorage.getItem('cricScore_' + currentClientID); if(saved) { let p = JSON.parse(saved); matchMode = p.matchMode; state = p.state; playerDB = p.playerDB; activeBatSquad = p.activeBatSquad; activeBowlSquad = p.activeBowlSquad; tournament = p.tournament; historyStack = p.historyStack || []; lastOutPlayer = p.lastOutPlayer || ""; currentMatchStage = p.currentMatchStage || "Group Match"; navigate('liveScoringScreen'); sendUpdate(); alert("✅ अधूरा मैच वापस आ गया है!"); } }
-        function clearSavedMatch() { localStorage.removeItem('cricScore_' + currentClientID); document.getElementById('btnResumeMatch').style.display = 'none'; document.getElementById('navLiveBtn').style.display = 'none'; }
+        function clearSavedMatch() { localStorage.removeItem('cricScore_' + currentClientID); document.getElementById('btnResumeMatch').style.display = 'none'; document.getElementById('nav_liveScoringScreen').style.display = 'none'; }
 
         // ================= NAVIGATION BAR LOGIC =================
         function navigate(screenId) { 
-            // Hide all screens
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen')); 
             document.getElementById(screenId).classList.add('active-screen'); 
             window.scrollTo(0,0); 
 
-            // Handle Top Navbar display
             let navBar = document.getElementById('mainNavBar');
             if(screenId === 'modeSelectScreen') {
                 navBar.style.display = 'none';
             } else {
                 navBar.style.display = 'flex';
-                // Highlight active tab
                 document.querySelectorAll('.top-navbar button').forEach(b => b.classList.remove('active-nav'));
                 if(document.getElementById('nav_' + screenId)) {
                     document.getElementById('nav_' + screenId).classList.add('active-nav');
@@ -389,8 +402,33 @@
 
         let selectedTeamForPlayer = ""; 
         function openPlayerManageScreen(t) { selectedTeamForPlayer = t; document.getElementById('selectedTeamLabel').innerText = t; navigate('tourPlayerManageScreen'); renderTourPlayers(); }
-        function addPlayerToSelectedTeam() { let p = document.getElementById('tpName').value.trim(); if(!p) return; tournament.teams[selectedTeamForPlayer].players.push({ name: p, role: document.getElementById('tpRole').value, isC: document.getElementById('tpCap').checked, isVC: document.getElementById('tpVcap').checked }); document.getElementById('tpName').value = ""; renderTourPlayers(); }
-        function renderTourPlayers() { let list = document.getElementById('tourPlayerList'); list.innerHTML = ""; tournament.teams[selectedTeamForPlayer].players.forEach((p, i) => { list.innerHTML += `<div class="player-item"><span><b>${p.name}</b> (${p.role})</span></div>`; }); }
+        
+        function addPlayerToSelectedTeam() { 
+            let p = document.getElementById('tpName').value.trim(); 
+            if(!p) return; 
+            tournament.teams[selectedTeamForPlayer].players.push({ name: p, role: document.getElementById('tpRole').value, isC: document.getElementById('tpCap').checked, isVC: document.getElementById('tpVcap').checked }); 
+            document.getElementById('tpName').value = ""; 
+            renderTourPlayers(); 
+        }
+        
+        // 🔥 NEW: Player Removal Logic 🔥
+        function removePlayerFromSelectedTeam(index) {
+            if(confirm("क्या आप सच में इस खिलाड़ी को हटाना चाहते हैं?")) {
+                tournament.teams[selectedTeamForPlayer].players.splice(index, 1);
+                renderTourPlayers();
+                saveToLocal();
+            }
+        }
+
+        function renderTourPlayers() { 
+            let list = document.getElementById('tourPlayerList'); list.innerHTML = ""; 
+            tournament.teams[selectedTeamForPlayer].players.forEach((p, i) => { 
+                list.innerHTML += `<div class="player-item">
+                    <span><b>${i+1}. ${p.name}</b> (${p.role})</span> 
+                    <button class="btn-danger" style="width:auto; padding:5px 10px; margin:0;" onclick="removePlayerFromSelectedTeam(${i}); event.stopPropagation();">❌</button>
+                </div>`; 
+            }); 
+        }
         
         function updateTossDropdowns() { let t1 = document.getElementById('matchT1').value; let t2 = document.getElementById('matchT2').value; document.getElementById('tourTossWinner').innerHTML = `<option value="${t1}">${t1}</option><option value="${t2}">${t2}</option>`; }
         
@@ -426,7 +464,6 @@
                     let trClass = tm.eliminated ? 'eliminated-team' : '';
                     let btn = tm.eliminated ? `<button class="btn-primary" style="padding:4px; font-size:0.8rem; background:#38a169;" onclick="toggleEliminate('${tName}')">Bring Back</button>` : `<button class="btn-primary" style="padding:4px; font-size:0.8rem; background:#e53e3e;" onclick="toggleEliminate('${tName}')">Eliminate</button>`;
                     
-                    // Group Change Dropdown inside the table
                     let grpOptions = tournament.groups.map(grpName => `<option value="${grpName}" ${tm.group === grpName ? 'selected' : ''}>${grpName}</option>`).join('');
                     let grpSelect = tournament.type === 'group' ? `<br><select class="grp-select-small" onchange="changeTeamGroup('${tName}', this.value)">${grpOptions}</select>` : '';
 
@@ -442,8 +479,8 @@
         function changeTeamGroup(tName, newGroup) {
             tournament.teams[tName].group = newGroup;
             saveToLocal();
-            openStandingsScreen(); // Re-render table
-            renderTournamentTeams(); // Re-render background lists
+            openStandingsScreen(); 
+            renderTournamentTeams(); 
         }
 
         // ================= WORLD CUP TV CONTROLS =================
