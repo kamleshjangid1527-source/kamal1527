@@ -62,7 +62,42 @@
         <div class="login-card">
             <h1 style="color:#38bdf8;">Tournament Pro</h1>
             <input type="text" id="clientIdInput" placeholder="Client ID">
-            <button onclick="checkLogin()" class="btn-primary">Login 🚀</button>
+            function checkLogin() { 
+    let inputId = document.getElementById('clientIdInput').value.trim().toUpperCase(); 
+    if(!inputId) return; 
+    let errorBox = document.getElementById('loginError'); 
+    errorBox.style.display = "none"; 
+    
+    database.ref('vk_clients/' + inputId).once('value').then((snapshot) => { 
+        let clientData = snapshot.val(); 
+        
+        // CHECK IF ID EXISTS AND IS NOT EXPIRED
+        if(clientData && Date.now() < clientData.expiryTime && clientData.active !== false) { 
+            
+            // 🔥 PLAN SECURITY CHECK FOR TOURNAMENT PRO 🔥
+            if(clientData.planType !== 'pro') {
+                errorBox.innerHTML = "❌ यह ID सिर्फ 'Single Match' के लिए है! Pro में लॉगिन नहीं कर सकते।"; 
+                errorBox.style.display = "block";
+                localStorage.removeItem('activeProClient');
+                return; // Stop login
+            }
+
+            currentClientID = inputId; 
+            localStorage.setItem('activeProClient', currentClientID); 
+            document.getElementById('loginBox').style.display = "none"; 
+            document.getElementById('appContainer').style.display = "block"; 
+            checkSavedMatch(); 
+            navigate('modeSelectScreen'); 
+        } else { 
+            errorBox.innerHTML = "❌ ID गलत है या एक्सपायर हो गई है!"; 
+            errorBox.style.display = "block"; 
+            localStorage.removeItem('activeProClient'); 
+        } 
+    }).catch(e => {
+        errorBox.innerHTML = "❌ इंटरनेट कनेक्शन चेक करें!"; 
+        errorBox.style.display = "block"; 
+    }); 
+}
         </div>
     </div>
 
@@ -302,3 +337,4 @@
     </script>
 </body>
 </html>
+
