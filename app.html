@@ -41,7 +41,6 @@
         .btn-tv:hover { background: #475569; }
         .btn-tv-hl { background: #d69e2e; color: #000; border:none; font-weight:bold;}
 
-        /* Theme Selection Boxes */
         .theme-box { border: 2px solid transparent; border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; color: white; font-weight: bold;}
         .theme-wc { background: linear-gradient(90deg, #0f172a, #e11d48, #fbbf24); }
         .theme-psl { background: linear-gradient(90deg, #064e3b, #84cc16); }
@@ -62,42 +61,8 @@
         <div class="login-card">
             <h1 style="color:#38bdf8;">Tournament Pro</h1>
             <input type="text" id="clientIdInput" placeholder="Client ID">
-            function checkLogin() { 
-    let inputId = document.getElementById('clientIdInput').value.trim().toUpperCase(); 
-    if(!inputId) return; 
-    let errorBox = document.getElementById('loginError'); 
-    errorBox.style.display = "none"; 
-    
-    database.ref('vk_clients/' + inputId).once('value').then((snapshot) => { 
-        let clientData = snapshot.val(); 
-        
-        // CHECK IF ID EXISTS AND IS NOT EXPIRED
-        if(clientData && Date.now() < clientData.expiryTime && clientData.active !== false) { 
-            
-            // 🔥 PLAN SECURITY CHECK FOR TOURNAMENT PRO 🔥
-            if(clientData.planType !== 'pro') {
-                errorBox.innerHTML = "❌ यह ID सिर्फ 'Single Match' के लिए है! Pro में लॉगिन नहीं कर सकते।"; 
-                errorBox.style.display = "block";
-                localStorage.removeItem('activeProClient');
-                return; // Stop login
-            }
-
-            currentClientID = inputId; 
-            localStorage.setItem('activeProClient', currentClientID); 
-            document.getElementById('loginBox').style.display = "none"; 
-            document.getElementById('appContainer').style.display = "block"; 
-            checkSavedMatch(); 
-            navigate('modeSelectScreen'); 
-        } else { 
-            errorBox.innerHTML = "❌ ID गलत है या एक्सपायर हो गई है!"; 
-            errorBox.style.display = "block"; 
-            localStorage.removeItem('activeProClient'); 
-        } 
-    }).catch(e => {
-        errorBox.innerHTML = "❌ इंटरनेट कनेक्शन चेक करें!"; 
-        errorBox.style.display = "block"; 
-    }); 
-}
+            <button onclick="checkLogin()" class="btn-primary" style="margin-top:15px;">Login 🚀</button>
+            <p id="loginError" style="color:#ef4444; font-weight:bold; margin-top:15px; display:none;"></p>
         </div>
     </div>
 
@@ -127,7 +92,6 @@
         <div id="themeScreen" class="screen">
             <div class="panel">
                 <h2>🎨 TV Graphics Studio</h2>
-                
                 <h3>1. Select Scoreboard Layout</h3>
                 <select id="layoutSelect" onchange="previewTheme()">
                     <option value="layout-1">Layout 1: Bottom Center (Star Sports)</option>
@@ -135,7 +99,6 @@
                     <option value="layout-3">Layout 3: Rounded Glass (Modern)</option>
                     <option value="layout-4">Layout 4: Classic Box</option>
                 </select>
-
                 <h3 style="margin-top:20px;">2. Select Color Gradient</h3>
                 <div class="grid">
                     <div class="theme-box theme-wc theme-selected" id="theme_wc" onclick="selectColor('theme-wc')">World Cup</div>
@@ -143,7 +106,6 @@
                     <div class="theme-box theme-fire" id="theme_fire" onclick="selectColor('theme-fire')">Fire Orange</div>
                     <div class="theme-box theme-neon" id="theme_neon" onclick="selectColor('theme-neon')">Neon T20</div>
                 </div>
-
                 <button class="btn-success" style="margin-top:20px; font-size:1.2rem;" onclick="applyThemeToTV()">📺 Send Theme to TV (OBS)</button>
             </div>
         </div>
@@ -246,9 +208,9 @@
         </div>
     </div>
 
-    <div id="wicketModal" class="modal-bg"><div class="modal-content"><h3>Wicket!</h3><select id="outType"><option>Bowled</option><option>Caught</option><option>Run Out</option></select><br><br><select id="newBatsmanSelect" style="width:100%;"></select><br><br><button class="btn-primary" onclick="confirmWicket()">Confirm</button><button class="btn-danger" onclick="document.getElementById('wicketModal').style.display='none'">Cancel</button></div></div>
+    <div id="wicketModal" class="modal-bg"><div class="modal-content"><h3>Wicket!</h3><select id="outType"><option>Bowled</option><option>Caught</option><option>Run Out</option></select><br><br><select id="newBatsmanSelect" style="width:100%;"></select><br><br><button class="btn-primary" onclick="confirmWicket()">Confirm</button><button class="btn-danger" style="margin-top:10px;" onclick="document.getElementById('wicketModal').style.display='none'">Cancel</button></div></div>
     <div id="bowlerModal" class="modal-bg"><div class="modal-content"><h3>Select Bowler</h3><select id="newBowlerSelect" style="width:100%;"></select><br><br><button class="btn-primary" onclick="confirmBowler()">Confirm</button></div></div>
-    <div id="extraModal" class="modal-bg"><div class="modal-content"><h3>Extra</h3><select id="exType"><option value="wd">Wide</option><option value="nb">No Ball</option><option value="lb">Leg Bye</option></select><select id="exRuns"><option value="0">0</option><option value="1">1</option><option value="4">4</option></select><br><br><button class="btn-primary" onclick="applyExtra()">Apply</button><button class="btn-danger" onclick="document.getElementById('extraModal').style.display='none'">Cancel</button></div></div>
+    <div id="extraModal" class="modal-bg"><div class="modal-content"><h3>Extra</h3><select id="exType"><option value="wd">Wide</option><option value="nb">No Ball</option><option value="lb">Leg Bye</option></select><select id="exRuns"><option value="0">0</option><option value="1">1</option><option value="4">4</option></select><br><br><button class="btn-primary" onclick="applyExtra()">Apply</button><button class="btn-danger" style="margin-top:10px;" onclick="document.getElementById('extraModal').style.display='none'">Cancel</button></div></div>
 
     <script>
         const firebaseConfig = { apiKey: "AIzaSyBVDsBQ-yf2Bf3SYn6EGA8TFzf5BwrGBGg", authDomain: "kamal-7775e.firebaseapp.com", databaseURL: "https://kamal-7775e-default-rtdb.firebaseio.com", projectId: "kamal-7775e", storageBucket: "kamal-7775e.firebasestorage.app", messagingSenderId: "58214965866", appId: "1:58214965866:web:de98f07ae696c69ec16013" };
@@ -263,25 +225,47 @@
         function resumeSavedMatch() { let saved = localStorage.getItem('cricPro_' + currentClientID); if(saved) { let p = JSON.parse(saved); state = p.state; playerDB = p.playerDB; activeBatSquad = p.activeBatSquad; activeBowlSquad = p.activeBowlSquad; tournament = p.tournament; navigate('liveScoringScreen'); sendUpdate(); } }
         function clearSavedMatch() { localStorage.removeItem('cricPro_' + currentClientID); document.getElementById('nav_liveScoringScreen').style.display = 'none'; }
         
-        function checkLogin() { let id = document.getElementById('clientIdInput').value.trim().toUpperCase(); if(!id) return; database.ref('vk_clients/' + id).once('value').then(s => { if(s.val()) { currentClientID = id; localStorage.setItem('activeProClient', id); document.getElementById('loginBox').style.display="none"; document.getElementById('appContainer').style.display="block"; checkSavedMatch(); navigate('modeSelectScreen'); } else { alert("Wrong ID"); localStorage.removeItem('activeProClient'); } }); }
+        // 🔥 SECURE LOGIN FOR PRO PLAN 🔥
+        function checkLogin() { 
+            let inputId = document.getElementById('clientIdInput').value.trim().toUpperCase(); 
+            if(!inputId) return; 
+            let errorBox = document.getElementById('loginError'); 
+            errorBox.style.display = "none"; 
+            
+            database.ref('vk_clients/' + inputId).once('value').then((snapshot) => { 
+                let clientData = snapshot.val(); 
+                if(clientData && Date.now() < clientData.expiryTime && clientData.active !== false) { 
+                    if(clientData.planType !== 'pro') {
+                        errorBox.innerHTML = "❌ यह ID 'Single Match' के लिए है! इसमें लॉगिन नहीं कर सकते।"; 
+                        errorBox.style.display = "block";
+                        localStorage.removeItem('activeProClient');
+                        return; 
+                    }
+                    currentClientID = inputId; 
+                    localStorage.setItem('activeProClient', currentClientID); 
+                    document.getElementById('loginBox').style.display = "none"; 
+                    document.getElementById('appContainer').style.display = "block"; 
+                    checkSavedMatch(); 
+                    navigate('modeSelectScreen'); 
+                } else { 
+                    errorBox.innerHTML = "❌ ID गलत है या एक्सपायर हो गई है!"; 
+                    errorBox.style.display = "block"; 
+                    localStorage.removeItem('activeProClient'); 
+                } 
+            }).catch(e => {
+                errorBox.innerHTML = "❌ इंटरनेट कनेक्शन चेक करें!"; 
+                errorBox.style.display = "block"; 
+            }); 
+        }
+
         function logout() { currentClientID=""; localStorage.removeItem('activeProClient'); location.reload(); }
         function broadcast(data) { if(!currentClientID) return; data.timestamp = Date.now(); database.ref('vk_live_action/' + currentClientID).set(data); saveToLocal(); }
         function navigate(id) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen')); document.getElementById(id).classList.add('active-screen'); document.getElementById('mainNavBar').style.display = id==='modeSelectScreen'?'none':'flex'; document.querySelectorAll('.top-navbar button').forEach(b=>b.classList.remove('active-nav')); if(document.getElementById('nav_'+id)) document.getElementById('nav_'+id).classList.add('active-nav'); window.scrollTo(0,0); }
         function goToLiveScore() { if(!state.s_name) return alert("No active match!"); navigate('liveScoringScreen'); }
 
-        // ================= THEMES & COLORS LOGIC (NEW) =================
-        function selectColor(colorClass) {
-            currentThemeColor = colorClass;
-            document.querySelectorAll('.theme-box').forEach(b => b.classList.remove('theme-selected'));
-            document.getElementById(colorClass.replace('-','_')).classList.add('theme-selected');
-        }
-        function applyThemeToTV() {
-            let layout = document.getElementById('layoutSelect').value;
-            broadcast({ type: 'theme_update', layout: layout, color: currentThemeColor });
-            alert("✅ Theme updated on OBS screen!");
-        }
+        function selectColor(colorClass) { currentThemeColor = colorClass; document.querySelectorAll('.theme-box').forEach(b => b.classList.remove('theme-selected')); document.getElementById(colorClass.replace('-','_')).classList.add('theme-selected'); }
+        function applyThemeToTV() { let layout = document.getElementById('layoutSelect').value; broadcast({ type: 'theme_update', layout: layout, color: currentThemeColor }); alert("✅ Theme updated on OBS screen!"); }
 
-        // DEMO DATA
         function loadDemoData() { tournament.name = "Pro League"; tournament.teams = { "India": { group: "Group A", stats: {m:0, w:0, l:0, pts:0}, eliminated: false, players: [{name:"Rohit",role:"BAT"}, {name:"Kohli",role:"BAT"}, {name:"Pant",role:"WK"}, {name:"Bumrah",role:"BOWL"}] }, "Australia": { group: "Group A", stats: {m:0, w:0, l:0, pts:0}, eliminated: false, players: [{name:"Warner",role:"BAT"}, {name:"Head",role:"BAT"}, {name:"Starc",role:"BOWL"}, {name:"Cummins",role:"BOWL"}] } }; document.getElementById('tourName').value = "Pro League"; navigate('tourTeamsListScreen'); renderTournamentTeams(); }
         
         function goToTourTeamsList() { tournament.name = document.getElementById('tourName').value || "Tournament"; tournament.type = document.getElementById('tourTypeMode').value; tournament.groups = tournament.type === 'group' ? (document.getElementById('groupCount').value==='1'?["Group A"]:["Group A", "Group B"]) : ["All Teams"]; let sel = document.getElementById('teamGroupSelect'); sel.innerHTML=""; tournament.groups.forEach(g=>sel.innerHTML+=`<option>${g}</option>`); document.getElementById('teamGroupSelectDiv').style.display=tournament.type==='group'?'block':'none'; navigate('tourTeamsListScreen'); renderTournamentTeams(); }
@@ -296,7 +280,6 @@
         function popSel(id, arr, type, ex1, ex2) { let s = document.getElementById(id); s.innerHTML=""; arr.forEach(p=>{ let db=playerDB[p.name]; if(db && type==="BAT" && db.status==='yet_to_bat' && p.name!==ex1 && p.name!==ex2) s.innerHTML+=`<option>${p.name}</option>`; if(db && type==="BOWL" && db.bwB<(state.maxBowlerOvers*6) && p.name!==ex1) s.innerHTML+=`<option>${p.name}</option>`; }); }
         function startLiveScoring() { state.s_name=document.getElementById('tInitStr').value; state.ns_name=document.getElementById('tInitNStr').value; state.b_name=document.getElementById('tInitBwl').value; playerDB[state.s_name].status='batting'; playerDB[state.ns_name].status='batting'; document.getElementById('nav_liveScoringScreen').style.display='inline-block'; navigate('liveScoringScreen'); sendUpdate(); }
 
-        // TV GRAPHIC FIXES (Points table & Milestone)
         function openStandingsScreen() { navigate('tourStandingsScreen'); let c=document.getElementById('standingsContainer'); c.innerHTML=""; tournament.groups.forEach(g=>{ let grp=Object.keys(tournament.teams).filter(t=>tournament.teams[t].group===g); grp.sort((a,b)=>tournament.teams[b].stats.pts - tournament.teams[a].stats.pts); let html=`<h4 style="margin:5px 0;">${g}</h4><table class="pt-table"><tr><th>Team</th><th>M</th><th>Pts</th><th>Act</th></tr>`; grp.forEach(t=>{ let tm=tournament.teams[t]; html+=`<tr><td>${t}</td><td>${tm.stats.m}</td><td>${tm.stats.pts}</td><td><button onclick="tournament.teams['${t}'].eliminated=!tournament.teams['${t}'].eliminated; openStandingsScreen();">Eliminate</button></td></tr>`; }); c.innerHTML+=html+"</table>"; }); }
         function showMilestonePrompt() { let type = prompt("Type (eg: 50 RUNS, 100 RUNS)", "HALF CENTURY - 50"); let name = prompt("Player Name:", state.s_name); if(type && name) broadcast({type: 'show_milestone', text: type, player: name}); }
         function togglePowerplay() { state.isPowerplay = !state.isPowerplay; document.getElementById('btnPp').innerText = state.isPowerplay ? "⚡ Powerplay ON" : "⚡ Powerplay OFF"; sendUpdate(); }
@@ -337,4 +320,3 @@
     </script>
 </body>
 </html>
-
