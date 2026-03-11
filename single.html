@@ -58,7 +58,32 @@
         <div class="login-card">
             <h1 style="color:#38bdf8;">Single Match Edition</h1>
             <input type="text" id="clientIdInput" placeholder="Client ID">
-            <button onclick="checkLogin()" class="btn-primary" style="margin-top:15px;">Login 🚀</button>
+            <button onclick="function checkLogin() { 
+    let id = document.getElementById('clientIdInput').value.trim().toUpperCase(); 
+    if(!id) return; 
+    database.ref('vk_clients/' + id).once('value').then(s => { 
+        let clientData = s.val();
+        if(clientData && Date.now() < clientData.expiryTime && clientData.active !== false) { 
+            
+            // 🔥 PLAN SECURITY CHECK FOR SINGLE MATCH 🔥
+            if(clientData.planType !== 'single') {
+                alert("❌ यह ID 'Tournament Pro' की है। कृपया सही पैनल में लॉगिन करें!");
+                localStorage.removeItem('activeSingleClient');
+                return; // Stop login
+            }
+
+            currentClientID = id; 
+            localStorage.setItem('activeSingleClient', id); 
+            document.getElementById('loginBox').style.display="none"; 
+            document.getElementById('appContainer').style.display="block"; 
+            checkSavedMatch(); 
+            navigate('setupScreen'); 
+        } else { 
+            alert("❌ ID गलत है या एक्सपायर हो गई है!"); 
+            localStorage.removeItem('activeSingleClient'); 
+        } 
+    }); 
+}
         </div>
     </div>
 
