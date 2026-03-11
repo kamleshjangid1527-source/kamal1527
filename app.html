@@ -12,12 +12,10 @@
         .active-screen { display: block; }
         .panel { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 15px; }
         
-        /* TOP NAVIGATION */
         .top-navbar { display: none; background: #1a365d; padding: 10px; overflow-x: auto; white-space: nowrap; position: sticky; top: 0; z-index: 100;}
         .top-navbar button { background: transparent; color: #cbd5e1; border: none; padding: 8px 12px; font-weight: bold; cursor: pointer; border-radius: 6px; margin-right:5px;}
         .top-navbar button.active-nav { background: #38bdf8; color: #0f172a; }
 
-        .btn-back-nav { background: #e2e8f0; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 15px;}
         h2 { text-align: center; color: #1a365d; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;}
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
         .grid-full { grid-column: span 2; }
@@ -41,12 +39,10 @@
         .btn-tv:hover { background: #475569; }
         .btn-tv-hl { background: #d69e2e; color: #000; border:none; font-weight:bold;}
 
-        .theme-box { border: 2px solid transparent; border-radius: 8px; padding: 10px; text-align: center; cursor: pointer; color: white; font-weight: bold;}
-        .theme-wc { background: linear-gradient(90deg, #0f172a, #e11d48, #fbbf24); }
-        .theme-psl { background: linear-gradient(90deg, #064e3b, #84cc16); }
-        .theme-fire { background: linear-gradient(90deg, #ea580c, #000000, #94a3b8); }
-        .theme-neon { background: linear-gradient(90deg, #7e22ce, #db2777, #06b6d4); }
-        .theme-selected { border: 3px solid #fff; transform: scale(1.05); }
+        /* 20 THEMES GRID */
+        .grid-themes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .theme-box { border: 2px solid transparent; border-radius: 8px; padding: 10px 5px; text-align: center; cursor: pointer; color: white; font-weight: bold; font-size:0.8rem;}
+        .theme-selected { border: 3px solid #fff; transform: scale(1.05); box-shadow: 0 4px 10px rgba(0,0,0,0.5);}
 
         .modal-bg { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 20px; border-radius: 12px; width: 300px; text-align:center;}
@@ -67,7 +63,6 @@
     </div>
 
     <div id="appContainer" style="display:none;">
-        
         <div id="mainNavBar" class="top-navbar">
             <button id="nav_modeSelectScreen" onclick="navigate('modeSelectScreen')">🏠 Home</button>
             <button id="nav_tourSetupScreen" onclick="navigate('tourSetupScreen')">⚙️ Setup</button>
@@ -93,77 +88,62 @@
             <div class="panel">
                 <h2>🎨 TV Graphics Studio</h2>
                 <h3>1. Select Scoreboard Layout</h3>
-                <select id="layoutSelect" onchange="previewTheme()">
+                <select id="layoutSelect">
                     <option value="layout-1">Layout 1: Bottom Center (Star Sports)</option>
                     <option value="layout-2">Layout 2: Bottom Left (IPL Style)</option>
                     <option value="layout-3">Layout 3: Rounded Glass (Modern)</option>
                     <option value="layout-4">Layout 4: Classic Box</option>
                 </select>
-                <h3 style="margin-top:20px;">2. Select Color Gradient</h3>
-                <div class="grid">
-                    <div class="theme-box theme-wc theme-selected" id="theme_wc" onclick="selectColor('theme-wc')">World Cup</div>
-                    <div class="theme-box theme-psl" id="theme_psl" onclick="selectColor('theme-psl')">Green Grass</div>
-                    <div class="theme-box theme-fire" id="theme_fire" onclick="selectColor('theme-fire')">Fire Orange</div>
-                    <div class="theme-box theme-neon" id="theme_neon" onclick="selectColor('theme-neon')">Neon T20</div>
+                
+                <h3 style="margin-top:20px;">2. Select Color Gradient (20 Premium Colors)</h3>
+                <div class="grid-themes">
+                    <div class="theme-box theme-selected" style="background: linear-gradient(90deg, #0f172a, #e11d48);" onclick="selectColor(this, 'theme-1')">World Cup</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #022c22, #064e3b);" onclick="selectColor(this, 'theme-2')">PSL Green</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #18181b, #ea580c);" onclick="selectColor(this, 'theme-3')">Fire Orange</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #3b0764, #db2777);" onclick="selectColor(this, 'theme-4')">Neon Pink</div>
+                    
+                    <div class="theme-box" style="background: linear-gradient(90deg, #083344, #06b6d4);" onclick="selectColor(this, 'theme-5')">Ocean Blue</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #171717, #eab308); color:#000;" onclick="selectColor(this, 'theme-6')">Royal Gold</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #1e3a8a, #fbbf24);" onclick="selectColor(this, 'theme-7')">Mumbai Blue</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #000000, #22c55e);" onclick="selectColor(this, 'theme-8')">Cyber Green</div>
+                    
+                    <div class="theme-box" style="background: linear-gradient(90deg, #1c1917, #78716c);" onclick="selectColor(this, 'theme-9')">Dark Mode</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #4a044e, #f97316);" onclick="selectColor(this, 'theme-10')">Sunset</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #064e3b, #d97706);" onclick="selectColor(this, 'theme-11')">Forest Wood</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #450a0a, #000000);" onclick="selectColor(this, 'theme-12')">Blood Red</div>
+                    
+                    <div class="theme-box" style="background: linear-gradient(90deg, #0c4a6e, #e0f2fe); color:#000;" onclick="selectColor(this, 'theme-13')">Sky Blue</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #2e1065, #c084fc);" onclick="selectColor(this, 'theme-14')">Lavender</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #4c0519, #e11d48);" onclick="selectColor(this, 'theme-15')">Berry Dark</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #042f2e, #14b8a6);" onclick="selectColor(this, 'theme-16')">Mint Teal</div>
+                    
+                    <div class="theme-box" style="background: linear-gradient(90deg, #451a03, #ea580c);" onclick="selectColor(this, 'theme-17')">Desert Sand</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #0f172a, #a855f7);" onclick="selectColor(this, 'theme-18')">Galaxy</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #7f1d1d, #fef08a); color:#000;" onclick="selectColor(this, 'theme-19')">Volcano</div>
+                    <div class="theme-box" style="background: linear-gradient(90deg, #1e293b, #38bdf8);" onclick="selectColor(this, 'theme-20')">Slate Blue</div>
                 </div>
-                <button class="btn-success" style="margin-top:20px; font-size:1.2rem;" onclick="applyThemeToTV()">📺 Send Theme to TV (OBS)</button>
+
+                <button class="btn-success" style="margin-top:20px; font-size:1.2rem;" onclick="applyThemeToTV()">📺 Send Theme to TV</button>
             </div>
         </div>
 
         <div id="tourSetupScreen" class="screen">
-            <div class="panel"><h2>Tournament Settings</h2>
-                <input type="text" id="tourName" placeholder="Tournament Name"><br><br>
-                <select id="tourTypeMode" onchange="document.getElementById('groupCountDiv').style.display = this.value==='group'?'block':'none'">
-                    <option value="group">Group & Points Tournament</option><option value="normal">Normal Tournament</option>
-                </select><br><br>
-                <div id="groupCountDiv"><select id="groupCount"><option value="1">1 Group</option><option value="2" selected>2 Groups</option><option value="4">4 Groups</option></select></div><br>
-                <button class="btn-primary" onclick="goToTourTeamsList()">Next ➔</button>
-            </div>
+            <div class="panel"><h2>Tournament Settings</h2><input type="text" id="tourName" placeholder="Tournament Name"><br><br><select id="tourTypeMode" onchange="document.getElementById('groupCountDiv').style.display = this.value==='group'?'block':'none'"><option value="group">Group & Points Tournament</option><option value="normal">Normal Tournament</option></select><br><br><div id="groupCountDiv"><select id="groupCount"><option value="1">1 Group</option><option value="2" selected>2 Groups</option><option value="4">4 Groups</option></select></div><br><button class="btn-primary" onclick="goToTourTeamsList()">Next ➔</button></div>
         </div>
-
         <div id="tourTeamsListScreen" class="screen">
-            <div class="panel"><h2>Tournament Teams</h2>
-                <div style="display:flex; gap:10px;"><input type="text" id="newTeamName" placeholder="Team Name"><select id="teamGroupSelect"></select><button class="btn-success" onclick="addTourTeam()">Add</button></div>
-                <div id="tourTeamsContainer" style="margin-top:15px;"></div>
-            </div>
+            <div class="panel"><h2>Tournament Teams</h2><div style="display:flex; gap:10px;"><input type="text" id="newTeamName" placeholder="Team Name"><select id="teamGroupSelect"></select><button class="btn-success" onclick="addTourTeam()">Add</button></div><div id="tourTeamsContainer" style="margin-top:15px;"></div></div>
         </div>
-
         <div id="tourPlayerManageScreen" class="screen">
-            <div class="panel"><h2 id="selectedTeamLabel">TEAM</h2>
-                <div style="display:flex; gap:10px;"><input type="text" id="tpName" placeholder="Player Name"><select id="tpRole"><option value="BAT">BAT</option><option value="BOWL">BOWL</option><option value="AR">AR</option><option value="WK">WK</option></select><button class="btn-primary" onclick="addPlayerToSelectedTeam()">Add</button></div>
-                <div id="tourPlayerList" style="margin-top:15px; max-height:200px; overflow-y:auto;"></div>
-            </div>
+            <div class="panel"><h2 id="selectedTeamLabel">TEAM</h2><div style="display:flex; gap:10px;"><input type="text" id="tpName" placeholder="Player Name"><select id="tpRole"><option value="BAT">BAT</option><option value="BOWL">BOWL</option><option value="AR">AR</option><option value="WK">WK</option></select><button class="btn-primary" onclick="addPlayerToSelectedTeam()">Add</button></div><div id="tourPlayerList" style="margin-top:15px; max-height:200px; overflow-y:auto;"></div></div>
         </div>
-
-        <div id="tourStandingsScreen" class="screen">
-            <div class="panel"><h2>📊 Points Table</h2><div id="standingsContainer"></div></div>
-        </div>
-
+        <div id="tourStandingsScreen" class="screen"><div class="panel"><h2>📊 Points Table</h2><div id="standingsContainer"></div></div></div>
+        
         <div id="tourMatchSetupScreen" class="screen">
-            <div class="panel"><h2>Match Toss</h2>
-                <select id="matchStage"><option>Group Match</option><option>Knockout</option></select><br><br>
-                <div class="grid"><div><select id="matchT1" onchange="updateTossDropdowns()"></select></div><div><select id="matchT2" onchange="updateTossDropdowns()"></select></div>
-                <div><input type="number" id="tourMatchOvers" value="20" placeholder="Overs"></div><div><input type="number" id="tourMaxOvers" value="4" placeholder="Max Overs"></div></div>
-                <div class="grid"><div><select id="tourTossWinner"></select></div><div><select id="tourTossDec"><option value="bat">Batting</option><option value="bowl">Bowling</option></select></div></div>
-                <button class="btn-success" onclick="confirmTourToss()">Confirm Toss ➔</button>
-                <div id="tourOpenersBox" style="display:none; background:#eee; padding:10px; margin-top:10px;">
-                    <select id="tInitStr"></select> <select id="tInitNStr"></select> <select id="tInitBwl"></select><br><br>
-                    <button class="btn-danger" onclick="startLiveScoring()">Start Scoring</button>
-                </div>
-            </div>
+            <div class="panel"><h2>Match Toss</h2><select id="matchStage"><option>Group Match</option><option>Knockout</option></select><br><br><div class="grid"><div><select id="matchT1" onchange="updateTossDropdowns()"></select></div><div><select id="matchT2" onchange="updateTossDropdowns()"></select></div><div><input type="number" id="tourMatchOvers" value="20" placeholder="Overs"></div><div><input type="number" id="tourMaxOvers" value="4" placeholder="Max Overs"></div></div><div class="grid"><div><select id="tourTossWinner"></select></div><div><select id="tourTossDec"><option value="bat">Batting</option><option value="bowl">Bowling</option></select></div></div><button class="btn-success" onclick="confirmTourToss()">Confirm Toss ➔</button><div id="tourOpenersBox" style="display:none; background:#eee; padding:10px; margin-top:10px;"><select id="tInitStr"></select> <select id="tInitNStr"></select> <select id="tInitBwl"></select><br><br><button class="btn-danger" onclick="startLiveScoring()">Start Scoring</button></div></div>
         </div>
 
         <div id="inningsBreakScreen" class="screen">
-            <div class="panel">
-                <h2>🎯 Innings Break</h2>
-                <h3 id="ibTargetDisplay" style="color:red; text-align:center;"></h3>
-                <div class="grid">
-                    <div><label>New Striker</label><select id="ibTourStr"></select></div>
-                    <div><label>Non-Striker</label><select id="ibTourNStr"></select></div>
-                    <div class="grid-full"><label>First Bowler</label><select id="ibTourBwl"></select></div>
-                </div>
-                <button class="btn-primary" style="margin-top:15px; background:#e53e3e;" onclick="startSecondInnings()">Start 2nd Innings</button>
-            </div>
+            <div class="panel"><h2>🎯 Innings Break</h2><h3 id="ibTargetDisplay" style="color:red; text-align:center;"></h3><div class="grid"><div><label>New Striker</label><select id="ibTourStr"></select></div><div><label>Non-Striker</label><select id="ibTourNStr"></select></div><div class="grid-full"><label>First Bowler</label><select id="ibTourBwl"></select></div></div><button class="btn-primary" style="margin-top:15px; background:#e53e3e;" onclick="startSecondInnings()">Start 2nd Innings</button></div>
         </div>
 
         <div id="liveScoringScreen" class="screen">
@@ -183,25 +163,15 @@
             </div>
 
             <div class="mini-board">
-                <div style="display:flex; justify-content:space-between; font-size:1.5rem; font-weight:bold; border-bottom:1px solid #4a5568; padding-bottom:5px; margin-bottom:5px;">
-                    <span id="mbTeam">TEAM</span><span><span id="mbScore">0-0</span> <span style="font-size:1rem; color:#aaa;" id="mbOvers">(0.0)</span></span>
-                </div>
-                <div style="display:flex; justify-content:space-between; font-size:1rem;">
-                    <div><span style="color:#68d391" id="mbStr">Str: 0(0)</span><br><span style="color:#aaa" id="mbNStr">NStr: 0(0)</span></div>
-                    <div style="text-align:right;"><span style="color:#f6e05e" id="mbBwl">Bwl: 0-0(0.0)</span><br><span style="color:#aaa" id="mbThisOver"></span></div>
-                </div>
+                <div style="display:flex; justify-content:space-between; font-size:1.5rem; font-weight:bold; border-bottom:1px solid #4a5568; padding-bottom:5px; margin-bottom:5px;"><span id="mbTeam">TEAM</span><span><span id="mbScore">0-0</span> <span style="font-size:1rem; color:#aaa;" id="mbOvers">(0.0)</span></span></div>
+                <div style="display:flex; justify-content:space-between; font-size:1rem;"><div><span style="color:#68d391" id="mbStr">Str: 0(0)</span><br><span style="color:#aaa" id="mbNStr">NStr: 0(0)</span></div><div style="text-align:right;"><span style="color:#f6e05e" id="mbBwl">Bwl: 0-0(0.0)</span><br><span style="color:#aaa" id="mbThisOver"></span></div></div>
             </div>
 
             <div class="numpad">
-                <button style="background:#fff; color:#000;" onclick="addRun(0)">0</button><button style="background:#fff; color:#000;" onclick="addRun(1)">1</button>
-                <button style="background:#fff; color:#000;" onclick="addRun(2)">2</button><button style="background:#fff; color:#000;" onclick="addRun(3)">3</button>
-                <button style="background:#3182ce; color:#fff; grid-column:span 2;" onclick="addRun(4)">FOUR 4</button>
-                <button style="background:#805ad5; color:#fff; grid-column:span 2;" onclick="addRun(6)">SIX 6</button>
-                <button style="background:#e53e3e; color:#fff; grid-column:span 2;" onclick="openWicketModal()">WICKET</button>
-                <button style="background:#ecc94b; grid-column:span 2;" onclick="document.getElementById('extraModal').style.display='flex'">Extra</button>
-                <button style="background:#ed8936; color:#fff; grid-column:span 2;" onclick="undoAction()">↩ UNDO</button>
-                <button style="background:#718096; color:#fff;" onclick="swapStrike()">Swap</button>
-                <button style="background:#c53030; color:#fff;" onclick="changeBowlerMidOver()">Bwl Chg</button>
+                <button style="background:#fff; color:#000;" onclick="addRun(0)">0</button><button style="background:#fff; color:#000;" onclick="addRun(1)">1</button><button style="background:#fff; color:#000;" onclick="addRun(2)">2</button><button style="background:#fff; color:#000;" onclick="addRun(3)">3</button>
+                <button style="background:#3182ce; color:#fff; grid-column:span 2;" onclick="addRun(4)">FOUR 4</button><button style="background:#805ad5; color:#fff; grid-column:span 2;" onclick="addRun(6)">SIX 6</button>
+                <button style="background:#e53e3e; color:#fff; grid-column:span 2;" onclick="openWicketModal()">WICKET</button><button style="background:#ecc94b; grid-column:span 2;" onclick="document.getElementById('extraModal').style.display='flex'">Extra</button>
+                <button style="background:#ed8936; color:#fff; grid-column:span 2;" onclick="undoAction()">↩ UNDO</button><button style="background:#718096; color:#fff;" onclick="swapStrike()">Swap</button><button style="background:#c53030; color:#fff;" onclick="changeBowlerMidOver()">Bwl Chg</button>
                 <button style="background:#000; color:#fff; grid-column:span 4;" onclick="endInningsEarly()">End Innings</button>
             </div>
             <button class="btn-danger" style="margin-top:20px;" onclick="if(confirm('Exit Match?')) { clearSavedMatch(); navigate('modeSelectScreen'); }">🚪 Exit Match</button>
@@ -217,7 +187,7 @@
         firebase.initializeApp(firebaseConfig); const database = firebase.database();
         let currentClientID = ""; let tournament = { name: "", type: "group", groups: ["Group A", "Group B"], teams: {} }; 
         let state = { runs: 0, wickets: 0, balls: 0, batTeam: "", bowlTeam: "", totalMatchOvers: 20, maxBowlerOvers: 4, s_name: "", ns_name: "", b_name: "", s_runs:0, s_balls:0, ns_runs:0, ns_balls:0, b_runs:0, b_wickets:0, b_balls:0, thisOver: [], target: 0, innings: 1, partnership: {runs: 0, balls: 0}, crr: "0.00", rrr: "0.00", isPowerplay: false };
-        let activeBatSquad = []; let activeBowlSquad = []; let playerDB = {}; let historyStack = []; let currentThemeColor = 'theme-wc';
+        let activeBatSquad = []; let activeBowlSquad = []; let playerDB = {}; let historyStack = []; let currentThemeColor = 'theme-1';
 
         window.onload = function() { let saved = localStorage.getItem('activeProClient'); if(saved) { document.getElementById('clientIdInput').value = saved; checkLogin(); } };
         function saveToLocal() { if(!currentClientID) return; localStorage.setItem('cricPro_' + currentClientID, JSON.stringify({ state, playerDB, activeBatSquad, activeBowlSquad, tournament, historyStack })); }
@@ -225,36 +195,16 @@
         function resumeSavedMatch() { let saved = localStorage.getItem('cricPro_' + currentClientID); if(saved) { let p = JSON.parse(saved); state = p.state; playerDB = p.playerDB; activeBatSquad = p.activeBatSquad; activeBowlSquad = p.activeBowlSquad; tournament = p.tournament; navigate('liveScoringScreen'); sendUpdate(); } }
         function clearSavedMatch() { localStorage.removeItem('cricPro_' + currentClientID); document.getElementById('nav_liveScoringScreen').style.display = 'none'; }
         
-        // 🔥 SECURE LOGIN FOR PRO PLAN 🔥
         function checkLogin() { 
             let inputId = document.getElementById('clientIdInput').value.trim().toUpperCase(); 
             if(!inputId) return; 
-            let errorBox = document.getElementById('loginError'); 
-            errorBox.style.display = "none"; 
-            
+            let errorBox = document.getElementById('loginError'); errorBox.style.display = "none"; 
             database.ref('vk_clients/' + inputId).once('value').then((snapshot) => { 
                 let clientData = snapshot.val(); 
                 if(clientData && Date.now() < clientData.expiryTime && clientData.active !== false) { 
-                    if(clientData.planType !== 'pro') {
-                        errorBox.innerHTML = "❌ यह ID 'Single Match' के लिए है! इसमें लॉगिन नहीं कर सकते।"; 
-                        errorBox.style.display = "block";
-                        localStorage.removeItem('activeProClient');
-                        return; 
-                    }
-                    currentClientID = inputId; 
-                    localStorage.setItem('activeProClient', currentClientID); 
-                    document.getElementById('loginBox').style.display = "none"; 
-                    document.getElementById('appContainer').style.display = "block"; 
-                    checkSavedMatch(); 
-                    navigate('modeSelectScreen'); 
-                } else { 
-                    errorBox.innerHTML = "❌ ID गलत है या एक्सपायर हो गई है!"; 
-                    errorBox.style.display = "block"; 
-                    localStorage.removeItem('activeProClient'); 
-                } 
-            }).catch(e => {
-                errorBox.innerHTML = "❌ इंटरनेट कनेक्शन चेक करें!"; 
-                errorBox.style.display = "block"; 
+                    if(clientData.planType !== 'pro') { errorBox.innerHTML = "❌ यह ID 'Single Match' के लिए है!"; errorBox.style.display = "block"; localStorage.removeItem('activeProClient'); return; }
+                    currentClientID = inputId; localStorage.setItem('activeProClient', currentClientID); document.getElementById('loginBox').style.display = "none"; document.getElementById('appContainer').style.display = "block"; checkSavedMatch(); navigate('modeSelectScreen'); 
+                } else { errorBox.innerHTML = "❌ ID गलत या एक्सपायर है!"; errorBox.style.display = "block"; localStorage.removeItem('activeProClient'); } 
             }); 
         }
 
@@ -263,11 +213,15 @@
         function navigate(id) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen')); document.getElementById(id).classList.add('active-screen'); document.getElementById('mainNavBar').style.display = id==='modeSelectScreen'?'none':'flex'; document.querySelectorAll('.top-navbar button').forEach(b=>b.classList.remove('active-nav')); if(document.getElementById('nav_'+id)) document.getElementById('nav_'+id).classList.add('active-nav'); window.scrollTo(0,0); }
         function goToLiveScore() { if(!state.s_name) return alert("No active match!"); navigate('liveScoringScreen'); }
 
-        function selectColor(colorClass) { currentThemeColor = colorClass; document.querySelectorAll('.theme-box').forEach(b => b.classList.remove('theme-selected')); document.getElementById(colorClass.replace('-','_')).classList.add('theme-selected'); }
-        function applyThemeToTV() { let layout = document.getElementById('layoutSelect').value; broadcast({ type: 'theme_update', layout: layout, color: currentThemeColor }); alert("✅ Theme updated on OBS screen!"); }
+        // 🔥 20 THEMES SELECTION LOGIC 🔥
+        function selectColor(element, colorClass) { 
+            currentThemeColor = colorClass; 
+            document.querySelectorAll('.theme-box').forEach(b => b.classList.remove('theme-selected')); 
+            element.classList.add('theme-selected'); 
+        }
+        function applyThemeToTV() { let layout = document.getElementById('layoutSelect').value; broadcast({ type: 'theme_update', layout: layout, color: currentThemeColor }); alert("✅ Theme updated on OBS!"); }
 
-        function loadDemoData() { tournament.name = "Pro League"; tournament.teams = { "India": { group: "Group A", stats: {m:0, w:0, l:0, pts:0}, eliminated: false, players: [{name:"Rohit",role:"BAT"}, {name:"Kohli",role:"BAT"}, {name:"Pant",role:"WK"}, {name:"Bumrah",role:"BOWL"}] }, "Australia": { group: "Group A", stats: {m:0, w:0, l:0, pts:0}, eliminated: false, players: [{name:"Warner",role:"BAT"}, {name:"Head",role:"BAT"}, {name:"Starc",role:"BOWL"}, {name:"Cummins",role:"BOWL"}] } }; document.getElementById('tourName').value = "Pro League"; navigate('tourTeamsListScreen'); renderTournamentTeams(); }
-        
+        function loadDemoData() { tournament.name = "Pro League"; tournament.teams = { "India": { group: "Group A", stats: {m:0, w:0, l:0, pts:0}, eliminated: false, players: [{name:"Rohit"}, {name:"Kohli"}, {name:"Pant"}, {name:"Bumrah"}] }, "Australia": { group: "Group A", stats: {m:0, w:0, l:0, pts:0}, eliminated: false, players: [{name:"Warner"}, {name:"Head"}, {name:"Starc"}, {name:"Cummins"}] } }; document.getElementById('tourName').value = "Pro League"; navigate('tourTeamsListScreen'); renderTournamentTeams(); }
         function goToTourTeamsList() { tournament.name = document.getElementById('tourName').value || "Tournament"; tournament.type = document.getElementById('tourTypeMode').value; tournament.groups = tournament.type === 'group' ? (document.getElementById('groupCount').value==='1'?["Group A"]:["Group A", "Group B"]) : ["All Teams"]; let sel = document.getElementById('teamGroupSelect'); sel.innerHTML=""; tournament.groups.forEach(g=>sel.innerHTML+=`<option>${g}</option>`); document.getElementById('teamGroupSelectDiv').style.display=tournament.type==='group'?'block':'none'; navigate('tourTeamsListScreen'); renderTournamentTeams(); }
         function addTourTeam() { let t = document.getElementById('newTeamName').value; let g = document.getElementById('teamGroupSelect').value || "All Teams"; if(t && !tournament.teams[t]) { tournament.teams[t] = {players:[], group:g, stats:{m:0,w:0,l:0,pts:0}, eliminated:false}; document.getElementById('newTeamName').value=""; renderTournamentTeams(); } }
         function renderTournamentTeams() { let c = document.getElementById('tourTeamsContainer'); c.innerHTML=""; let t1=document.getElementById('matchT1'); t1.innerHTML=""; let t2=document.getElementById('matchT2'); t2.innerHTML=""; tournament.groups.forEach(g=>{ let grpTeams = Object.keys(tournament.teams).filter(t=>tournament.teams[t].group===g); if(grpTeams.length>0){ c.innerHTML+=`<div style="background:#2b6cb0;color:#fff;padding:5px;margin-top:10px;">${g}</div>`; grpTeams.forEach(tName=>{ let tm = tournament.teams[tName]; c.innerHTML+=`<div style="padding:10px; border:1px solid #ccc; margin-top:5px; cursor:pointer;" onclick="openPlayerManageScreen('${tName}')"><b>${tName}</b> (${tm.players.length} Pl)</div>`; if(!tm.eliminated){ t1.innerHTML+=`<option>${tName}</option>`; t2.innerHTML+=`<option>${tName}</option>`; } }); } }); updateTossDropdowns(); }
@@ -276,9 +230,24 @@
         function renderTourPlayers() { let c = document.getElementById('tourPlayerList'); c.innerHTML=""; tournament.teams[selTeam].players.forEach((p,i)=>c.innerHTML+=`<div style="padding:5px;border-bottom:1px solid #eee;">${p.name} <button onclick="tournament.teams['${selTeam}'].players.splice(${i},1);renderTourPlayers();">X</button></div>`); }
         
         function updateTossDropdowns() { let t1=document.getElementById('matchT1').value; let t2=document.getElementById('matchT2').value; document.getElementById('tourTossWinner').innerHTML=`<option>${t1}</option><option>${t2}</option>`; }
-        function confirmTourToss() { let t1=document.getElementById('matchT1').value; let t2=document.getElementById('matchT2').value; if(t1===t2) return alert("Select different teams"); state.totalMatchOvers = parseInt(document.getElementById('tourMatchOvers').value); state.maxBowlerOvers = parseInt(document.getElementById('tourMaxOvers').value); let w = document.getElementById('tourTossWinner').value; let d = document.getElementById('tourTossDec').value; state.batTeam = (w===t1 && d==='bat')||(w===t2 && d==='bowl')?t1:t2; state.bowlTeam = state.batTeam===t1?t2:t1; activeBatSquad = tournament.teams[state.batTeam].players; activeBowlSquad = tournament.teams[state.bowlTeam].players; playerDB={}; activeBatSquad.forEach(p=>playerDB[p.name]={r:0,b:0,fours:0,sixes:0,bwR:0,bwW:0,bwB:0,status:'yet_to_bat'}); activeBowlSquad.forEach(p=>playerDB[p.name]={r:0,b:0,fours:0,sixes:0,bwR:0,bwW:0,bwB:0,status:'yet_to_bat'}); popSel('tInitStr',activeBatSquad,"BAT"); popSel('tInitNStr',activeBatSquad,"BAT"); popSel('tInitBwl',activeBowlSquad,"BOWL"); document.getElementById('tourOpenersBox').style.display="block"; broadcast({type:'animation', eventText:w+" WON TOSS", animType:'simple'}); }
+        function confirmTourToss() { 
+            let t1=document.getElementById('matchT1').value; let t2=document.getElementById('matchT2').value; if(t1===t2) return alert("Select different teams"); 
+            state.totalMatchOvers = parseInt(document.getElementById('tourMatchOvers').value); state.maxBowlerOvers = parseInt(document.getElementById('tourMaxOvers').value); 
+            let w = document.getElementById('tourTossWinner').value; let d = document.getElementById('tourTossDec').value; 
+            state.batTeam = (w===t1 && d==='bat')||(w===t2 && d==='bowl')?t1:t2; state.bowlTeam = state.batTeam===t1?t2:t1; 
+            activeBatSquad = tournament.teams[state.batTeam].players; activeBowlSquad = tournament.teams[state.bowlTeam].players; playerDB={}; 
+            activeBatSquad.forEach(p=>playerDB[p.name]={r:0,b:0,fours:0,sixes:0,bwR:0,bwW:0,bwB:0,status:'yet_to_bat'}); activeBowlSquad.forEach(p=>playerDB[p.name]={r:0,b:0,fours:0,sixes:0,bwR:0,bwW:0,bwB:0,status:'yet_to_bat'}); 
+            popSel('tInitStr',activeBatSquad,"BAT"); popSel('tInitNStr',activeBatSquad,"BAT"); popSel('tInitBwl',activeBowlSquad,"BOWL"); 
+            if(document.getElementById('tInitNStr').options.length > 1) document.getElementById('tInitNStr').selectedIndex = 1;
+            document.getElementById('tourOpenersBox').style.display="block"; broadcast({type:'animation', eventText:w+" WON TOSS", animType:'simple'}); 
+        }
         function popSel(id, arr, type, ex1, ex2) { let s = document.getElementById(id); s.innerHTML=""; arr.forEach(p=>{ let db=playerDB[p.name]; if(db && type==="BAT" && db.status==='yet_to_bat' && p.name!==ex1 && p.name!==ex2) s.innerHTML+=`<option>${p.name}</option>`; if(db && type==="BOWL" && db.bwB<(state.maxBowlerOvers*6) && p.name!==ex1) s.innerHTML+=`<option>${p.name}</option>`; }); }
-        function startLiveScoring() { state.s_name=document.getElementById('tInitStr').value; state.ns_name=document.getElementById('tInitNStr').value; state.b_name=document.getElementById('tInitBwl').value; playerDB[state.s_name].status='batting'; playerDB[state.ns_name].status='batting'; document.getElementById('nav_liveScoringScreen').style.display='inline-block'; navigate('liveScoringScreen'); sendUpdate(); }
+        
+        function startLiveScoring() { 
+            state.s_name=document.getElementById('tInitStr').value; state.ns_name=document.getElementById('tInitNStr').value; state.b_name=document.getElementById('tInitBwl').value; 
+            if(state.s_name === state.ns_name) return alert("❌ Error: स्ट्राइकर और नॉन-स्ट्राइकर एक ही खिलाड़ी नहीं हो सकते!");
+            playerDB[state.s_name].status='batting'; playerDB[state.ns_name].status='batting'; document.getElementById('nav_liveScoringScreen').style.display='inline-block'; navigate('liveScoringScreen'); sendUpdate(); 
+        }
 
         function openStandingsScreen() { navigate('tourStandingsScreen'); let c=document.getElementById('standingsContainer'); c.innerHTML=""; tournament.groups.forEach(g=>{ let grp=Object.keys(tournament.teams).filter(t=>tournament.teams[t].group===g); grp.sort((a,b)=>tournament.teams[b].stats.pts - tournament.teams[a].stats.pts); let html=`<h4 style="margin:5px 0;">${g}</h4><table class="pt-table"><tr><th>Team</th><th>M</th><th>Pts</th><th>Act</th></tr>`; grp.forEach(t=>{ let tm=tournament.teams[t]; html+=`<tr><td>${t}</td><td>${tm.stats.m}</td><td>${tm.stats.pts}</td><td><button onclick="tournament.teams['${t}'].eliminated=!tournament.teams['${t}'].eliminated; openStandingsScreen();">Eliminate</button></td></tr>`; }); c.innerHTML+=html+"</table>"; }); }
         function showMilestonePrompt() { let type = prompt("Type (eg: 50 RUNS, 100 RUNS)", "HALF CENTURY - 50"); let name = prompt("Player Name:", state.s_name); if(type && name) broadcast({type: 'show_milestone', text: type, player: name}); }
@@ -309,6 +278,7 @@
                 let s=activeBatSquad; activeBatSquad=activeBowlSquad; activeBowlSquad=s; 
                 document.getElementById('ibTargetDisplay').innerText="TARGET: "+state.target; 
                 popSel('ibTourStr', activeBatSquad, "BAT"); popSel('ibTourNStr', activeBatSquad, "BAT"); popSel('ibTourBwl', activeBowlSquad, "BOWL"); 
+                if(document.getElementById('ibTourNStr').options.length > 1) document.getElementById('ibTourNStr').selectedIndex = 1;
                 navigate('inningsBreakScreen'); 
             } else { 
                 let res = state.runs>=state.target ? `${state.batTeam} WON` : (state.runs===state.target-1 ? "MATCH TIED" : `${state.bowlTeam} WON`); 
@@ -316,7 +286,11 @@
                 clearSavedMatch(); navigate('modeSelectScreen'); 
             } 
         }
-        function startSecondInnings() { state.s_name=document.getElementById('ibTourStr').value; state.ns_name=document.getElementById('ibTourNStr').value; state.b_name=document.getElementById('ibTourBwl').value; playerDB[state.s_name].status='batting'; playerDB[state.ns_name].status='batting'; navigate('liveScoringScreen'); sendUpdate(); }
+        function startSecondInnings() { 
+            state.s_name=document.getElementById('ibTourStr').value; state.ns_name=document.getElementById('ibTourNStr').value; state.b_name=document.getElementById('ibTourBwl').value; 
+            if(state.s_name === state.ns_name) return alert("❌ Error: स्ट्राइकर और नॉन-स्ट्राइकर एक ही खिलाड़ी नहीं हो सकते!");
+            playerDB[state.s_name].status='batting'; playerDB[state.ns_name].status='batting'; navigate('liveScoringScreen'); sendUpdate(); 
+        }
     </script>
 </body>
 </html>
