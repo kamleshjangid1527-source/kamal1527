@@ -8,49 +8,51 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        /* CSS VARIABLES FOR DYNAMIC THEMES */
-        :root {
-            --t-bg: linear-gradient(90deg, #0f172a, #1e293b);
-            --t-accent: #e11d48;
-            --t-text: #ffffff;
-            --t-highlight: #fbbf24;
-            --t-border: #334155;
-        }
-
-        /* 🎨 THEME CLASSES */
-        body.theme-wc { --t-bg: linear-gradient(90deg, #0f172a, #1e293b); --t-accent: #e11d48; --t-highlight: #fbbf24; --t-border: #334155; }
-        body.theme-psl { --t-bg: linear-gradient(90deg, #022c22, #064e3b); --t-accent: #84cc16; --t-highlight: #bef264; --t-border: #166534; }
-        body.theme-fire { --t-bg: linear-gradient(90deg, #18181b, #000000); --t-accent: #ea580c; --t-highlight: #cbd5e1; --t-border: #3f3f46; }
-        body.theme-neon { --t-bg: linear-gradient(90deg, #3b0764, #4c1d95); --t-accent: #db2777; --t-highlight: #06b6d4; --t-border: #9d174d; }
+        /* 20 PREMIUM THEMES (CSS VARIABLES) */
+        :root { --t-bg: linear-gradient(90deg, #0f172a, #1e293b); --t-accent: #e11d48; --t-text: #ffffff; --t-highlight: #fbbf24; --t-border: #334155; }
+        body.theme-1 { --t-bg: linear-gradient(90deg, #0f172a, #1e293b); --t-accent: #e11d48; --t-highlight: #fbbf24; --t-border: #334155; }
+        body.theme-2 { --t-bg: linear-gradient(90deg, #022c22, #064e3b); --t-accent: #84cc16; --t-highlight: #bef264; --t-border: #166534; }
+        body.theme-3 { --t-bg: linear-gradient(90deg, #18181b, #000000); --t-accent: #ea580c; --t-highlight: #cbd5e1; --t-border: #3f3f46; }
+        body.theme-4 { --t-bg: linear-gradient(90deg, #3b0764, #4c1d95); --t-accent: #db2777; --t-highlight: #06b6d4; --t-border: #9d174d; }
+        body.theme-5 { --t-bg: linear-gradient(90deg, #083344, #0c4a6e); --t-accent: #06b6d4; --t-highlight: #67e8f9; --t-border: #164e63; }
+        body.theme-6 { --t-bg: linear-gradient(90deg, #171717, #262626); --t-accent: #eab308; --t-text: #000; --t-highlight: #fef08a; --t-border: #52525b; }
+        body.theme-7 { --t-bg: linear-gradient(90deg, #1e3a8a, #1d4ed8); --t-accent: #fbbf24; --t-highlight: #ffffff; --t-border: #1e40af; }
+        body.theme-8 { --t-bg: linear-gradient(90deg, #000000, #111827); --t-accent: #22c55e; --t-highlight: #d946ef; --t-border: #1f2937; }
+        body.theme-9 { --t-bg: linear-gradient(90deg, #1c1917, #292524); --t-accent: #78716c; --t-highlight: #d6d3d1; --t-border: #44403c; }
+        body.theme-10 { --t-bg: linear-gradient(90deg, #4a044e, #7e22ce); --t-accent: #f97316; --t-highlight: #fde047; --t-border: #a855f7; }
+        body.theme-11 { --t-bg: linear-gradient(90deg, #064e3b, #0f766e); --t-accent: #d97706; --t-highlight: #fef3c7; --t-border: #0f766e; }
+        body.theme-12 { --t-bg: linear-gradient(90deg, #450a0a, #7f1d1d); --t-accent: #000000; --t-highlight: #fca5a5; --t-border: #991b1b; }
+        body.theme-13 { --t-bg: linear-gradient(90deg, #0c4a6e, #0284c7); --t-accent: #e0f2fe; --t-text: #0f172a; --t-highlight: #bae6fd; --t-border: #0284c7; }
+        body.theme-14 { --t-bg: linear-gradient(90deg, #2e1065, #4c1d95); --t-accent: #c084fc; --t-highlight: #f3e8ff; --t-border: #6b21a8; }
+        body.theme-15 { --t-bg: linear-gradient(90deg, #4c0519, #831843); --t-accent: #e11d48; --t-highlight: #fecdd3; --t-border: #9f1239; }
+        body.theme-16 { --t-bg: linear-gradient(90deg, #042f2e, #134e4a); --t-accent: #14b8a6; --t-highlight: #ccfbf1; --t-border: #0f766e; }
+        body.theme-17 { --t-bg: linear-gradient(90deg, #451a03, #78350f); --t-accent: #ea580c; --t-highlight: #fde68a; --t-border: #92400e; }
+        body.theme-18 { --t-bg: linear-gradient(90deg, #0f172a, #312e81); --t-accent: #a855f7; --t-highlight: #e0e7ff; --t-border: #3730a3; }
+        body.theme-19 { --t-bg: linear-gradient(90deg, #7f1d1d, #ea580c); --t-accent: #fef08a; --t-text: #000000; --t-highlight: #ffffff; --t-border: #b91c1c; }
+        body.theme-20 { --t-bg: linear-gradient(90deg, #1e293b, #334155); --t-accent: #38bdf8; --t-highlight: #bae6fd; --t-border: #475569; }
 
         body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: transparent; overflow: hidden; color: var(--t-text); text-transform: uppercase;}
         
-        /* 📐 LAYOUT CLASSES */
+        #waitingText { position: fixed; top: 10px; left: 10px; color: rgba(56, 189, 248, 0.5); font-size: 0.8rem; z-index: -1; }
+
+        /* LAYOUTS */
         #bottomBug { position: fixed; display: flex; align-items: flex-end; z-index: 100; transition: all 0.5s ease; opacity: 0; }
-        
-        /* Layout 1: Bottom Center (Star Sports) */
         body.layout-1 #bottomBug { bottom: 30px; left: 50%; transform: translateX(-50%); }
-        /* Layout 2: Bottom Left (IPL) */
         body.layout-2 #bottomBug { bottom: 30px; left: 30px; transform: none; }
-        /* Layout 3: Rounded Glass */
         body.layout-3 #bottomBug { bottom: 40px; left: 50%; transform: translateX(-50%); }
         body.layout-3 .bb-main { border-radius: 50px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); }
-        /* Layout 4: Classic Box */
         body.layout-4 #bottomBug { bottom: 20px; left: 20px; transform: none; }
         body.layout-4 .bb-main { border-radius: 0; border: 4px solid var(--t-accent); }
 
         .bb-main { display: flex; background: var(--t-bg); border: 2px solid var(--t-border); border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        
         .bb-team { background: var(--t-accent); color: white; font-size: 2.2rem; font-weight: 900; padding: 10px 25px; display: flex; align-items: center; justify-content: center; min-width: 100px; }
         .bb-score { font-size: 2.8rem; font-weight: 900; padding: 5px 25px; color: var(--t-text); display: flex; align-items: center; justify-content: center; }
         .bb-overs { font-size: 1.4rem; color: #cbd5e1; padding-right: 20px; display: flex; align-items: center; font-weight: 700;}
-        
         .bb-details { background: rgba(0, 0, 0, 0.4); padding: 5px 20px; font-size: 1.1rem; display: flex; flex-direction: column; justify-content: center; border-left: 2px solid var(--t-border); min-width: 350px;}
         .bb-row { display: flex; justify-content: space-between; margin: 2px 0;}
         .striker-text { color: var(--t-highlight); font-weight: 900; }
         .normal-text { color: #cbd5e1; font-weight: 700; }
         .score-text { font-weight: 900; color: white;}
-        
         .bb-extras { background: var(--t-border); color: white; padding: 5px 20px; font-weight: 900; display: flex; flex-direction: column; justify-content: center; text-align: center; font-size:1.1rem;}
         
         #powerplayTag { background: var(--t-highlight); color: #000; padding: 2px 10px; border-radius: 4px; font-size: 0.9rem; font-weight: 900; margin-left: 10px; display: none; animation: blink 2s infinite;}
@@ -61,16 +63,12 @@
         .ball-w { background: #e11d48; } .ball-4 { background: #3b82f6; } .ball-6 { background: #8b5cf6; }
         .target-box { position: absolute; bottom: 100%; left: 0; background: var(--t-highlight); color: #000; padding: 5px 15px; border-radius: 8px 8px 0 0; font-size: 1.1rem; font-weight: 900; display: none;}
 
-        /* POPUPS */
         #eventPopup { position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%) scale(0); font-size: 5rem; font-weight: 900; text-align: center; text-shadow: 4px 4px 10px rgba(0,0,0,0.8); z-index: 999; transition: all 0.3s ease; opacity: 0;}
         .event-four { color: #3b82f6; } .event-six { color: var(--t-highlight); font-size: 7rem !important; } .event-wicket { color: #e11d48; }
+        #milestonePopup { position: fixed; bottom: 150px; left: 50%; transform: translateX(-50%) translateY(50px); background: var(--t-bg); color: var(--t-text); padding: 20px 50px; border-radius: 12px; font-size: 2.5rem; font-weight: 900; border: 4px solid var(--t-highlight); box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 500; opacity: 0; transition: all 0.5s ease; text-align:center;}
         
-        #milestonePopup { position: fixed; bottom: 150px; left: 50%; transform: translateX(-50%) translateY(50px); background: var(--t-bg); color: white; padding: 20px 50px; border-radius: 12px; font-size: 2.5rem; font-weight: 900; border: 4px solid var(--t-highlight); box-shadow: 0 10px 30px rgba(0,0,0,0.6); z-index: 500; opacity: 0; transition: all 0.5s ease; text-align:center;}
-        
-        /* SIDE/FULL CARDS */
         .graphic-card { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) translateY(50px); background: var(--t-bg); border: 2px solid var(--t-accent); border-radius: 12px; padding: 25px; min-width: 500px; box-shadow: 0 15px 40px rgba(0,0,0,0.7); opacity: 0; visibility: hidden; transition: all 0.4s ease; z-index: 200; }
         .graphic-card.active { transform: translate(-50%, -50%) translateY(0); opacity: 1; visibility: visible; }
-        
         .card-header { background: var(--t-accent); margin: -25px -25px 20px -25px; padding: 15px 25px; border-radius: 10px 10px 0 0; font-size: 1.8rem; font-weight: 900; text-align: center; color: white;}
         .card-table { width: 100%; border-collapse: collapse; font-size: 1.2rem; font-weight: 700;}
         .card-table th, .card-table td { padding: 10px; border-bottom: 1px solid var(--t-border); text-align: center; }
@@ -82,7 +80,9 @@
         .team-title { background: var(--t-border); color: white; text-align: center; padding: 10px; font-size: 1.5rem; font-weight: 900; border-radius: 8px; margin-bottom: 15px;}
     </style>
 </head>
-<body class="theme-wc layout-1">
+<body class="theme-1 layout-1">
+
+    <div id="waitingText">📡 Waiting for Live Match Signal...</div>
 
     <div id="eventPopup">WICKET!</div>
     <div id="milestonePopup"><div id="msTitle" style="font-size:1.5rem; color:var(--t-highlight);">HALF CENTURY</div><div id="msPlayer">PLAYER</div></div>
@@ -93,12 +93,10 @@
     <div id="bottomBug">
         <div class="target-box" id="bbTarget">TARGET: 154</div>
         <div class="this-over-box">THIS OVER: <span id="bbThisOver"></span></div>
-        
         <div class="bb-main">
             <div class="bb-team" id="bbTeam">IND</div>
             <div class="bb-score"><span id="bbRunsWickets">0-0</span> <span id="powerplayTag">P1</span></div>
             <div class="bb-overs" id="bbOvers">0.0</div>
-            
             <div class="bb-details">
                 <div class="bb-row"><span class="striker-text" id="bbStrName">Striker *</span><span class="score-text" id="bbStrScore">0 (0)</span></div>
                 <div class="bb-row"><span class="normal-text" id="bbNStrName">Non-Striker</span><span class="score-text" id="bbNStrScore">0 (0)</span></div>
@@ -132,25 +130,27 @@
         let clearAnim, clearMs;
 
         function processCommand(d) {
-            if(d.type === 'theme_update') {
-                document.body.className = `${d.color} ${d.layout}`;
-            }
-            if(d.type === 'update' && d.state) {
-                updateBottomBug(d.state);
-                document.getElementById('bottomBug').style.opacity = 1;
-            }
-            if(d.type === 'animation') showEventAnimation(d.eventText, d.animType);
-            if(d.type === 'show_milestone') showMilestone(d.text, d.player);
-            if(d.type === 'hide_all_cards') { document.getElementById('statsCard').classList.remove('active'); document.getElementById('fullScreenCard').classList.remove('active'); }
-            
-            if(d.type === 'show_bat_card') renderBatCard(d.teamName, d.squad, d.db);
-            if(d.type === 'show_bowl_card') renderBowlCard(d.teamName, d.squad, d.db);
-            if(d.type === 'show_partnership') renderPartnershipCard(d.state);
-            
-            // FULL SCREEN FIXES
-            if(d.type === 'show_playing_xi') renderPlayingXI(d.t1, d.t2, d.sq1, d.sq2);
-            if(d.type === 'show_match_summary') renderMatchSummary(d.state, d.db);
-            if(d.type === 'show_points_table') renderPointsTable(d.tourName, d.groups, d.teams);
+            try {
+                if(d.type === 'theme_update') document.body.className = `${d.color} ${d.layout}`;
+                
+                if(d.type === 'update' && d.state) {
+                    updateBottomBug(d.state);
+                    document.getElementById('bottomBug').style.opacity = 1;
+                    document.getElementById('waitingText').style.display = 'none';
+                }
+                
+                if(d.type === 'animation') showEventAnimation(d.eventText, d.animType);
+                if(d.type === 'show_milestone') showMilestone(d.text, d.player);
+                if(d.type === 'hide_all_cards') { document.getElementById('statsCard').classList.remove('active'); document.getElementById('fullScreenCard').classList.remove('active'); }
+                
+                if(d.type === 'show_bat_card') renderBatCard(d.teamName, d.squad, d.db);
+                if(d.type === 'show_bowl_card') renderBowlCard(d.teamName, d.squad, d.db);
+                if(d.type === 'show_partnership') renderPartnershipCard(d.state);
+                
+                if(d.type === 'show_playing_xi') renderPlayingXI(d.t1, d.t2, d.sq1, d.sq2);
+                if(d.type === 'show_match_summary') renderMatchSummary(d.state, d.db);
+                if(d.type === 'show_points_table' && d.groups && d.teams) renderPointsTable(d.tourName, d.groups, d.teams);
+            } catch(e) { console.error("Scoreboard Error:", e); }
         }
 
         function updateBottomBug(s) {
@@ -161,30 +161,17 @@
             let oh = ""; s.thisOver.forEach(b => { let cl = 'ball-circle '; if(b==='W'||b.includes('W')) cl+='ball-w'; else if(b==='4') cl+='ball-4'; else if(b==='6') cl+='ball-6'; oh+=`<span class="${cl}">${b}</span>`; }); document.getElementById('bbThisOver').innerHTML = oh;
         }
 
-        function showEventAnimation(t, type) {
-            let el = document.getElementById('eventPopup'); el.innerText = t; el.className = '';
-            if(type === 'four') el.classList.add('event-four'); if(type === 'six') el.classList.add('event-six'); if(type === 'wicket') el.classList.add('event-wicket');
-            el.style.transform = "translate(-50%, -50%) scale(1)"; el.style.opacity = 1;
-            clearTimeout(clearAnim); clearAnim = setTimeout(() => { el.style.transform = "translate(-50%, -50%) scale(0)"; el.style.opacity = 0; }, 3000);
-        }
-
-        function showMilestone(title, player) {
-            document.getElementById('msTitle').innerText = title; document.getElementById('msPlayer').innerText = player;
-            let el = document.getElementById('milestonePopup'); el.style.opacity = 1; el.style.transform = "translateX(-50%) translateY(0)";
-            clearTimeout(clearMs); clearMs = setTimeout(() => { el.style.opacity = 0; el.style.transform = "translateX(-50%) translateY(50px)"; }, 5000);
-        }
-
+        function showEventAnimation(t, type) { let el = document.getElementById('eventPopup'); el.innerText = t; el.className = ''; if(type === 'four') el.classList.add('event-four'); if(type === 'six') el.classList.add('event-six'); if(type === 'wicket') el.classList.add('event-wicket'); el.style.transform = "translate(-50%, -50%) scale(1)"; el.style.opacity = 1; clearTimeout(clearAnim); clearAnim = setTimeout(() => { el.style.transform = "translate(-50%, -50%) scale(0)"; el.style.opacity = 0; }, 3000); }
+        function showMilestone(title, player) { document.getElementById('msTitle').innerText = title; document.getElementById('msPlayer').innerText = player; let el = document.getElementById('milestonePopup'); el.style.opacity = 1; el.style.transform = "translateX(-50%) translateY(0)"; clearTimeout(clearMs); clearMs = setTimeout(() => { el.style.opacity = 0; el.style.transform = "translateX(-50%) translateY(50px)"; }, 5000); }
         function showCard(id) { document.getElementById('statsCard').classList.remove('active'); document.getElementById('fullScreenCard').classList.remove('active'); setTimeout(() => document.getElementById(id).classList.add('active'), 100); }
 
         function renderBatCard(t, sq, db) { if(!sq||!db)return; document.getElementById('scHeader').innerText = `${t} - BATTING`; let html=`<tr><th>BATTER</th><th>R</th><th>B</th><th>4s</th><th>6s</th><th>SR</th></tr>`; sq.forEach(p=>{ let d=db[p.name]; if(d&&(d.status==='batting'||d.status==='out')){ let sr=d.b>0?((d.r/d.b)*100).toFixed(1):"0.0"; let rc=d.status==='batting'?'highlight-text':''; html+=`<tr class="${rc}"><td><b>${p.name}</b><br><span style="font-size:0.8rem;color:#cbd5e1">${d.dismissalInfo||'Batting'}</span></td><td><b>${d.r}</b></td><td>${d.b}</td><td>${d.fours||0}</td><td>${d.sixes||0}</td><td>${sr}</td></tr>`; }}); document.getElementById('scTable').innerHTML=html; showCard('statsCard'); }
         function renderBowlCard(t, sq, db) { if(!sq||!db)return; document.getElementById('scHeader').innerText = `${t} - BOWLING`; let html=`<tr><th>BOWLER</th><th>O</th><th>M</th><th>R</th><th>W</th><th>ECO</th></tr>`; sq.forEach(p=>{ let d=db[p.name]; if(d&&d.bwB>0){ let ov=Math.floor(d.bwB/6)+"."+(d.bwB%6); let eco=d.bwB>0?(d.bwR/(d.bwB/6)).toFixed(1):"0.0"; html+=`<tr><td><b>${p.name}</b></td><td>${ov}</td><td>0</td><td>${d.bwR}</td><td><b class="highlight-text">${d.bwW}</b></td><td>${eco}</td></tr>`; }}); document.getElementById('scTable').innerHTML=html; showCard('statsCard'); }
         function renderPartnershipCard(s) { document.getElementById('scHeader').innerText = "PARTNERSHIP"; document.getElementById('scTable').innerHTML=`<tr><td colspan="3" style="text-align:center;font-size:3rem;color:var(--t-highlight)"><b>${s.partnership.runs}</b> <span style="font-size:1.5rem;color:#cbd5e1">Runs</span></td></tr><tr><td colspan="3" style="text-align:center;color:#cbd5e1">${s.partnership.balls} Balls</td></tr><tr style="border-top:2px solid var(--t-border)"><td style="text-align:center;font-size:1.5rem"><b>${s.s_name}</b><br><span style="color:var(--t-highlight)">${s.s_runs}</span>(${s.s_balls})</td><td style="text-align:center;color:#cbd5e1">Vs</td><td style="text-align:center;font-size:1.5rem"><b>${s.ns_name}</b><br><span style="color:var(--t-highlight)">${s.ns_runs}</span>(${s.ns_balls})</td></tr>`; showCard('statsCard'); }
 
-        function renderPlayingXI(t1,t2,sq1,sq2) { document.getElementById('fsHeader').innerText="PLAYING XI"; let html=`<div class="flex-split"><div class="flex-half"><div class="team-title">${t1}</div><table class="card-table">`; sq1.forEach(p=>html+=`<tr><td style="text-align:center">${p.name}</td></tr>`); html+=`</table></div><div class="flex-half"><div class="team-title">${t2}</div><table class="card-table">`; sq2.forEach(p=>html+=`<tr><td style="text-align:center">${p.name}</td></tr>`); html+=`</table></div></div>`; document.getElementById('fsContent').innerHTML=html; showCard('fullScreenCard'); }
-        
+        function renderPlayingXI(t1,t2,sq1,sq2) { if(!sq1 || !sq2) return; document.getElementById('fsHeader').innerText="PLAYING XI"; let html=`<div class="flex-split"><div class="flex-half"><div class="team-title">${t1}</div><table class="card-table">`; sq1.forEach(p=>html+=`<tr><td style="text-align:center">${p.name}</td></tr>`); html+=`</table></div><div class="flex-half"><div class="team-title">${t2}</div><table class="card-table">`; sq2.forEach(p=>html+=`<tr><td style="text-align:center">${p.name}</td></tr>`); html+=`</table></div></div>`; document.getElementById('fsContent').innerHTML=html; showCard('fullScreenCard'); }
         function renderMatchSummary(s, db) { document.getElementById('fsHeader').innerText="INNINGS SUMMARY"; let bt=[], bw=[]; for(let p in db) { if(db[p].r>0||db[p].b>0)bt.push({n:p,r:db[p].r,b:db[p].b}); if(db[p].bwB>0)bw.push({n:p,w:db[p].bwW,r:db[p].bwR,ov:Math.floor(db[p].bwB/6)+"."+(db[p].bwB%6)}); } bt.sort((a,b)=>b.r-a.r); bw.sort((a,b)=>b.w-a.w||a.r-b.r); let html=`<div style="text-align:center;font-size:3rem;font-weight:900;color:var(--t-highlight);margin-bottom:20px">${s.batTeam} : ${s.runs}-${s.wickets} <span style="font-size:1.5rem;color:#cbd5e1">(${Math.floor(s.balls/6)}.${s.balls%6} Ov)</span></div><div class="flex-split"><div class="flex-half"><div class="team-title">TOP BATTERS</div><table class="card-table">`; bt.slice(0,3).forEach(b=>html+=`<tr><td>${b.n}</td><td><b class="highlight-text">${b.r}</b> (${b.b})</td></tr>`); html+=`</table></div><div class="flex-half"><div class="team-title">TOP BOWLERS</div><table class="card-table">`; bw.slice(0,3).forEach(b=>html+=`<tr><td>${b.n}</td><td><b class="highlight-text">${b.w}</b>/${b.r} <span style="font-size:0.8rem;color:#cbd5e1">(${b.ov})</span></td></tr>`); html+=`</table></div></div>`; document.getElementById('fsContent').innerHTML=html; showCard('fullScreenCard'); }
-        
-        function renderPointsTable(tn, grps, tms) { document.getElementById('fsHeader').innerText=`${tn} - POINTS TABLE`; let html=`<div class="flex-split">`; grps.forEach(g=>{ let tGrp=Object.keys(tms).filter(t=>tms[t].group===g && !tms[t].eliminated); tGrp.sort((a,b)=>tms[b].stats.pts-tms[a].stats.pts); if(tGrp.length>0) { html+=`<div class="flex-half"><div class="team-title" style="background:var(--t-border)">${g}</div><table class="card-table"><tr><th>TEAM</th><th>M</th><th>W</th><th>L</th><th>PTS</th></tr>`; tGrp.forEach((tName,i)=>{ let tm=tms[tName]; let hl=i<2?'color:var(--t-highlight);':''; html+=`<tr style="${hl}"><td>${tName}</td><td>${tm.stats.m}</td><td>${tm.stats.w}</td><td>${tm.stats.l}</td><td style="font-weight:900">${tm.stats.pts}</td></tr>`; }); html+=`</table></div>`; } }); html+=`</div>`; document.getElementById('fsContent').innerHTML=html; showCard('fullScreenCard'); }
+        function renderPointsTable(tn, grps, tms) { if(!grps || !tms) return; document.getElementById('fsHeader').innerText=`${tn} - POINTS TABLE`; let html=`<div class="flex-split">`; grps.forEach(g=>{ let tGrp=Object.keys(tms).filter(t=>tms[t].group===g && !tms[t].eliminated); tGrp.sort((a,b)=>tms[b].stats.pts-tms[a].stats.pts); if(tGrp.length>0) { html+=`<div class="flex-half"><div class="team-title" style="background:var(--t-border)">${g}</div><table class="card-table"><tr><th>TEAM</th><th>M</th><th>W</th><th>L</th><th>PTS</th></tr>`; tGrp.forEach((tName,i)=>{ let tm=tms[tName]; let hl=i<2?'color:var(--t-highlight);':''; html+=`<tr style="${hl}"><td>${tName}</td><td>${tm.stats.m}</td><td>${tm.stats.w}</td><td>${tm.stats.l}</td><td style="font-weight:900">${tm.stats.pts}</td></tr>`; }); html+=`</table></div>`; } }); html+=`</div>`; document.getElementById('fsContent').innerHTML=html; showCard('fullScreenCard'); }
     </script>
 </body>
 </html>
