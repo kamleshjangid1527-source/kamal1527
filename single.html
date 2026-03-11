@@ -58,32 +58,8 @@
         <div class="login-card">
             <h1 style="color:#38bdf8;">Single Match Edition</h1>
             <input type="text" id="clientIdInput" placeholder="Client ID">
-            <button onclick="function checkLogin() { 
-    let id = document.getElementById('clientIdInput').value.trim().toUpperCase(); 
-    if(!id) return; 
-    database.ref('vk_clients/' + id).once('value').then(s => { 
-        let clientData = s.val();
-        if(clientData && Date.now() < clientData.expiryTime && clientData.active !== false) { 
-            
-            // 🔥 PLAN SECURITY CHECK FOR SINGLE MATCH 🔥
-            if(clientData.planType !== 'single') {
-                alert("❌ यह ID 'Tournament Pro' की है। कृपया सही पैनल में लॉगिन करें!");
-                localStorage.removeItem('activeSingleClient');
-                return; // Stop login
-            }
-
-            currentClientID = id; 
-            localStorage.setItem('activeSingleClient', id); 
-            document.getElementById('loginBox').style.display="none"; 
-            document.getElementById('appContainer').style.display="block"; 
-            checkSavedMatch(); 
-            navigate('setupScreen'); 
-        } else { 
-            alert("❌ ID गलत है या एक्सपायर हो गई है!"); 
-            localStorage.removeItem('activeSingleClient'); 
-        } 
-    }); 
-}
+            <button onclick="checkLogin()" class="btn-primary" style="margin-top:15px;">Login 🚀</button>
+            <p id="loginError" style="color:#ef4444; font-weight:bold; margin-top:15px; display:none;"></p>
         </div>
     </div>
 
@@ -230,121 +206,77 @@
         </div>
     </div>
 
-    <div id="wicketModal" class="modal-bg"><div class="modal-content"><h3>Wicket!</h3><select id="outType"><option>Bowled</option><option>Caught</option><option>Run Out</option></select><br><br><select id="newBatsmanSelect" style="width:100%;"></select><br><br><button class="btn-primary" onclick="confirmWicket()">Confirm</button><button class="btn-danger" onclick="document.getElementById('wicketModal').style.display='none'">Cancel</button></div></div>
-    <div id="bowlerModal" class="modal-bg"><div class="modal-content"><h3>Select Bowler</h3><select id="newBowlerSelect" style="width:100%;"></select><br><br><button class="btn-primary" onclick="confirmBowler()">Confirm</button><button class="btn-danger" onclick="document.getElementById('bowlerModal').style.display='none'">Cancel</button></div></div>
-    <div id="extraModal" class="modal-bg"><div class="modal-content"><h3>Extra</h3><select id="exType"><option value="wd">Wide</option><option value="nb">No Ball</option><option value="lb">Leg Bye</option></select><select id="exRuns"><option value="0">0</option><option value="1">1</option><option value="4">4</option></select><br><br><button class="btn-primary" onclick="applyExtra()">Apply</button><button class="btn-danger" onclick="document.getElementById('extraModal').style.display='none'">Cancel</button></div></div>
+    <div id="wicketModal" class="modal-bg"><div class="modal-content"><h3>Wicket!</h3><select id="outType"><option>Bowled</option><option>Caught</option><option>Run Out</option></select><br><br><select id="newBatsmanSelect" style="width:100%;"></select><br><br><button class="btn-primary" onclick="confirmWicket()">Confirm</button><button class="btn-danger" style="margin-top:10px;" onclick="document.getElementById('wicketModal').style.display='none'">Cancel</button></div></div>
+    <div id="bowlerModal" class="modal-bg"><div class="modal-content"><h3>Select Bowler</h3><select id="newBowlerSelect" style="width:100%;"></select><br><br><button class="btn-primary" onclick="confirmBowler()">Confirm</button><button class="btn-danger" style="margin-top:10px;" onclick="document.getElementById('bowlerModal').style.display='none'">Cancel</button></div></div>
+    <div id="extraModal" class="modal-bg"><div class="modal-content"><h3>Extra</h3><select id="exType"><option value="wd">Wide</option><option value="nb">No Ball</option><option value="lb">Leg Bye</option></select><select id="exRuns"><option value="0">0</option><option value="1">1</option><option value="4">4</option></select><br><br><button class="btn-primary" onclick="applyExtra()">Apply</button><button class="btn-danger" style="margin-top:10px;" onclick="document.getElementById('extraModal').style.display='none'">Cancel</button></div></div>
 
     <script>
         const firebaseConfig = { apiKey: "AIzaSyBVDsBQ-yf2Bf3SYn6EGA8TFzf5BwrGBGg", authDomain: "kamal-7775e.firebaseapp.com", databaseURL: "https://kamal-7775e-default-rtdb.firebaseio.com", projectId: "kamal-7775e", storageBucket: "kamal-7775e.firebasestorage.app", messagingSenderId: "58214965866", appId: "1:58214965866:web:de98f07ae696c69ec16013" };
         firebase.initializeApp(firebaseConfig); const database = firebase.database();
         
         let currentClientID = ""; 
-        // Single Match Specific Data Structure
         let matchInfo = { t1Name: "Team A", t2Name: "Team B", t1Players: [], t2Players: [] };
-        
         let state = { runs: 0, wickets: 0, balls: 0, batTeam: "", bowlTeam: "", totalMatchOvers: 10, maxBowlerOvers: 2, s_name: "", ns_name: "", b_name: "", s_runs:0, s_balls:0, ns_runs:0, ns_balls:0, b_runs:0, b_wickets:0, b_balls:0, thisOver: [], target: 0, innings: 1, partnership: {runs: 0, balls: 0}, crr: "0.00", rrr: "0.00", isPowerplay: false };
         let activeBatSquad = []; let activeBowlSquad = []; let playerDB = {}; let historyStack = []; let currentThemeColor = 'theme-wc';
 
-        // Auto Login
         window.onload = function() { let saved = localStorage.getItem('activeSingleClient'); if(saved) { document.getElementById('clientIdInput').value = saved; checkLogin(); } };
         function saveToLocal() { if(!currentClientID) return; localStorage.setItem('cricSingle_' + currentClientID, JSON.stringify({ state, playerDB, activeBatSquad, activeBowlSquad, matchInfo, historyStack })); }
         function checkSavedMatch() { let saved = localStorage.getItem('cricSingle_' + currentClientID); document.getElementById('btnResumeMatch').style.display = saved ? 'inline-block' : 'none'; }
         function resumeSavedMatch() { let saved = localStorage.getItem('cricSingle_' + currentClientID); if(saved) { let p = JSON.parse(saved); state = p.state; playerDB = p.playerDB; activeBatSquad = p.activeBatSquad; activeBowlSquad = p.activeBowlSquad; matchInfo = p.matchInfo; navigate('liveScoringScreen'); sendUpdate(); } }
         function clearSavedMatch() { localStorage.removeItem('cricSingle_' + currentClientID); document.getElementById('nav_liveScoringScreen').style.display = 'none'; matchInfo = { t1Name: "Team A", t2Name: "Team B", t1Players: [], t2Players: [] }; document.getElementById('listT1').innerHTML=""; document.getElementById('listT2').innerHTML=""; }
         
-        function checkLogin() { let id = document.getElementById('clientIdInput').value.trim().toUpperCase(); if(!id) return; database.ref('vk_clients/' + id).once('value').then(s => { if(s.val()) { currentClientID = id; localStorage.setItem('activeSingleClient', id); document.getElementById('loginBox').style.display="none"; document.getElementById('appContainer').style.display="block"; checkSavedMatch(); navigate('setupScreen'); } else { alert("Wrong ID"); localStorage.removeItem('activeSingleClient'); } }); }
-        function logout() { currentClientID=""; localStorage.removeItem('activeSingleClient'); location.reload(); }
-        function broadcast(data) { if(!currentClientID) return; data.timestamp = Date.now(); database.ref('vk_live_action/' + currentClientID).set(data); saveToLocal(); }
-        
-        function navigate(id) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen')); document.getElementById(id).classList.add('active-screen'); document.getElementById('mainNavBar').style.display = 'flex'; document.querySelectorAll('.top-navbar button').forEach(b=>b.classList.remove('active-nav')); if(document.getElementById('nav_'+id)) document.getElementById('nav_'+id).classList.add('active-nav'); window.scrollTo(0,0); }
-        function goToLiveScore() { if(!state.s_name) return alert("No active match!"); navigate('liveScoringScreen'); }
+        // 🔥 SECURE LOGIN FOR SINGLE MATCH 🔥
+        function checkLogin() { 
+            let id = document.getElementById('clientIdInput').value.trim().toUpperCase(); 
+            if(!id) return; 
+            let errorBox = document.getElementById('loginError'); 
+            errorBox.style.display = "none";
 
-        // THEMES
-        function selectColor(cClass) { currentThemeColor = cClass; document.querySelectorAll('.theme-box').forEach(b => b.classList.remove('theme-selected')); document.getElementById(cClass.replace('-','_')).classList.add('theme-selected'); }
-        function applyThemeToTV() { let layout = document.getElementById('layoutSelect').value; broadcast({ type: 'theme_update', layout: layout, color: currentThemeColor }); alert("✅ Theme sent to TV!"); }
-
-        // TEAM & PLAYER LOGIC
-        function quickDemoSetup() {
-            document.getElementById('t1Name').value = "India"; document.getElementById('t2Name').value = "Australia";
-            matchInfo.t1Players = [{name:"Rohit"},{name:"Kohli"},{name:"Pant"},{name:"Bumrah"}];
-            matchInfo.t2Players = [{name:"Warner"},{name:"Head"},{name:"Maxwell"},{name:"Starc"}];
-            alert("Demo Data Loaded! Go to Teams tab to check.");
-        }
-
-        function goToTeams() {
-            matchInfo.t1Name = document.getElementById('t1Name').value || "Team A";
-            matchInfo.t2Name = document.getElementById('t2Name').value || "Team B";
-            document.getElementById('lblT1').innerText = matchInfo.t1Name + " Players";
-            document.getElementById('lblT2').innerText = matchInfo.t2Name + " Players";
-            renderPlayers(); navigate('team1Screen');
-        }
-
-        function addPlayer(teamNum) {
-            let pName = document.getElementById(teamNum === 1 ? 'p1Name' : 'p2Name').value.trim();
-            if(!pName) return;
-            if(teamNum === 1) matchInfo.t1Players.push({name: pName});
-            else matchInfo.t2Players.push({name: pName});
-            document.getElementById(teamNum === 1 ? 'p1Name' : 'p2Name').value = "";
-            renderPlayers();
-        }
-
-        function removePlayer(teamNum, index) {
-            if(teamNum === 1) matchInfo.t1Players.splice(index, 1);
-            else matchInfo.t2Players.splice(index, 1);
-            renderPlayers();
-        }
-
-        function renderPlayers() {
-            let c1 = document.getElementById('listT1'); c1.innerHTML = "";
-            matchInfo.t1Players.forEach((p,i) => c1.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ccc; display:flex; justify-content:space-between;">${i+1}. ${p.name} <button class="btn-danger" style="width:auto; padding:2px 8px;" onclick="removePlayer(1,${i})">X</button></div>`);
-            let c2 = document.getElementById('listT2'); c2.innerHTML = "";
-            matchInfo.t2Players.forEach((p,i) => c2.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ccc; display:flex; justify-content:space-between;">${i+1}. ${p.name} <button class="btn-danger" style="width:auto; padding:2px 8px;" onclick="removePlayer(2,${i})">X</button></div>`);
-        }
-
-        // TOSS & START
-        function goToToss() {
-            if(matchInfo.t1Players.length === 0 || matchInfo.t2Players.length === 0) return alert("Add at least 1 player to both teams!");
-            document.getElementById('tossWinner').innerHTML = `<option>${matchInfo.t1Name}</option><option>${matchInfo.t2Name}</option>`;
-            navigate('tossScreen');
-        }
-
-        function confirmToss() {
-            state.totalMatchOvers = parseInt(document.getElementById('matchOvers').value);
-            state.maxBowlerOvers = parseInt(document.getElementById('maxOvers').value);
-            let w = document.getElementById('tossWinner').value;
-            let d = document.getElementById('tossDec').value;
-            
-            state.batTeam = (w === matchInfo.t1Name && d === 'bat') || (w === matchInfo.t2Name && d === 'bowl') ? matchInfo.t1Name : matchInfo.t2Name;
-            state.bowlTeam = state.batTeam === matchInfo.t1Name ? matchInfo.t2Name : matchInfo.t1Name;
-            
-            activeBatSquad = state.batTeam === matchInfo.t1Name ? matchInfo.t1Players : matchInfo.t2Players;
-            activeBowlSquad = state.bowlTeam === matchInfo.t1Name ? matchInfo.t1Players : matchInfo.t2Players;
-            
-            playerDB = {};
-            activeBatSquad.forEach(p => playerDB[p.name] = {r:0,b:0,fours:0,sixes:0,bwR:0,bwW:0,bwB:0,status:'yet_to_bat'});
-            activeBowlSquad.forEach(p => playerDB[p.name] = {r:0,b:0,fours:0,sixes:0,bwR:0,bwW:0,bwB:0,status:'yet_to_bat'});
-            
-            popSel('selStr', activeBatSquad, "BAT"); popSel('selNStr', activeBatSquad, "BAT"); popSel('selBwl', activeBowlSquad, "BOWL");
-            document.getElementById('openersBox').style.display = "block";
-            broadcast({type:'animation', eventText: w + " WON TOSS", animType:'simple'});
-        }
-
-        function popSel(id, arr, type, ex1, ex2) { 
-            let s = document.getElementById(id); s.innerHTML=""; 
-            arr.forEach(p => { 
-                let db=playerDB[p.name]; 
-                if(db && type==="BAT" && db.status==='yet_to_bat' && p.name!==ex1 && p.name!==ex2) s.innerHTML+=`<option value="${p.name}">${p.name}</option>`; 
-                if(db && type==="BOWL" && db.bwB<(state.maxBowlerOvers*6) && p.name!==ex1) s.innerHTML+=`<option value="${p.name}">${p.name} (${Math.floor(db.bwB/6)}.${db.bwB%6} Ov)</option>`; 
+            database.ref('vk_clients/' + id).once('value').then(s => { 
+                let clientData = s.val();
+                if(clientData && Date.now() < clientData.expiryTime && clientData.active !== false) { 
+                    if(clientData.planType !== 'single') {
+                        errorBox.innerHTML = "❌ यह ID 'Tournament Pro' की है। यहाँ काम नहीं करेगी!";
+                        errorBox.style.display = "block";
+                        localStorage.removeItem('activeSingleClient');
+                        return; 
+                    }
+                    currentClientID = id; 
+                    localStorage.setItem('activeSingleClient', id); 
+                    document.getElementById('loginBox').style.display="none"; 
+                    document.getElementById('appContainer').style.display="block"; 
+                    checkSavedMatch(); 
+                    navigate('setupScreen'); 
+                } else { 
+                    errorBox.innerHTML = "❌ ID गलत है या एक्सपायर हो गई है!";
+                    errorBox.style.display = "block";
+                    localStorage.removeItem('activeSingleClient'); 
+                } 
+            }).catch(e => {
+                errorBox.innerHTML = "❌ इंटरनेट कनेक्शन चेक करें!"; 
+                errorBox.style.display = "block"; 
             }); 
         }
 
-        function startLiveScoring() { 
-            state.s_name=document.getElementById('selStr').value; state.ns_name=document.getElementById('selNStr').value; state.b_name=document.getElementById('selBwl').value; 
-            playerDB[state.s_name].status='batting'; playerDB[state.ns_name].status='batting'; 
-            document.getElementById('nav_liveScoringScreen').style.display='inline-block'; navigate('liveScoringScreen'); sendUpdate(); 
-        }
+        function logout() { currentClientID=""; localStorage.removeItem('activeSingleClient'); location.reload(); }
+        function broadcast(data) { if(!currentClientID) return; data.timestamp = Date.now(); database.ref('vk_live_action/' + currentClientID).set(data); saveToLocal(); }
+        function navigate(id) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active-screen')); document.getElementById(id).classList.add('active-screen'); document.getElementById('mainNavBar').style.display = 'flex'; document.querySelectorAll('.top-navbar button').forEach(b=>b.classList.remove('active-nav')); if(document.getElementById('nav_'+id)) document.getElementById('nav_'+id).classList.add('active-nav'); window.scrollTo(0,0); }
+        function goToLiveScore() { if(!state.s_name) return alert("No active match!"); navigate('liveScoringScreen'); }
 
-        // SCORING ENGINE
+        function selectColor(cClass) { currentThemeColor = cClass; document.querySelectorAll('.theme-box').forEach(b => b.classList.remove('theme-selected')); document.getElementById(cClass.replace('-','_')).classList.add('theme-selected'); }
+        function applyThemeToTV() { let layout = document.getElementById('layoutSelect').value; broadcast({ type: 'theme_update', layout: layout, color: currentThemeColor }); alert("✅ Theme sent to TV!"); }
+
+        function quickDemoSetup() { document.getElementById('t1Name').value = "India"; document.getElementById('t2Name').value = "Australia"; matchInfo.t1Players = [{name:"Rohit"},{name:"Kohli"},{name:"Pant"},{name:"Bumrah"}]; matchInfo.t2Players = [{name:"Warner"},{name:"Head"},{name:"Maxwell"},{name:"Starc"}]; alert("Demo Data Loaded! Go to Teams tab to check."); }
+        function goToTeams() { matchInfo.t1Name = document.getElementById('t1Name').value || "Team A"; matchInfo.t2Name = document.getElementById('t2Name').value || "Team B"; document.getElementById('lblT1').innerText = matchInfo.t1Name + " Players"; document.getElementById('lblT2').innerText = matchInfo.t2Name + " Players"; renderPlayers(); navigate('team1Screen'); }
+        function addPlayer(teamNum) { let pName = document.getElementById(teamNum === 1 ? 'p1Name' : 'p2Name').value.trim(); if(!pName) return; if(teamNum === 1) matchInfo.t1Players.push({name: pName}); else matchInfo.t2Players.push({name: pName}); document.getElementById(teamNum === 1 ? 'p1Name' : 'p2Name').value = ""; renderPlayers(); }
+        function removePlayer(teamNum, index) { if(teamNum === 1) matchInfo.t1Players.splice(index, 1); else matchInfo.t2Players.splice(index, 1); renderPlayers(); }
+        function renderPlayers() { let c1 = document.getElementById('listT1'); c1.innerHTML = ""; matchInfo.t1Players.forEach((p,i) => c1.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ccc; display:flex; justify-content:space-between;">${i+1}. ${p.name} <button class="btn-danger" style="width:auto; padding:2px 8px;" onclick="removePlayer(1,${i})">X</button></div>`); let c2 = document.getElementById('listT2'); c2.innerHTML = ""; matchInfo.t2Players.forEach((p,i) => c2.innerHTML += `<div style="padding:8px; border-bottom:1px solid #ccc; display:flex; justify-content:space-between;">${i+1}. ${p.name} <button class="btn-danger" style="width:auto; padding:2px 8px;" onclick="removePlayer(2,${i})">X</button></div>`); }
+
+        function goToToss() { if(matchInfo.t1Players.length === 0 || matchInfo.t2Players.length === 0) return alert("Add at least 1 player to both teams!"); document.getElementById('tossWinner').innerHTML = `<option>${matchInfo.t1Name}</option><option>${matchInfo.t2Name}</option>`; navigate('tossScreen'); }
+        function confirmToss() { state.totalMatchOvers = parseInt(document.getElementById('matchOvers').value); state.maxBowlerOvers = parseInt(document.getElementById('maxOvers').value); let w = document.getElementById('tossWinner').value; let d = document.getElementById('tossDec').value; state.batTeam = (w === matchInfo.t1Name && d === 'bat') || (w === matchInfo.t2Name && d === 'bowl') ? matchInfo.t1Name : matchInfo.t2Name; state.bowlTeam = state.batTeam === matchInfo.t1Name ? matchInfo.t2Name : matchInfo.t1Name; activeBatSquad = state.batTeam === matchInfo.t1Name ? matchInfo.t1Players : matchInfo.t2Players; activeBowlSquad = state.bowlTeam === matchInfo.t1Name ? matchInfo.t1Players : matchInfo.t2Players; playerDB = {}; activeBatSquad.forEach(p => playerDB[p.name] = {r:0,b:0,fours:0,sixes:0,bwR:0,bwW:0,bwB:0,status:'yet_to_bat'}); activeBowlSquad.forEach(p => playerDB[p.name] = {r:0,b:0,fours:0,sixes:0,bwR:0,bwW:0,bwB:0,status:'yet_to_bat'}); popSel('selStr', activeBatSquad, "BAT"); popSel('selNStr', activeBatSquad, "BAT"); popSel('selBwl', activeBowlSquad, "BOWL"); document.getElementById('openersBox').style.display = "block"; broadcast({type:'animation', eventText: w + " WON TOSS", animType:'simple'}); }
+        function popSel(id, arr, type, ex1, ex2) { let s = document.getElementById(id); s.innerHTML=""; arr.forEach(p => { let db=playerDB[p.name]; if(db && type==="BAT" && db.status==='yet_to_bat' && p.name!==ex1 && p.name!==ex2) s.innerHTML+=`<option value="${p.name}">${p.name}</option>`; if(db && type==="BOWL" && db.bwB<(state.maxBowlerOvers*6) && p.name!==ex1) s.innerHTML+=`<option value="${p.name}">${p.name} (${Math.floor(db.bwB/6)}.${db.bwB%6} Ov)</option>`; }); }
+        function startLiveScoring() { state.s_name=document.getElementById('selStr').value; state.ns_name=document.getElementById('selNStr').value; state.b_name=document.getElementById('selBwl').value; playerDB[state.s_name].status='batting'; playerDB[state.ns_name].status='batting'; document.getElementById('nav_liveScoringScreen').style.display='inline-block'; navigate('liveScoringScreen'); sendUpdate(); }
+
         function showMilestonePrompt() { let type = prompt("Type (eg: 50 RUNS, 100 RUNS)", "HALF CENTURY - 50"); let name = prompt("Player Name:", state.s_name); if(type && name) broadcast({type: 'show_milestone', text: type, player: name}); }
         function togglePowerplay() { state.isPowerplay = !state.isPowerplay; document.getElementById('btnPp').innerText = state.isPowerplay ? "⚡ Powerplay ON" : "⚡ Powerplay OFF"; sendUpdate(); }
 
