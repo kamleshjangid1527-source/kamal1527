@@ -2,153 +2,86 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
+    <title>Jangid CricScore - Pro Live Scoring</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jangid CricScore - Live Broadcasting Software</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
-        /* Base & Reset */
-        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; color: #f8fafc; scroll-behavior: smooth; }
-        a { text-decoration: none; color: inherit; }
+        body { font-family: 'Poppins', sans-serif; background: #0f172a; margin: 0; color: white; text-align: center; }
+        .header { background: linear-gradient(90deg, #1e293b, #0f172a); padding: 30px 20px; border-bottom: 2px solid #38bdf8; }
+        .header h1 { margin: 0; font-size: 2.5rem; color: #38bdf8; font-weight: 900; }
+        .container { max-width: 900px; margin: 40px auto; padding: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px; }
+        .card { background: #1e293b; border-radius: 12px; padding: 30px; border: 2px solid #334155;}
+        .features { list-style: none; padding: 0; text-align: left; color: #cbd5e1; line-height: 1.8;}
+        .features li::before { content: '✅ '; }
+        .btn { display: inline-block; padding: 12px 25px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; text-decoration: none; width: 100%; box-sizing: border-box; cursor: pointer; border:none;}
+        .btn-login { background: #334155; color: white; margin-top:10px; border: 1px solid #475569;}
         
-        /* Navigation Bar */
-        nav { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); position: fixed; top: 0; width: 100%; z-index: 1000; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; box-sizing: border-box; }
-        
-        /* Jangid CricScore Logo Design */
-        .logo { font-size: 2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
-        .logo-jangid { background: linear-gradient(90deg, #38bdf8, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .logo-cric { color: #f59e0b; text-shadow: 0 0 10px rgba(245, 158, 11, 0.4); }
-        
-        .nav-links { display: flex; gap: 20px; }
-        .nav-links a { font-weight: 600; color: #cbd5e1; transition: color 0.3s; }
-        .nav-links a:hover { color: #38bdf8; }
-        .btn-login { background: linear-gradient(90deg, #f59e0b, #d97706); color: white !important; padding: 8px 20px; border-radius: 20px; font-weight: bold; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); transition: transform 0.2s; }
-        .btn-login:hover { transform: scale(1.05); }
-
-        /* Hero Section */
-        header { padding: 150px 5% 100px; text-align: center; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%); border-bottom: 1px solid #1e293b; }
-        .hero-title { font-size: 3.5rem; font-weight: 900; margin-bottom: 20px; line-height: 1.2; }
-        .hero-subtitle { font-size: 1.2rem; color: #94a3b8; max-width: 700px; margin: 0 auto 40px; line-height: 1.6; }
-        .btn-main { background: #38bdf8; color: #0f172a; padding: 15px 35px; font-size: 1.2rem; font-weight: bold; border-radius: 30px; display: inline-block; box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4); transition: 0.3s; }
-        .btn-main:hover { background: #0ea5e9; transform: translateY(-3px); }
-
-        /* Section Styles */
-        section { padding: 80px 5%; border-bottom: 1px solid #1e293b; }
-        .sec-title { text-align: center; font-size: 2.5rem; font-weight: 800; color: #f8fafc; margin-bottom: 50px; text-transform: uppercase; }
-        .sec-title span { color: #38bdf8; }
-
-        /* Live Score Box */
-        .live-box { background: #1e293b; max-width: 600px; margin: 0 auto; padding: 30px; border-radius: 15px; border: 2px solid #38bdf8; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
-        .live-badge { background: #ef4444; color: white; padding: 5px 15px; font-size: 0.9rem; font-weight: bold; border-radius: 20px; display: inline-block; margin-bottom: 20px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-
-        /* How it Works */
-        .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .guide-card { background: #1e293b; padding: 30px; border-radius: 15px; text-align: center; transition: 0.3s; border: 1px solid transparent; }
-        .guide-card:hover { border-color: #f59e0b; transform: translateY(-5px); }
-        .step-num { width: 50px; height: 50px; background: #f59e0b; color: #0f172a; font-size: 1.5rem; font-weight: bold; line-height: 50px; border-radius: 50%; margin: 0 auto 20px; }
-
-        /* Pricing */
-        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; }
-        .price-card { background: #1e293b; padding: 40px 30px; border-radius: 15px; text-align: center; border: 1px solid #334155; position: relative; }
-        .price-card.popular { border-color: #38bdf8; box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2); transform: scale(1.05); }
-        .popular-badge { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); background: #38bdf8; color: #0f172a; padding: 5px 15px; font-weight: bold; border-radius: 20px; font-size: 0.9rem; }
-        .price { font-size: 3rem; font-weight: 900; margin: 20px 0; color: #f8fafc; }
-        .price span { font-size: 1rem; color: #94a3b8; font-weight: normal; }
-        .price-card ul { list-style: none; padding: 0; margin: 0 0 30px 0; color: #cbd5e1; line-height: 2; }
-        .btn-buy { background: transparent; border: 2px solid #f59e0b; color: #f59e0b; padding: 12px 0; width: 100%; border-radius: 8px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; display: block; }
-        .btn-buy:hover, .price-card.popular .btn-buy { background: #f59e0b; color: #0f172a; }
-
-        /* Contact */
-        .contact-box { background: linear-gradient(135deg, #1e293b, #0f172a); max-width: 600px; margin: 0 auto; padding: 40px; border-radius: 15px; text-align: center; border: 1px solid #334155; }
-        .contact-btn { display: inline-block; padding: 15px 30px; border-radius: 30px; font-weight: bold; font-size: 1.1rem; margin: 10px; transition: 0.3s; }
-        .btn-whatsapp { background: #25D366; color: white; } .btn-whatsapp:hover { background: #128C7E; transform: scale(1.05); }
-        .btn-email { background: #ea4335; color: white; } .btn-email:hover { background: #c5221f; transform: scale(1.05); }
-
-        footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9rem; }
+        /* Request Form Box */
+        .request-box { background: linear-gradient(135deg, #1e40af, #1e3a8a); padding: 30px; border-radius: 12px; border: 2px solid #60a5fa; max-width: 500px; margin: 0 auto;}
+        .request-box input, .request-box select { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: none; font-size: 1rem; box-sizing: border-box;}
+        .btn-req { background: #fbbf24; color: #000; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">
-            <span class="logo-jangid">Jangid</span><span class="logo-cric">CricScore</span>
-        </div>
-        <div class="nav-links">
-            <a href="#home">Home</a>
-            <a href="#live">Live Score</a>
-            <a href="#pricing">Pricing</a>
-            <a href="app.html" class="btn-login">Login / Score Panel ➔</a>
-        </div>
-    </nav>
+    <div class="header">
+        <h1>JANGID CRICSCORE</h1>
+        <p style="color: #94a3b8;">TV Style Live Scoring & OBS Broadcast</p>
+    </div>
 
-    <header id="home">
-        <h1 class="hero-title">अपने लोकल क्रिकेट को दें<br><span style="color:#38bdf8;">इंटरनेशनल टीवी</span> वाला लुक!</h1>
-        <p class="hero-subtitle">Jangid CricScore एक स्मार्ट क्लाउड-आधारित ब्रॉडकास्टिंग सॉफ्टवेयर है। बस अपने मोबाइल से स्कोर अपडेट करें और OBS Studio के जरिए वायरलेस तरीके से शानदार ग्राफ़िक्स लाइव स्ट्रीम करें।</p>
-        <a href="#pricing" class="btn-main">अभी प्लान खरीदें 🚀</a>
-    </header>
-
-    <section id="live" style="background-color: #1e293b;">
-        <h2 class="sec-title">🔴 <span>Live</span> Matches</h2>
-        <div class="live-box">
-            <div class="live-badge">LIVE NOW</div>
-            <h3 style="color:#94a3b8; margin-top:0;">टूर्नामेंट: Local Premier League</h3>
-            <div style="display:flex; justify-content:space-around; align-items:center; font-size:2rem; font-weight:bold; margin:20px 0;">
-                <div style="color:#38bdf8;">TEAM A</div>
-                <div style="font-size:1.2rem; color:#f59e0b;">VS</div>
-                <div style="color:#4ade80;">TEAM B</div>
+    <div class="container">
+        <div class="grid">
+            <div class="card">
+                <h2 style="color: #fbbf24; margin-top:0;">🏏 Single Match</h2>
+                <ul class="features"><li>2 Teams & Playing XI</li><li>Fixed World Cup Theme</li><li>Perfect for Sunday Matches</li></ul>
+                <a href="single_app.html" class="btn btn-login">Login Panel ➔</a>
             </div>
-            <p style="color:#cbd5e1; font-size:1.1rem;">लाइव स्कोर देखने के लिए ऐप पर जाएँ।<br>सिस्टम पूरी तरह Firebase से कनेक्टेड है!</p>
-        </div>
-    </section>
-
-    <section id="guide">
-        <h2 class="sec-title">यह कैसे <span>काम करता है?</span></h2>
-        <div class="guide-grid">
-            <div class="guide-card"><div class="step-num">1</div><h3 style="color:#38bdf8;">ID प्राप्त करें</h3><p style="color:#cbd5e1;">हमसे अपना प्लान खरीदें। आपको व्हाट्सएप पर एक यूनिक 'Client ID' मिलेगी।</p></div>
-            <div class="guide-card"><div class="step-num">2</div><h3 style="color:#38bdf8;">OBS में जोड़ें</h3><p style="color:#cbd5e1;">अपने लैपटॉप के OBS में 'Browser Source' जोड़ें और हमारा स्कोरबोर्ड लिंक पेस्ट करें।</p></div>
-            <div class="guide-card"><div class="step-num">3</div><h3 style="color:#38bdf8;">ID सेट करें</h3><p style="color:#cbd5e1;">OBS लिंक के आखिर में अपनी ID जोड़ें (उदा: <i>scoreboard.html?id=VK-101</i>)।</p></div>
-            <div class="guide-card"><div class="step-num">4</div><h3 style="color:#38bdf8;">मोबाइल कंट्रोल</h3><p style="color:#cbd5e1;">वेबसाइट पर 'Login' करें और मोबाइल से छक्के-चौके दबाएं। ग्राफ़िक्स सीधे OBS में दिखेंगे!</p></div>
-        </div>
-    </section>
-
-    <section id="pricing" style="background-color: #1e293b;">
-        <h2 class="sec-title">हमारे <span>पैकेज (Pricing)</span></h2>
-        <div class="pricing-grid">
-            <div class="price-card">
-                <h3 style="color:#94a3b8; margin-top:0;">BASIC PLAN</h3>
-                <div class="price">₹500<span> / 3 दिन</span></div>
-                <ul><li>✅ 3 दिन की वैलिडिटी</li><li>✅ मोबाइल + लैपटॉप कंट्रोल</li><li>✅ 10+ डिज़ाइन</li></ul>
-                <a href="https://wa.me/918829893705?text=Hello%20Jangid%20CricScore,%20मुझे%20Basic%20Plan%20(₹500)%20खरीदना%20है।" target="_blank" class="btn-buy">Buy Basic</a>
-            </div>
-            <div class="price-card popular">
-                <div class="popular-badge">MOST POPULAR</div>
-                <h3 style="color:#38bdf8; margin-top:0;">PRO PLAN</h3>
-                <div class="price" style="color:#38bdf8;">₹1200<span> / 10 दिन</span></div>
-                <ul><li>✅ 10 दिन की वैलिडिटी</li><li>✅ फुल HD सपोर्ट</li><li>✅ कस्टमाइज़ टीम लोगो</li></ul>
-                <a href="https://wa.me/918829893705?text=Hello%20Jangid%20CricScore,%20मुझे%20Pro%20Plan%20(₹1200)%20खरीदना%20है।" target="_blank" class="btn-buy">Buy Pro</a>
-            </div>
-            <div class="price-card">
-                <h3 style="color:#f59e0b; margin-top:0;">PREMIUM PLAN</h3>
-                <div class="price" style="color:#f59e0b;">₹3000<span> / 30 दिन</span></div>
-                <ul><li>✅ पूरे 1 महीने की वैलिडिटी</li><li>✅ अनलिमिटेड मैच</li><li>✅ 24/7 सपोर्ट</li></ul>
-                <a href="https://wa.me/918829893705?text=Hello%20Jangid%20CricScore,%20मुझे%20Premium%20Plan%20(₹3000)%20खरीदना%20है।" target="_blank" class="btn-buy">Buy Premium</a>
+            <div class="card">
+                <h2 style="color: #e11d48; margin-top:0;">🏆 Tournament Pro</h2>
+                <ul class="features"><li>Groups & Points Table</li><li>20 Premium TV Themes</li><li>Auto Elimination</li></ul>
+                <a href="app.html" class="btn btn-login">Login Panel ➔</a>
             </div>
         </div>
-    </section>
 
-    <section id="contact">
-        <h2 class="sec-title">हमसे <span>संपर्क करें</span></h2>
-        <div class="contact-box">
-            <h3 style="color:#f8fafc; margin-top:0; font-size:1.8rem;">Jangid CricScore Support</h3>
-            <p style="color:#94a3b8; margin-bottom:30px;">सिस्टम खरीदने के लिए या किसी भी सहायता के लिए संपर्क करें।</p>
-            <a href="https://wa.me/918829893705" target="_blank" class="contact-btn btn-whatsapp">💬 WhatsApp: 8829893705</a>
-            <a href="mailto:kamlesh.jangid1526@gmail.com" class="contact-btn btn-email">📧 Email Us</a>
+        <div class="request-box">
+            <h3 style="margin-top: 0; color: #93c5fd;">सिस्टम चालू करने के लिए ID चाहिए?</h3>
+            <p style="font-size: 0.9rem; color: #e2e8f0; margin-bottom: 20px;">नीचे फॉर्म भरें, एडमिन एप्रूव करते ही आपके WhatsApp पर लिंक आ जाएगा!</p>
+            
+            <input type="text" id="reqName" placeholder="आपका नाम (Your Name)">
+            <input type="number" id="reqPhone" placeholder="WhatsApp Number (उदा: 9876543210)">
+            <input type="email" id="reqEmail" placeholder="Email ID">
+            <select id="reqPlan">
+                <option value="single">🏏 Single Match Plan</option>
+                <option value="pro">🏆 Tournament Pro Plan</option>
+            </select>
+            <button class="btn btn-req" onclick="submitRequest()">ID के लिए Request भेजें 🚀</button>
         </div>
-    </section>
+    </div>
 
-    <footer>
-        © 2026 Jangid CricScore. All Rights Reserved.<br>
-        <span style="color:#334155; font-size:0.8rem; margin-top:5px; display:inline-block;">Powered by VK Education</span>
-    </footer>
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyBVDsBQ-yf2Bf3SYn6EGA8TFzf5BwrGBGg", authDomain: "kamal-7775e.firebaseapp.com", databaseURL: "https://kamal-7775e-default-rtdb.firebaseio.com", projectId: "kamal-7775e", storageBucket: "kamal-7775e.firebasestorage.app", messagingSenderId: "58214965866", appId: "1:58214965866:web:de98f07ae696c69ec16013" };
+        firebase.initializeApp(firebaseConfig); const database = firebase.database();
 
+        function submitRequest() {
+            let name = document.getElementById('reqName').value.trim();
+            let phone = document.getElementById('reqPhone').value.trim();
+            let email = document.getElementById('reqEmail').value.trim();
+            let plan = document.getElementById('reqPlan').value;
+
+            if(!name || !phone) return alert("नाम और WhatsApp नंबर ज़रूरी है!");
+
+            let reqId = "REQ-" + Math.floor(1000 + Math.random() * 9000); // Random Request ID
+            
+            database.ref('vk_requests/' + reqId).set({
+                name: name, phone: phone, email: email, plan: plan, timestamp: Date.now()
+            }).then(() => {
+                alert("✅ आपकी Request एडमिन को भेज दी गई है। एप्रूव होते ही आपके WhatsApp पर लिंक आ जाएगा!");
+                document.getElementById('reqName').value = ""; document.getElementById('reqPhone').value = ""; document.getElementById('reqEmail').value = "";
+            });
+        }
+    </script>
 </body>
 </html>
