@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>Inquiry - Jangid CricScore</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #0f172a; margin: 0; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .form-container { background: #1e293b; padding: 40px; border-radius: 12px; border: 2px solid #38bdf8; width: 100%; max-width: 450px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); text-align: center; }
+        h2 { color: #38bdf8; margin-top: 0; font-size: 2rem; }
+        p { color: #94a3b8; margin-bottom: 25px; }
+        
+        .input-group { text-align: left; margin-bottom: 20px; }
+        label { font-weight: bold; color: #cbd5e1; display: block; margin-bottom: 8px; }
+        input, select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #475569; background: #0f172a; color: white; font-size: 1rem; box-sizing: border-box; }
+        input:focus, select:focus { outline: none; border-color: #38bdf8; }
+        
+        .btn-submit { background: #38bdf8; color: #0f172a; padding: 15px; border: none; border-radius: 8px; font-weight: bold; font-size: 1.2rem; width: 100%; cursor: pointer; transition: 0.3s; margin-top: 10px;}
+        .btn-submit:hover { background: #0ea5e9; color: white; }
+        
+        .back-link { display: block; margin-top: 20px; color: #cbd5e1; text-decoration: none; }
+        .back-link:hover { color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>ID Request Form</h2>
+        <p>अपनी डिटेल्स भरें, हमारी टीम जल्द ही आपसे WhatsApp पर संपर्क करेगी।</p>
+        
+        <div class="input-group">
+            <label>आपका नाम (Full Name)</label>
+            <input type="text" id="reqName" placeholder="अपना नाम लिखें" required>
+        </div>
+
+        <div class="input-group">
+            <label>WhatsApp नंबर</label>
+            <input type="number" id="reqPhone" placeholder="उदा: 9876543210" required>
+        </div>
+
+        <div class="input-group">
+            <label>आप कौन सा प्लान लेना चाहते हैं?</label>
+            <select id="reqPlan">
+                <option value="single">🏏 Single Match Plan (₹100)</option>
+                <option value="pro">🏆 Tournament Pro Plan (₹1500)</option>
+            </select>
+        </div>
+
+        <button class="btn-submit" onclick="submitRequest()">रिक्वेस्ट भेजें 🚀</button>
+        <a href="index.html" class="back-link">⬅️ वापस होम पेज पर जाएँ</a>
+    </div>
+
+    <script>
+        // FIREBASE SETUP
+        const firebaseConfig = { apiKey: "AIzaSyBVDsBQ-yf2Bf3SYn6EGA8TFzf5BwrGBGg", authDomain: "kamal-7775e.firebaseapp.com", databaseURL: "https://kamal-7775e-default-rtdb.firebaseio.com", projectId: "kamal-7775e", storageBucket: "kamal-7775e.firebasestorage.app", messagingSenderId: "58214965866", appId: "1:58214965866:web:de98f07ae696c69ec16013" };
+        firebase.initializeApp(firebaseConfig); const database = firebase.database();
+
+        // Auto-select plan based on URL (e.g. ?plan=pro)
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const planParam = urlParams.get('plan');
+            if(planParam === 'pro' || planParam === 'single') {
+                document.getElementById('reqPlan').value = planParam;
+            }
+        };
+
+        function submitRequest() {
+            let name = document.getElementById('reqName').value.trim();
+            let phone = document.getElementById('reqPhone').value.trim();
+            let plan = document.getElementById('reqPlan').value;
+
+            if(!name || !phone) return alert("कृपया नाम और WhatsApp नंबर दोनों भरें!");
+            if(phone.length < 10) return alert("कृपया सही मोबाइल नंबर भरें!");
+
+            let reqId = "REQ-" + Math.floor(10000 + Math.random() * 90000); 
+            let btn = document.querySelector('.btn-submit');
+            btn.innerText = "भेजा जा रहा है...";
+            btn.disabled = true;
+            
+            database.ref('vk_requests/' + reqId).set({
+                name: name, 
+                phone: phone, 
+                plan: plan, 
+                timestamp: Date.now()
+            }).then(() => {
+                alert("✅ आपकी Request सफलतापूर्वक भेज दी गई है!\nएडमिन एप्रूव करते ही आपके WhatsApp पर लिंक आ जाएगा।");
+                window.location.href = "index.html"; // Go back to home after success
+            }).catch((error) => {
+                alert("❌ एरर: डेटाबेस से कनेक्ट नहीं हो सका। कृपया इंटरनेट चेक करें।");
+                console.error(error);
+                btn.innerText = "रिक्वेस्ट भेजें 🚀";
+                btn.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
