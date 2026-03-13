@@ -7,57 +7,93 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         body { font-family: Arial, sans-serif; background: #0f172a; color: white; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; background: #1e293b; padding: 20px; border-radius: 12px; border: 2px solid #38bdf8; }
+        .container { max-width: 1000px; margin: 0 auto; }
         h1 { text-align: center; color: #38bdf8; border-bottom: 1px solid #334155; padding-bottom: 10px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        label { font-weight: bold; color: #cbd5e1; display: block; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white; box-sizing: border-box; }
-        button { background: #38bdf8; color: #0f172a; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #0f172a; }
+        .box { background: #1e293b; padding: 20px; border-radius: 12px; border: 2px solid #334155; margin-bottom: 20px;}
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #0f172a; }
         th, td { padding: 10px; border: 1px solid #334155; text-align: center; }
         th { background: #334155; color: #38bdf8; }
+        .btn-approve { background: #4ade80; color: #000; padding: 6px 12px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .btn-delete { background: #ef4444; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div id="authScreen" style="text-align:center; margin-top:100px;">
         <h2>Enter Admin Password</h2>
-        <input type="password" id="adminPass" style="max-width:300px; margin-bottom:15px; text-align:center;">
-        <br><button onclick="checkAdmin()" style="width:200px;">Login</button>
+        <input type="password" id="adminPass" style="padding:10px; width:200px; text-align:center;"><br><br>
+        <button onclick="checkAdmin()" style="padding:10px 20px; background:#38bdf8; border:none; cursor:pointer;">Login</button>
     </div>
 
     <div id="adminPanel" class="container" style="display:none;">
         <h1>🛡️ Super Admin Control</h1>
-        <div style="background:#0f172a; padding:20px; border-radius:8px; border:1px solid #334155;">
-            <div class="grid">
-                <div><label>Client ID (Name)</label><input type="text" id="newClientId" placeholder="VK-101" style="text-transform:uppercase;"></div>
-                <div><label>Plan Type</label><select id="newClientPlan"><option value="single">🏏 Single Match</option><option value="pro">🏆 Tournament Pro</option></select></div>
-                <div><label>Validity</label><select id="newClientValidity"><option value="1">1 Day</option><option value="7">7 Days</option><option value="30">30 Days</option></select></div>
-            </div>
-            <button onclick="generateID()" style="width:100%;">➕ ID Generate करें</button>
+
+        <div class="box" style="border-color: #fbbf24;">
+            <h2 style="color: #fbbf24; margin-top:0;">🔔 Pending Requests (ग्राहकों की मांग)</h2>
+            <table>
+                <thead><tr><th>Date</th><th>Name</th><th>Phone</th><th>Plan Requested</th><th>Action</th></tr></thead>
+                <tbody id="requestTableBody"></tbody>
+            </table>
         </div>
 
-        <table>
-            <thead><tr><th>Client ID</th><th>Plan</th><th>Expiry Date</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody id="clientTableBody"></tbody>
-        </table>
+        <div class="box">
+            <h2 style="color: #38bdf8; margin-top:0;">📋 Active Client IDs</h2>
+            <table>
+                <thead><tr><th>Client ID</th><th>Plan</th><th>Expiry Date</th><th>Status</th><th>Action</th></tr></thead>
+                <tbody id="clientTableBody"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
         const firebaseConfig = { apiKey: "AIzaSyBVDsBQ-yf2Bf3SYn6EGA8TFzf5BwrGBGg", authDomain: "kamal-7775e.firebaseapp.com", databaseURL: "https://kamal-7775e-default-rtdb.firebaseio.com", projectId: "kamal-7775e", storageBucket: "kamal-7775e.firebasestorage.app", messagingSenderId: "58214965866", appId: "1:58214965866:web:de98f07ae696c69ec16013" };
         firebase.initializeApp(firebaseConfig); const database = firebase.database();
 
-        function checkAdmin() { if(document.getElementById('adminPass').value === "admin123") { document.getElementById('authScreen').style.display = "none"; document.getElementById('adminPanel').style.display = "block"; loadClients(); } else alert("Wrong Password!"); }
+        // 🚨 अपना असली GITHUB लिंक यहाँ डालें 🚨
+        const BASE_URL = "https://YOUR_GITHUB_LINK_HERE.github.io/repository-name";
 
-        function generateID() {
-            let id = document.getElementById('newClientId').value.trim().toUpperCase();
-            let plan = document.getElementById('newClientPlan').value;
-            let days = parseInt(document.getElementById('newClientValidity').value);
-            if(!id) return alert("Enter ID Name!");
-            let expiry = Date.now() + (days * 24 * 60 * 60 * 1000);
-            database.ref('vk_clients/' + id).set({ active: true, planType: plan, expiryTime: expiry, createdOn: Date.now() }).then(() => {
-                alert(`✅ ID (${id}) Generated!`); document.getElementById('newClientId').value = ""; loadClients();
+        function checkAdmin() { if(document.getElementById('adminPass').value === "admin123") { document.getElementById('authScreen').style.display = "none"; document.getElementById('adminPanel').style.display = "block"; loadRequests(); loadClients(); } else alert("Wrong Password!"); }
+
+        function loadRequests() {
+            database.ref('vk_requests').on('value', (s) => {
+                let tbody = document.getElementById('requestTableBody'); tbody.innerHTML = "";
+                let data = s.val();
+                if(data) {
+                    for(let reqId in data) {
+                        let r = data[reqId];
+                        let date = new Date(r.timestamp).toLocaleDateString('hi-IN');
+                        let planName = r.plan === 'pro' ? '🏆 Pro' : '🏏 Single';
+                        tbody.innerHTML += `<tr><td>${date}</td><td><b>${r.name}</b></td><td>${r.phone}</td><td>${planName}</td>
+                        <td>
+                            <button class="btn-approve" onclick="approveRequest('${reqId}', '${r.name}', '${r.phone}', '${r.plan}')">✅ Approve & Send</button>
+                            <button class="btn-delete" onclick="database.ref('vk_requests/${reqId}').remove()">❌ Reject</button>
+                        </td></tr>`;
+                    }
+                } else { tbody.innerHTML = "<tr><td colspan='5'>कोई नई Request नहीं है।</td></tr>"; }
             });
+        }
+
+        // 🔥 THE MAGIC APPROVAL FUNCTION 🔥
+        function approveRequest(reqId, name, phone, plan) {
+            // 1. Generate ID (e.g. VK-PRO-8542)
+            let newId = "VK-" + plan.toUpperCase() + "-" + Math.floor(1000 + Math.random() * 9000);
+            let days = plan === 'pro' ? 30 : 1; // Pro gets 30 days, Single gets 1 day
+            let expiry = Date.now() + (days * 24 * 60 * 60 * 1000);
+
+            // 2. Save to Clients DB
+            database.ref('vk_clients/' + newId).set({ active: true, planType: plan, expiryTime: expiry, createdOn: Date.now(), customerName: name });
+            
+            // 3. Remove from Requests
+            database.ref('vk_requests/' + reqId).remove();
+
+            // 4. Generate EXACT GitHub Links
+            let appLink = plan === 'pro' ? `${BASE_URL}/app.html` : `${BASE_URL}/single_app.html`;
+            let obsLink = plan === 'pro' ? `${BASE_URL}/score.html?id=${newId}` : `${BASE_URL}/single_score.html?id=${newId}`;
+            
+            // 5. Send Auto-WhatsApp
+            let msg = `Hello ${name}! 🎉\n\nYour Live Scoring Request is Approved.\n\n🔑 *Your Client ID:* ${newId}\n📦 *Plan:* ${plan.toUpperCase()}\n\n📱 *1. Mobile Control Panel Link:*\n${appLink}\n(Login with your ID here to update score)\n\n📺 *2. OBS TV Scoreboard Link:*\n${obsLink}\n(Paste this link in OBS Browser Source. Width:1920, Height:1080)\n\nThank you for choosing Jangid CricScore!`;
+            
+            window.open(`https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         function loadClients() {
@@ -67,28 +103,11 @@
                 if(data) {
                     for(let id in data) {
                         let c = data[id];
-                        let pText = c.planType === 'pro' ? '🏆 Pro' : '🏏 Single';
                         let status = Date.now() > c.expiryTime ? '<span style="color:#f87171">Expired</span>' : '<span style="color:#4ade80">Active</span>';
-                        tbody.innerHTML += `<tr><td><b>${id}</b></td><td>${pText}</td><td>${new Date(c.expiryTime).toLocaleString('hi-IN')}</td><td>${status}</td>
-                        <td>
-                            <button style="background:#ef4444; color:white; border:none; padding:5px; border-radius:4px; cursor:pointer;" onclick="deleteID('${id}')">🗑️</button>
-                            <button style="background:#25d366; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; margin-left:5px;" onclick="shareWhatsApp('${id}', '${c.planType}')">💬 Share</button>
-                        </td></tr>`;
+                        tbody.innerHTML += `<tr><td><b>${id}</b><br><span style="font-size:0.8rem;color:#aaa">${c.customerName || 'Admin'}</span></td><td>${c.planType}</td><td>${new Date(c.expiryTime).toLocaleDateString('hi-IN')}</td><td>${status}</td><td><button class="btn-delete" onclick="database.ref('vk_clients/${id}').remove()">🗑️ Delete</button></td></tr>`;
                     }
                 }
             });
-        }
-
-        function deleteID(id) { if(confirm(`Delete ${id}?`)) database.ref('vk_clients/' + id).remove(); }
-        
-        // 🔥 WHATSAPP SHARE SYSTEM 🔥
-        function shareWhatsApp(id, plan) {
-            let planName = plan === 'pro' ? 'Tournament Pro' : 'Single Match';
-            let linkExt = plan === 'pro' ? 'app.html' : 'single_app.html';
-            // Apna domain yahan change karein agar zaroorat ho
-            let fullLink = `https://your-website.com/${linkExt}`; 
-            let msg = `नमस्कार! आपके क्रिकेट मैच के लिए Live Scoring ID तैयार है: \n\n🏏 *Plan:* ${planName}\n🔑 *Client ID:* ${id}\n\n🔗 *लॉगिन लिंक:* ${fullLink}\n\nइस लिंक पर क्लिक करें और अपनी ID डालकर स्कोरिंग शुरू करें!`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
 </body>
