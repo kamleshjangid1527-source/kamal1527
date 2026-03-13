@@ -2,86 +2,95 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Jangid CricScore - Pro Live Scoring</title>
+    <title>Jangid CricScore - Live Broadcasting</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         body { font-family: 'Poppins', sans-serif; background: #0f172a; margin: 0; color: white; text-align: center; }
-        .header { background: linear-gradient(90deg, #1e293b, #0f172a); padding: 30px 20px; border-bottom: 2px solid #38bdf8; }
-        .header h1 { margin: 0; font-size: 2.5rem; color: #38bdf8; font-weight: 900; }
-        .container { max-width: 900px; margin: 40px auto; padding: 20px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 40px; }
-        .card { background: #1e293b; border-radius: 12px; padding: 30px; border: 2px solid #334155;}
-        .features { list-style: none; padding: 0; text-align: left; color: #cbd5e1; line-height: 1.8;}
-        .features li::before { content: '✅ '; }
-        .btn { display: inline-block; padding: 12px 25px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; text-decoration: none; width: 100%; box-sizing: border-box; cursor: pointer; border:none;}
-        .btn-login { background: #334155; color: white; margin-top:10px; border: 1px solid #475569;}
         
-        /* Request Form Box */
-        .request-box { background: linear-gradient(135deg, #1e40af, #1e3a8a); padding: 30px; border-radius: 12px; border: 2px solid #60a5fa; max-width: 500px; margin: 0 auto;}
-        .request-box input, .request-box select { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: none; font-size: 1rem; box-sizing: border-box;}
-        .btn-req { background: #fbbf24; color: #000; font-size: 1.2rem; }
+        /* Premium Header with Logo */
+        .header { background: linear-gradient(90deg, #1e293b, #0f172a); padding: 40px 20px; border-bottom: 3px solid #38bdf8; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .logo-circle { width: 100px; height: 100px; background: #fff; border-radius: 50%; margin: 0 auto 15px auto; display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 4px solid #38bdf8; overflow: hidden; }
+        .logo-circle img { width: 100%; height: 100%; object-fit: cover; } /* Add your logo image here */
+        .header h1 { margin: 0; font-size: 2.8rem; color: #38bdf8; font-weight: 900; letter-spacing: 1px; }
+        .header p { color: #94a3b8; font-size: 1.2rem; margin-top: 5px; }
+
+        .container { max-width: 1000px; margin: 40px auto; padding: 20px; }
+        
+        /* Pricing Cards */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+        
+        .card { background: #1e293b; border-radius: 15px; padding: 30px; transition: 0.3s; position: relative; display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-10px); }
+        
+        /* Single Plan */
+        .card-single { border: 2px solid #fbbf24; box-shadow: 0 10px 30px rgba(251, 191, 36, 0.1); }
+        .card-single h2 { color: #fbbf24; font-size: 2rem; margin:0;}
+        .price-single { font-size: 2.5rem; font-weight: 900; color: #fff; margin: 15px 0; }
+        .price-single span { font-size: 1.2rem; color: #94a3b8; font-weight: 400; }
+        
+        /* Pro Plan */
+        .card-tour { border: 2px solid #e11d48; box-shadow: 0 10px 30px rgba(225, 29, 72, 0.1); }
+        .card-tour h2 { color: #e11d48; font-size: 2rem; margin:0;}
+        .price-tour { font-size: 2.5rem; font-weight: 900; color: #fff; margin: 15px 0; }
+        .price-tour span { font-size: 1.2rem; color: #94a3b8; font-weight: 400; }
+
+        .features { list-style: none; padding: 0; text-align: left; color: #cbd5e1; font-size: 1.1rem; line-height: 2; margin-bottom: 30px; flex-grow: 1;}
+        .features li::before { content: '✅ '; }
+
+        /* Buttons */
+        .btn-group { display: flex; gap: 10px; flex-direction: column; }
+        .btn { padding: 15px; border-radius: 8px; font-weight: bold; font-size: 1.2rem; text-decoration: none; cursor: pointer; transition: 0.2s; border: none; }
+        
+        .btn-buy-single { background: #fbbf24; color: #000; }
+        .btn-login-single { background: transparent; border: 2px solid #fbbf24; color: #fbbf24; }
+        
+        .btn-buy-tour { background: #e11d48; color: #fff; }
+        .btn-login-tour { background: transparent; border: 2px solid #e11d48; color: #e11d48; }
     </style>
 </head>
 <body>
 
     <div class="header">
+        <div class="logo-circle">🏏</div> 
         <h1>JANGID CRICSCORE</h1>
-        <p style="color: #94a3b8;">TV Style Live Scoring & OBS Broadcast</p>
+        <p>Premium Live TV Graphics for Local Cricket</p>
     </div>
 
     <div class="container">
-        <div class="grid">
-            <div class="card">
-                <h2 style="color: #fbbf24; margin-top:0;">🏏 Single Match</h2>
-                <ul class="features"><li>2 Teams & Playing XI</li><li>Fixed World Cup Theme</li><li>Perfect for Sunday Matches</li></ul>
-                <a href="single_app.html" class="btn btn-login">Login Panel ➔</a>
-            </div>
-            <div class="card">
-                <h2 style="color: #e11d48; margin-top:0;">🏆 Tournament Pro</h2>
-                <ul class="features"><li>Groups & Points Table</li><li>20 Premium TV Themes</li><li>Auto Elimination</li></ul>
-                <a href="app.html" class="btn btn-login">Login Panel ➔</a>
-            </div>
-        </div>
+        <h2 style="font-size: 2rem; margin-bottom: 40px;">Choose Your Scoring Plan</h2>
 
-        <div class="request-box">
-            <h3 style="margin-top: 0; color: #93c5fd;">सिस्टम चालू करने के लिए ID चाहिए?</h3>
-            <p style="font-size: 0.9rem; color: #e2e8f0; margin-bottom: 20px;">नीचे फॉर्म भरें, एडमिन एप्रूव करते ही आपके WhatsApp पर लिंक आ जाएगा!</p>
-            
-            <input type="text" id="reqName" placeholder="आपका नाम (Your Name)">
-            <input type="number" id="reqPhone" placeholder="WhatsApp Number (उदा: 9876543210)">
-            <input type="email" id="reqEmail" placeholder="Email ID">
-            <select id="reqPlan">
-                <option value="single">🏏 Single Match Plan</option>
-                <option value="pro">🏆 Tournament Pro Plan</option>
-            </select>
-            <button class="btn btn-req" onclick="submitRequest()">ID के लिए Request भेजें 🚀</button>
+        <div class="grid">
+            <div class="card card-single">
+                <h2>Single Match</h2>
+                <div class="price-single">₹100 <span>/ Match</span></div> <ul class="features">
+                    <li>2 Teams & Playing XI Graphics</li>
+                    <li>Fixed World Cup Theme</li>
+                    <li>Batting & Bowling Scorecards</li>
+                    <li>Valid for 24 Hours</li>
+                </ul>
+                <div class="btn-group">
+                    <a href="inquiry.html?plan=single" class="btn btn-buy-single">📞 Inquiry for Single Plan</a>
+                    <a href="single_app.html" class="btn btn-login-single">🔑 Login (Already have ID)</a>
+                </div>
+            </div>
+
+            <div class="card card-tour">
+                <h2>Tournament Pro</h2>
+                <div class="price-tour">₹1500 <span>/ Tournament</span></div> <ul class="features">
+                    <li>Create Groups & Auto Points Table</li>
+                    <li>20 Premium TV Graphics Themes</li>
+                    <li>Match Summary & 50/100 Milestones</li>
+                    <li>Valid for 30 Days</li>
+                </ul>
+                <div class="btn-group">
+                    <a href="inquiry.html?plan=pro" class="btn btn-buy-tour">📞 Inquiry for Tournament</a>
+                    <a href="app.html" class="btn btn-login-tour">🔑 Login (Already have ID)</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script>
-        const firebaseConfig = { apiKey: "AIzaSyBVDsBQ-yf2Bf3SYn6EGA8TFzf5BwrGBGg", authDomain: "kamal-7775e.firebaseapp.com", databaseURL: "https://kamal-7775e-default-rtdb.firebaseio.com", projectId: "kamal-7775e", storageBucket: "kamal-7775e.firebasestorage.app", messagingSenderId: "58214965866", appId: "1:58214965866:web:de98f07ae696c69ec16013" };
-        firebase.initializeApp(firebaseConfig); const database = firebase.database();
-
-        function submitRequest() {
-            let name = document.getElementById('reqName').value.trim();
-            let phone = document.getElementById('reqPhone').value.trim();
-            let email = document.getElementById('reqEmail').value.trim();
-            let plan = document.getElementById('reqPlan').value;
-
-            if(!name || !phone) return alert("नाम और WhatsApp नंबर ज़रूरी है!");
-
-            let reqId = "REQ-" + Math.floor(1000 + Math.random() * 9000); // Random Request ID
-            
-            database.ref('vk_requests/' + reqId).set({
-                name: name, phone: phone, email: email, plan: plan, timestamp: Date.now()
-            }).then(() => {
-                alert("✅ आपकी Request एडमिन को भेज दी गई है। एप्रूव होते ही आपके WhatsApp पर लिंक आ जाएगा!");
-                document.getElementById('reqName').value = ""; document.getElementById('reqPhone').value = ""; document.getElementById('reqEmail').value = "";
-            });
-        }
-    </script>
 </body>
 </html>
