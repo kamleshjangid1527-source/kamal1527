@@ -2,95 +2,517 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Jangid CricScore - Live Broadcasting</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>प्रवीण संग दीपिका - विवाह निमंत्रण</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #0f172a; margin: 0; color: white; text-align: center; }
-        
-        /* Premium Header with Logo */
-        .header { background: linear-gradient(90deg, #1e293b, #0f172a); padding: 40px 20px; border-bottom: 3px solid #38bdf8; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
-        .logo-circle { width: 100px; height: 100px; background: #fff; border-radius: 50%; margin: 0 auto 15px auto; display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 4px solid #38bdf8; overflow: hidden; }
-        .logo-circle img { width: 100%; height: 100%; object-fit: cover; } /* Add your logo image here */
-        .header h1 { margin: 0; font-size: 2.8rem; color: #38bdf8; font-weight: 900; letter-spacing: 1px; }
-        .header p { color: #94a3b8; font-size: 1.2rem; margin-top: 5px; }
+        @import url('https://fonts.googleapis.com/css2?family=Rozha+One&family=Poppins:wght@300;400;600&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif;
+        background-color: #fdfbf7; color: #333; overflow-x: hidden; scroll-behavior: smooth; }
 
-        .container { max-width: 1000px; margin: 40px auto; padding: 20px; }
-        
-        /* Pricing Cards */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px; }
-        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
-        
-        .card { background: #1e293b; border-radius: 15px; padding: 30px; transition: 0.3s; position: relative; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-10px); }
-        
-        /* Single Plan */
-        .card-single { border: 2px solid #fbbf24; box-shadow: 0 10px 30px rgba(251, 191, 36, 0.1); }
-        .card-single h2 { color: #fbbf24; font-size: 2rem; margin:0;}
-        .price-single { font-size: 2.5rem; font-weight: 900; color: #fff; margin: 15px 0; }
-        .price-single span { font-size: 1.2rem; color: #94a3b8; font-weight: 400; }
-        
-        /* Pro Plan */
-        .card-tour { border: 2px solid #e11d48; box-shadow: 0 10px 30px rgba(225, 29, 72, 0.1); }
-        .card-tour h2 { color: #e11d48; font-size: 2rem; margin:0;}
-        .price-tour { font-size: 2.5rem; font-weight: 900; color: #fff; margin: 15px 0; }
-        .price-tour span { font-size: 1.2rem; color: #94a3b8; font-weight: 400; }
+        /* --- 1. दरवाज़ा एनीमेशन और लॉगिन स्क्रीन --- */
+        #door-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: 9999;
+            display: flex; overflow: hidden; pointer-events: none;
+            perspective: 1500px;
+        }
+        .door {
+            width: 50%;
+            height: 100%; position: relative;
+            transition: transform 1.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5); pointer-events: auto;
+        }
+        .door.left { 
+            background: url('right1.jpg') no-repeat center center;
+            background-size: 100% 100%; 
+            border-right: 3px solid #d4af37;
+            transform-origin: left;
+        }
+        .door.right { 
+            background: url('left.jpg') no-repeat center center;
+            background-size: 100% 100%; 
+            border-left: 3px solid #d4af37;
+            transform-origin: right;
+        }
+        .door.left.open-left { transform: rotateY(-110deg); }
+        .door.right.open-right { transform: rotateY(110deg); }
 
-        .features { list-style: none; padding: 0; text-align: left; color: #cbd5e1; font-size: 1.1rem; line-height: 2; margin-bottom: 30px; flex-grow: 1;}
-        .features li::before { content: '✅ '; }
+        #welcome-box-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center; z-index: 10000;
+            background: rgba(0,0,0,0.6);
+            transition: opacity 1s;
+        }
+        .welcome-box { 
+            background: #fff;
+            padding: 40px 20px; border-radius: 15px; text-align: center; 
+            max-width: 400px; width: 90%; box-shadow: 0 15px 40px rgba(0,0,0,0.8); border: 4px solid #d4af37;
+        }
+        .welcome-box h2 { font-family: 'Rozha One', serif; color: #800000; margin-bottom: 20px; font-size: 2em; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label { color: #555; font-weight: bold; margin-bottom: 5px; display: block;}
+        .welcome-box input { width: 100%; padding: 12px; border: 2px solid #ccc; border-radius: 8px; font-size: 1.1em; text-align: center; font-family: 'Poppins';}
+        .welcome-box input:focus { outline: none; border-color: #d4af37; }
+        .open-btn { background: linear-gradient(45deg, #d4af37, #f9e596, #d4af37); color: #800000; border: none; padding: 15px 30px; border-radius: 30px; font-size: 1.3em; font-weight: bold; cursor: pointer; width: 100%; font-family: 'Rozha One', serif; box-shadow: 0 5px 15px rgba(212,175,55,0.4); transition: transform 0.2s;}
+        .open-btn:active { transform: scale(0.95); }
 
-        /* Buttons */
-        .btn-group { display: flex; gap: 10px; flex-direction: column; }
-        .btn { padding: 15px; border-radius: 8px; font-weight: bold; font-size: 1.2rem; text-decoration: none; cursor: pointer; transition: 0.2s; border: none; }
+        /* --- म्यूज़िक बटन --- */
+        #music-toggle {
+            position: fixed;
+            bottom: 20px; right: 20px; background: #800000; color: #f9e596;
+            border: 2px solid #d4af37; border-radius: 50%; width: 50px; height: 50px;
+            font-size: 1.5em; cursor: pointer; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- WhatsApp शेयर बटन --- */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 85px; right: 20px; background-color: #25d366; color: white;
+            border-radius: 50px; padding: 10px 20px; font-size: 1.1em; font-weight: bold;
+            text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000;
+            display: flex; align-items: center; gap: 8px; font-family: 'Poppins', sans-serif;
+            transition: transform 0.3s;
+        }
+        .whatsapp-btn:hover { transform: scale(1.05); }
+
+        /* --- गुलाब की पंखुड़ियाँ (Falling Petals) --- */
+        .petal {
+            position: fixed; top: -10%; background: linear-gradient(135deg, #ff0055, #cc0000);
+            border-radius: 15px 0 15px 0; z-index: 998; pointer-events: none;
+            animation: fall linear infinite; opacity: 0.6; box-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(720deg); }
+        }
+
+        /* --- 2. मुख्य कार्ड --- */
+        #main-card { display: none; text-align: center; padding-bottom: 50px; background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png'); }
         
-        .btn-buy-single { background: #fbbf24; color: #000; }
-        .btn-login-single { background: transparent; border: 2px solid #fbbf24; color: #fbbf24; }
+        .header-bg { 
+            color: #fff; padding: 40px 20px 40px 20px; border-bottom: 10px solid #d4af37; 
+            background: url('https://www.transparenttextures.com/patterns/arabesque.png'), linear-gradient(135deg, #122b4b, #0a182a);
+        }
+        .shree-ganesh { font-family: 'Rozha One', serif; color: #f9e596; font-size: 1.2em; margin-bottom: 15px; }
+        .guest-greeting { font-size: 1.3em; font-style: italic; margin-bottom: 15px; color: #ddd; }
+        .wedding-title { font-family: 'Rozha One', serif; font-size: 3em; margin: 10px 0; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .wedding-date { font-size: 1.2em; color: #f9e596; font-weight: bold; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); display: inline-block; padding-top: 10px; }
+
+        .middle-logo {
+            width: 110px; height: 110px; border-radius: 50%; border: 3px solid #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.6); margin: 15px auto; overflow: hidden;
+            background: #fff; animation: pulseGlow 2s infinite alternate ease-in-out; display: flex; align-items: center; justify-content: center;
+        }
+        .middle-logo img { width: 100%; height: 100%; object-fit: contain; }
         
-        .btn-buy-tour { background: #e11d48; color: #fff; }
-        .btn-login-tour { background: transparent; border: 2px solid #e11d48; color: #e11d48; }
+        @keyframes pulseGlow { 0% { transform: scale(1); box-shadow: 0 0 10px #d4af37; } 100% { transform: scale(1.15); box-shadow: 0 0 30px #f9e596; } }
+
+        /* --- उलटी गिनती (Countdown Timer) --- */
+        .countdown-container { display: flex; justify-content: center; gap: 10px; margin: 25px auto 10px auto; max-width: 350px; }
+        .time-box { background: linear-gradient(135deg, #800000, #4a0000); color: #f9e596; padding: 10px; border-radius: 10px; min-width: 70px; border: 2px solid #d4af37; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .time-box span { font-size: 1.8em; font-weight: bold; font-family: 'Rozha One', serif; display: block; line-height: 1.2; }
+        .time-box p { font-size: 0.8em; margin: 0; font-weight: 600; }
+
+        .section-title { font-family: 'Rozha One', serif; font-size: 2.2em; color: #122b4b; margin: 40px 0 20px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);}
+        
+        .sanidhy-box { background: url('https://www.transparenttextures.com/patterns/diamond-upholstery.png'), radial-gradient(circle, #fff, #fef8eb); border: 2px dashed #d4af37; max-width: 600px; margin: 30px auto; padding: 25px 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .sanidhy-box h3 { color: #d4af37; font-family: 'Rozha One', serif; font-size: 1.8em; margin-bottom: 10px; }
+
+        /* --- 3. लोकेशन बॉक्स --- */
+        .location-box { background: linear-gradient(to bottom, #ffffff, #f0f4f8); border: 2px solid #122b4b; position: relative;}
+        .map-btn { display: inline-block; margin-top: 15px; background: #122b4b; color: #f9e596; text-decoration: none; padding: 12px 25px; border-radius: 25px; font-weight: bold; font-size: 1.1em; box-shadow: 0 5px 15px rgba(18, 43, 75, 0.3); transition: 0.3s; }
+        .map-btn:hover { background: #0a182a; transform: translateY(-3px); color: #fff;}
+
+        /* --- 4. मांगलिक कार्यक्रम --- */
+        .slider-wrapper { max-width: 500px; margin: 0 auto 30px auto; overflow: hidden; border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.2); border: 3px solid #d4af37; position: relative; }
+        .manglik-track { display: flex; transition: transform 0.6s ease-in-out; }
+        .slide { min-width: 100%; background: url('https://www.transparenttextures.com/patterns/stardust.png'), linear-gradient(135deg, #800000, #4a0000); color: #fff; padding: 50px 20px; box-sizing: border-box; text-align: center; }
+        .event-name { font-size: 2.2em; font-family: 'Rozha One', serif; color: #f9e596; text-shadow: 2px 2px 4px rgba(0,0,0,0.4);}
+        .event-time { margin-top: 15px; font-weight: bold; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 8px 20px; border-radius: 15px; display: inline-block; font-size: 1.1em; }
+
+        /* --- 5. मज़ेदार परिवार बटन्स --- */
+        .btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 600px; margin: 0 auto 40px auto; padding: 0 20px; }
+        @media(max-width: 400px) { .btn-grid { grid-template-columns: 1fr; } }
+        .family-btn { background: linear-gradient(135deg, #122b4b, #1e4578); color: #f9e596; border: 2px solid #d4af37; padding: 18px 10px; border-radius: 15px; font-family: 'Rozha One', serif; font-size: 1.3em; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.2); transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .family-btn:hover { transform: translateY(-5px) scale(1.02); background: linear-gradient(135deg, #800000, #4a0000); color: #fff; }
+
+        /* --- 6. पॉपअप पेजेज़ --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 3000; display: none; opacity: 0; transition: opacity 0.4s; overflow: hidden; display: flex; align-items: center; justify-content: center; pointer-events: none;}
+        .modal-overlay.active { pointer-events: auto; }
+        .modal-content { background: #fdfbf7 url('https://www.transparenttextures.com/patterns/cream-paper.png'); width: 90%; max-width: 500px; border-radius: 15px; border: 4px solid #d4af37; padding: 25px 15px; text-align: center; position: relative; transform: translateY(50px); transition: transform 0.4s; box-shadow: 0 15px 30px rgba(0,0,0,0.5); max-height: 85vh; display: flex; flex-direction: column;}
+        .close-btn { position: absolute; top: 10px; right: 15px; background: #dc3545; color: white; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 1.2em; font-weight: bold; cursor: pointer; z-index: 10;}
+        .modal-title { font-family: 'Rozha One', serif; font-size: 2em; color: #800000; margin-bottom: 15px; border-bottom: 2px dashed #d4af37; padding-bottom: 10px; flex-shrink: 0;}
+        .name-list { text-align: left; padding: 0 10px; overflow-y: auto; flex-grow: 1; margin-top: 10px; padding-right: 5px; }
+        .name-list::-webkit-scrollbar { width: 6px; }
+        .name-list::-webkit-scrollbar-thumb { background-color: #d4af37; border-radius: 10px; }
+        .name-item { padding: 12px 0; border-bottom: 1px solid #e0d5b1; font-size: 1.1em; color: #222; font-weight: 500;}
+        .special-text { color: #800000; font-weight: bold; text-align: center; margin: 15px 0; font-size: 1.2em; }
+
+        /* --- 7. शुभकामना ऑटो-स्लाइडर --- */
+        #shubhkamna-section { max-width: 600px; margin: 0 auto 40px auto; padding: 20px; background: rgba(255,255,255,0.8); border-radius: 15px; border: 2px dashed #d4af37; overflow: hidden; }
+        .shubhkamna-slider { position: relative; }
+        .shubhkamna-track { display: flex; transition: transform 0.5s ease-in-out; }
+        .greeting-slide { min-width: 100%; padding: 20px; text-align: center; box-sizing: border-box; }
+        .msg-text { color: #122b4b; font-size: 1.3em; font-weight: 600; font-style: italic; margin-bottom: 10px;}
+        .msg-author { color: #800000; font-size: 1.1em; font-weight: bold; font-family: 'Rozha One', serif;}
+
+        /* फायरबेस फॉर्म बॉक्स */
+        .wish-section { background: rgba(255,255,255,0.95); padding: 40px 20px; max-width: 600px; margin: 0 auto; border-radius: 20px; border: 1px solid #d4af37; }
+        #wish-form { max-width: 500px; margin: 0 auto; background: #fdfbf7; padding: 25px; border-radius: 20px; border: 1px solid #e0d5b1; }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Poppins', sans-serif; }
+        .submit-btn { background: #122b4b; color: #d4af37; border: none; padding: 12px 30px; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; width: 100%; }
+
+        .nimantrak-strip { background: linear-gradient(135deg, #122b4b, #0a182a); color: #fff; padding: 40px 20px; text-align: center; border-top: 6px solid #d4af37; }
+        .nimantrak-strip h3 { font-family: 'Rozha One', serif; color: #d4af37; font-size: 2em; margin-bottom: 15px; }
+        .nimantrak-phone { display: inline-block; background: rgba(212, 175, 55, 0.2); border: 1px solid #d4af37; padding: 8px 20px; border-radius: 30px; color: #f9e596; font-size: 1.2em; font-weight: bold; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo-circle">🏏</div> 
-        <h1>JANGID CRICSCORE</h1>
-        <p>Premium Live TV Graphics for Local Cricket</p>
+    <audio id="bgMusic" loop>
+        <source src="audio.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="music-toggle" onclick="toggleMusic()">🎵</div>
+
+    <a href="#" id="whatsapp-share" target="_blank" class="whatsapp-btn" onclick="setWhatsappLink()">
+        💬 WhatsApp शेयर
+    </a>
+
+    <div id="door-container">
+        <div class="door left" id="door-left"></div>
+        <div class="door right" id="door-right"></div>
     </div>
 
-    <div class="container">
-        <h2 style="font-size: 2rem; margin-bottom: 40px;">Choose Your Scoring Plan</h2>
-
-        <div class="grid">
-            <div class="card card-single">
-                <h2>Single Match</h2>
-                <div class="price-single">₹100 <span>/ Match</span></div> <ul class="features">
-                    <li>2 Teams & Playing XI Graphics</li>
-                    <li>Fixed World Cup Theme</li>
-                    <li>Batting & Bowling Scorecards</li>
-                    <li>Valid for 24 Hours</li>
-                </ul>
-                <div class="btn-group">
-                    <a href="inquiry.html?plan=single" class="btn btn-buy-single">📞 Inquiry for Single Plan</a>
-                    <a href="single_app.html" class="btn btn-login-single">🔑 Login (Already have ID)</a>
-                </div>
+    <div id="welcome-box-container">
+        <div class="welcome-box">
+            <h2>निमंत्रण पत्रिका</h2>
+            <div class="input-group">
+                <label>आपका शुभ नाम:</label>
+                <input type="text" id="guest-name" placeholder="अपना नाम यहाँ लिखें" onkeypress="handleEnter(event)">
             </div>
-
-            <div class="card card-tour">
-                <h2>Tournament Pro</h2>
-                <div class="price-tour">₹1500 <span>/ Tournament</span></div> <ul class="features">
-                    <li>Create Groups & Auto Points Table</li>
-                    <li>20 Premium TV Graphics Themes</li>
-                    <li>Match Summary & 50/100 Milestones</li>
-                    <li>Valid for 30 Days</li>
-                </ul>
-                <div class="btn-group">
-                    <a href="inquiry.html?plan=pro" class="btn btn-buy-tour">📞 Inquiry for Tournament</a>
-                    <a href="app.html" class="btn btn-login-tour">🔑 Login (Already have ID)</a>
-                </div>
-            </div>
+            <button class="open-btn" onclick="openInvitation()">पत्रिका खोलें ✨</button>
         </div>
     </div>
 
+    <div id="main-card">
+        <div class="header-bg">
+            <p class="shree-ganesh">।। श्री गणेशाय नमः ।।<br>।। श्री कुलदेवी देगराराय माताजी नमः ।।</p>
+            <p class="guest-greeting">श्रीमान <span id="display-guest-name" style="color: #f9e596; font-weight: bold; font-size: 1.2em;"></span> जी, आपका सस्नेह स्वागत है!</p>
+            
+            <h1 class="wedding-title">
+                प्रवीण
+                <div class="middle-logo">
+                <img src="praveen.png">
+                </div>
+                दीपिका
+            </h1>
+            <p class="wedding-date">20 अप्रैल 2026</p>
+
+            <div class="countdown-container">
+                <div class="time-box"><span id="days">00</span><p>दिन</p></div>
+               <div class="time-box"><span id="hours">00</span><p>घंटे</p></div>
+                <div class="time-box"><span id="minutes">00</span><p>मिनट</p></div>
+                <div class="time-box"><span id="seconds">00</span><p>सेकंड</p></div>
+            </div>
+        </div>
+
+        <div class="sanidhy-box">
+            <h3>🌸 पावन सान्निध्य 🌸</h3>
+             <p style="font-weight: bold; color: #122b4b; font-size: 1.1em; line-height: 1.6;">
+                श्री श्री 1008 श्री गोविन्दवनजी महाराज, मठ भाटा<br>
+                श्री श्री 1008 श्री हनुमानदासजी महाराज
+            </p>
+        </div>
+
+        <h2 class="section-title">विवाह स्थल (लोकेशन)</h2>
+        <div class="sanidhy-box location-box">
+            <h3>📍 विवाह स्थल</h3>
+            <p style="font-weight: bold; color: #333; font-size: 1.1em; line-height: 1.5; margin-top: 10px;">
+                मु.पो. गालानाडी, तह. सिणधरी<br>जि. बालोतरा (राज.)
+            </p>
+            <a href="https://maps.google.com/?q=Sindhari,Balotra" target="_blank" class="map-btn">🗺️ Google Map पर देखें</a>
+        </div>
+
+        <h2 class="section-title">मांगलिक कार्यक्रम</h2>
+        <div class="slider-wrapper">
+            <div class="manglik-track" id="manglik-track">
+              <div class="slide"><div class="event-name">पाट मुहूर्त</div><div class="event-time">19 अप्रैल 2026, प्रात: 9:00 बजे</div></div>
+                <div class="slide"><div class="event-name">हल्दी रस्म</div><div class="event-time">19 अप्रैल 2026,  प्रात: 11:00 बजे</div></div>
+                <div class="slide"><div class="event-name">बंदौली</div><div class="event-time">19 अप्रैल 2026, रात्रि 10:00 बजे</div></div>
+                <div class="slide"><div class="event-name">बारात प्रस्थान</div><div class="event-time">20 अप्रैल 2026,  प्रात: 6:00 बजे</div></div>
+		<div class="slide"><div class="event-name">प्रीतिभोज व सभा </div><div class="event-time">21 अप्रैल 2026, प्रात: 10:00 बजे से</div></div>
+            </div>
+        </div>
+
+        <h2 class="section-title">परिवार एवं रिश्तेदार</h2>
+        <div class="btn-grid">
+            <button class="family-btn" onclick="openModal('darshan')">🙏 दर्शनाभिलाषी</button>
+            <button class="family-btn" onclick="openModal('nanihal')">🏠 ननिहाल पक्ष</button>
+            <button class="family-btn" onclick="openModal('bhanej')">👧👦 भाणेज पक्ष</button>
+            <button class="family-btn" onclick="openModal('jawai')">🤵 जंवाई पक्ष</button>
+            <button class="family-btn" onclick="openModal('buada')">🌺 बुआडा पक्ष</button>
+            <button class="family-btn" onclick="openModal('manuhar')">🍫 मीठी मनुहार</button>
+        </div>
+
+        <h2 class="section-title">शुभकामना संदेश</h2>
+        <div id="shubhkamna-section">
+            <div class="shubhkamna-slider">
+                <div class="shubhkamna-track" id="greeting-slider">
+                    <div class="greeting-slide"><div class="msg-text">"संदेश लोड हो रहे हैं..."</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="wish-section">
+            <h2 style="color: #122b4b; margin-bottom: 10px; font-family: 'Rozha One', serif;">अपनी शुभकामनाएं भेजें</h2>
+            <p style="color: #666; margin-bottom: 20px; font-size: 0.9em;">आपका संदेश कार्ड पर दिखाई देगा</p>
+            <form id="wish-form">
+                <input type="text" id="u-name" placeholder="आपका शुभ नाम" required>
+                <textarea id="u-message" placeholder="अपना संदेश यहाँ लिखें..." rows="3" required></textarea>
+                <button type="submit" class="submit-btn">संदेश भेजें 🕊️</button>
+            </form>
+        </div>
+
+        <div class="nimantrak-strip">
+            <h3>॥ निमंत्रक ॥</h3>
+            <p style="font-size: 1.5em; font-weight: bold; margin-bottom: 5px;">सुथार नगाराम  सुपुत्र स्व. श्री धुंकाराम जी  बरड़वा</p>
+            <p>मु.पो. गालानाडी, तह. सिणधरी, जि. बालोतरा (राज.)</p>
+            <div class="nimantrak-phone">📞 मो. 9427748781, 9928262424</div>
+        </div>
+    </div>
+
+    <div id="darshan-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content"><button class="close-btn" onclick="closeModal('darshan')">✖</button><h2 class="modal-title">🙏 दर्शनाभिलाषी</h2><div class="name-list"><div class="name-item">श्री  मिसरारामजी,   </div><div class="name-item">श्री नगारामजी , श्री कमलेश जी ( अध्यापक ) </div><div class="name-item">श्री दूदाराम जी, श्री बाबूलाल जी( अध्यापक ),  श्री छगन जी , श्री चेतनजी श्री जयराम जी , नरपत जी (  GST INSP.)</div><div class="name-item">श्री घेवाराम जी , श्री हबताराम जी , श्री नैनाराम जी , श्री जेनाराम जी, श्री सुरेश जी </div><div class="name-item">श्री जगतराम जी , श्री हकाराम जी , श्री वीराराम जी </div><div class="name-item">रमेश जी , अशोक जी , दिनेश जी , नरेश जी </div><div class="name-item">श्री मोहन जी , श्री कांतिलाल जी , अर्जुन जी </div><div class="name-item">श्री पारसजी , श्री गोबर जी </div><div class="special-text">एवं समस्त बरड़वा परिवार गालानाडी ।</div></div></div>
+    </div>
+    
+    <div id="nanihal-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content"><button class="close-btn" onclick="closeModal('nanihal')">✖</button><h2 class="modal-title">🏠 ननिहाल पक्ष</h2><div class="name-list"><div class="name-item">श्री पूनमाराम जी , श्री प्रागाराम जी नागल , श्री मुकनाराम जी नागल , </div><div class="name-item"> श्री उदाराम जी, श्री गंगाराम जी , श्री रामारामजी  </div><div class="name-item">श्री खीमाराम जी , श्री भोमाराम जी , श्री जैसाराम जी , श्री पारस राम जी</div><div class="name-item">श्री हरीश जी , श्री धन्नाराम जी , श्री रमेश जी </div><div class="name-item">श्री भट्टाराम जी , श्री अशोक जी , श्री छगन जी </div><div class="name-item"> श्री हुक्माराम जी , श्री भगाराम जी </div><div class="special-text">एवं समस्त नागल  परिवार, सिणधरी।</div><div class="name-item"><b>धर्मेली:</b> श्री पूनमाराम जी , बुधाराम जी , विंजाराम जी , वेलारामजी ( आर्मी ) प्रजापत  (गालानाडी)</div></div></div>
+    </div>
+
+    <div id="bhanej-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content"><button class="close-btn" onclick="closeModal('bhanej')">✖</button><h2 class="modal-title">👧👦 भाणेज पक्ष</h2><div class="name-list"><div class="name-item">उदाराम </div><div class="name-item">गंगाराम </div><div class="name-item">रामाराम </div><div class="name-item">गोबरराम </div><div class="name-item">गंगाराम</div><div class="name-item">रामाराम</div><div class="name-item">गोबाराम</div><div class="name-item"> देवाराम , महेंद्र , दीपेश </div><div class="name-item"> मनीष , विकास </div><div class="name-item">कार्तिक </div></div></div>
+    </div>
+
+    <div id="jawai-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content"><button class="close-btn" onclick="closeModal('jawai')">✖</button><h2 class="modal-title">🤵 जंवाई पक्ष</h2><div class="name-list"><div class="name-item"><b>हरिया </b> - श्री धनजी सुंधा , सिणली </div><div class="name-item"><b>मंजू </b> - श्री कांतिलाल जी बुडढ, कितपाला </div><div class="name-item"><b>अनीता </b> - श्री कैलाश जी कुलरिया , भांडीयावास</div><div class="name-item"><b>चतु </b> - श्री प्रभुजी  बुढ़ड़, मिठौडा</div><div class="name-item"><b>चुकी </b> - श्री ओमप्रकाश जी बोदलिया , डाबड </div><div class="name-item"><b>केला </b> - श्री चेतनजी  चवला, गोलिया</div><div class="name-item"><b>शांति </b> - स्व. श्री पूनमाराम जी बुडढ</div><div class="name-item"><b>तारो </b> - श्री कुम्भाराम जी धीर , मीठा </div><div class="special-text">धर्मेली </div><div class="name-item"><b>मंजू</b> - श्री मोहनजी प्रजापत , अरनियाली </div></div></div>
+    </div>
+
+    <div id="buada-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content"><button class="close-btn" onclick="closeModal('buada')">✖</button><h2 class="modal-title">🌺 बुआडा पक्ष</h2><div class="name-list"><div class="name-item"><b>मोरो</b> - स्व.श्री वगतारामजी नागल, सिणधरी</div><div class="name-item"><b>सुबटी</b> - स्व.श्री कानारामजी जोपिंग, सिणली</div><div class="name-item"><b> </b> - </div><div class="name-item"><b></b> - </div><div class="name-item"><b></b> - </div><div class="name-item"><b></b> -</div><div class="name-item"><b></b> -</div><div class="name-item"><b></b> -</div><div class="name-item"><b></b> - </div><div class="name-item"><b></b> - </div><div class="name-item"><b></b> - </div></div></div>
+    </div>
+
+    <div id="manuhar-modal" class="modal-overlay" style="display:none;">
+        <div class="modal-content"><button class="close-btn" onclick="closeModal('manuhar')">✖</button><h2 class="modal-title">🍫 मीठी मनुहार</h2><div class="special-text">"हम भी करेंगे आपका स्वागत"</div><div class="name-list" style="text-align: center; font-size: 1.3em; line-height: 2;">चन्द्रिका , ध्रुव , पियु , दीपिका, दीपेश , मनीष , विकाश , कार्तिक ।</div></div></div>
+    </div>
+
+    <script>
+        // Enter Button Logic
+        function handleEnter(event) { if (event.key === "Enter") { openInvitation(); } }
+
+        // WhatsApp Share Link Generate
+        function setWhatsappLink() {
+            let currentUrl = window.location.href;
+            let text = encodeURIComponent("प्रवीण और दीपिका की शादी का डिजिटल निमंत्रण देखें: \n" + currentUrl);
+            document.getElementById("whatsapp-share").href = "https://wa.me/?text=" + text;
+        }
+
+        // म्यूज़िक ऑन/ऑफ़ बटन
+        const bgMusic = document.getElementById("bgMusic");
+        function toggleMusic() {
+            const musicBtn = document.getElementById("music-toggle");
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicBtn.innerHTML = "🎵";
+            } else {
+                bgMusic.pause();
+                musicBtn.innerHTML = "🔇";
+            }
+        }
+
+        // दरवाज़ा खुलने का एनीमेशन और मुख्य कार्ड
+        function openInvitation() {
+            const guestInput = document.getElementById('guest-name').value;
+            if(guestInput.trim() === "") { 
+                alert("कृपया पहले अपना शुभ नाम दर्ज करें!"); 
+                document.getElementById('guest-name').focus();
+                return;
+            }
+
+            document.getElementById('display-guest-name').innerText = guestInput;
+            document.getElementById('u-name').value = guestInput;
+            document.getElementById('welcome-box-container').style.opacity = '0';
+            
+            bgMusic.play().catch((e) => console.log("Audio Play Blocked"));
+            document.getElementById("music-toggle").innerHTML = "🎵";
+            
+            setTimeout(() => {
+                document.getElementById('welcome-box-container').style.display = 'none';
+                document.getElementById('door-left').classList.add('open-left');
+                document.getElementById('door-right').classList.add('open-right');
+                document.getElementById('main-card').style.display = 'block';
+                
+                setTimeout(() => { document.getElementById('door-container').style.display = 'none'; }, 1800);
+            }, 500);
+        }
+
+        // गुलाब की पंखुड़ियाँ गिराने वाला लॉजिक (Falling Petals JS)
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            petal.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 8 + 8; // Size between 8px and 16px
+            petal.style.width = size + 'px';
+            petal.style.height = size + 'px';
+            petal.style.animationDuration = (Math.random() * 3 + 4) + 's';
+            document.body.appendChild(petal);
+            setTimeout(() => { petal.remove(); }, 7000);
+        }
+        setInterval(createPetal, 400); // 400ms में एक पंखुड़ी गिरेगी
+
+        // शादी का काउंटडाउन टाइमर और पटाखे
+        const countDownDate = new Date("Apr 20, 2026 00:00:00").getTime();
+        let isConfettiFired = false;
+
+        const x = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerHTML = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
+
+            if (distance < 0) {
+                clearInterval(x);
+                document.querySelector(".countdown-container").innerHTML = "<div class='time-box'><span>विवाह संपन्न</span></div>";
+                
+                // 🔥 पटाखे / Confetti Effect 🔥
+                if (!isConfettiFired) {
+                    isConfettiFired = true;
+                    var duration = 15 * 1000; // 15 सेकंड तक पटाखे चलेंगे
+                    var animationEnd = Date.now() + duration;
+                    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+
+                    function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+
+                    var interval = setInterval(function() {
+                        var timeLeft = animationEnd - Date.now();
+                        if (timeLeft <= 0) { return clearInterval(interval); }
+                        var particleCount = 50 * (timeLeft / duration);
+                        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                    }, 250);
+                }
+            }
+        }, 1000);
+
+        // मांगलिक कार्यक्रमों का स्लाइडर 
+        let manglikSlide = 0;
+        const manglikTrack = document.getElementById('manglik-track');
+        function moveManglik() {
+            const manglikSlides = document.querySelectorAll('#manglik-track .slide');
+            if(manglikSlides.length > 0) {
+                manglikSlide = (manglikSlide + 1) % manglikSlides.length;
+                manglikTrack.style.transform = `translateX(-${manglikSlide * 100}%)`;
+            }
+        }
+        setInterval(moveManglik, 3000);
+
+        // Modals (Pop-ups)
+        function openModal(id) {
+            const modal = document.getElementById(id + '-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => { 
+                modal.style.opacity = '1'; 
+                modal.classList.add('active');
+                modal.querySelector('.modal-content').style.transform = 'translateY(0)'; 
+            }, 10);
+            document.body.style.overflow = 'hidden'; 
+        }
+        function closeModal(id) {
+            const modal = document.getElementById(id + '-modal');
+            modal.style.opacity = '0';
+            modal.classList.remove('active');
+            modal.querySelector('.modal-content').style.transform = 'translateY(50px)';
+            setTimeout(() => { modal.style.display = 'none'; }, 400);
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBA_kb7jChlz_CeUapULv_-f5I8TIHoLBM",
+            authDomain: "scorecardplay-432bd.firebaseapp.com",
+            databaseURL: "https://scorecardplay-432bd-default-rtdb.firebaseio.com",
+            projectId: "scorecardplay-432bd",
+            storageBucket: "scorecardplay-432bd.firebasestorage.app",
+            messagingSenderId: "100391940044",
+            appId: "1:100391940044:web:45b5f4676bc84995ae3769"
+        };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const database = firebase.database();
+        const wishesRef = database.ref('wedding_wishes');
+        const greetTrack = document.getElementById('greeting-slider');
+
+        let greetSlide = 0;
+        let totalGreetingSlides = 1;
+        function moveGreeting() {
+            if(totalGreetingSlides > 1) {
+                greetSlide = (greetSlide + 1) % totalGreetingSlides;
+                greetTrack.style.transform = `translateX(-${greetSlide * 100}%)`;
+            }
+        }
+        setInterval(moveGreeting, 3500);
+
+        document.getElementById('wish-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('u-name').value;
+            const msg = document.getElementById('u-message').value;
+            const btn = document.querySelector('.submit-btn');
+            
+            btn.innerText = "भेज रहे हैं...";
+            wishesRef.push({ name: name, message: msg, timestamp: Date.now() }).then(() => {
+                alert("आपका बधाई संदेश सफलतापूर्वक भेज दिया गया है!");
+                document.getElementById('u-message').value = ""; 
+                btn.innerText = "संदेश भेजें 🕊️";
+            }).catch((error) => {
+                alert("कुछ तकनीकी समस्या आ रही है: " + error.message);
+                btn.innerText = "संदेश भेजें 🕊️";
+            });
+        });
+
+        wishesRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                greetTrack.innerHTML = ""; 
+                const wishes = Object.values(data).sort((a, b) => b.timestamp - a.timestamp); 
+                wishes.forEach(wish => {
+                    greetTrack.innerHTML += `
+                        <div class="greeting-slide">
+                            <div class="msg-text">"${wish.message}"</div>
+                            <div class="msg-author">- ${wish.name}</div>
+                        </div>`;
+                });
+                totalGreetingSlides = wishes.length;
+                greetSlide = 0; 
+                greetTrack.style.transform = `translateX(0%)`;
+            } else {
+                greetTrack.innerHTML = `<div class="greeting-slide"><div class="msg-text">"अभी तक कोई संदेश नहीं। आप पहले बनें!"</div></div>`;
+                totalGreetingSlides = 1;
+            }
+        });
+    </script>
 </body>
 </html>
